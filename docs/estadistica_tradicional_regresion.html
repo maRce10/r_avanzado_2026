@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Modelos estádisticos tradicionales como regresiones – R avanzado 2026</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -74,10 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-c875dbb4c9335aca9cc352e974a4ec92.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ae0b5334a1ec0bf99af3d0c304a697d2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d3c39859024bd7df398072cc9f90fe21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a5f0e07c88d63b2cffd0e8312cae9cf7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -107,7 +104,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -120,7 +117,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -199,29 +196,11 @@ window.Quarto = {
   </li>  
     </ul>
   </li>
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tareas" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Tareas</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-tareas">    
-        <li>
-    <a class="dropdown-item" href="./tarea4.html">
- <span class="dropdown-text">Tarea 4</span></a>
+  <li class="nav-item">
+    <span class="nav-link">
+<span class="menu-text">Tareas</span>
+    </span>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./solucion_tarea4.html">
- <span class="dropdown-text">Solución tarea 4</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./tarea5.html">
- <span class="dropdown-text">Tarea 5</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./respuestas_tarea5.html">
- <span class="dropdown-text">Solución Tarea 5</span></a>
-  </li>  
-    </ul>
-  </li>
   <li class="nav-item">
     <a class="nav-link" href="./preparacion_curso.html"> 
 <span class="menu-text">Preparación para el curso</span></a>
@@ -289,7 +268,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Fecha de publicación</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">20 de septiembre de 2026</p>
+      <p class="date">21 de septiembre de 2026</p>
     </div>
   </div>
   
@@ -320,7 +299,7 @@ window.Quarto = {
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># number of observations</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># number of observations</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="co"># set seed</span></span>
@@ -330,7 +309,7 @@ window.Quarto = {
 <span id="cb1-8"><a href="#cb1-8"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">1</span>)</span>
 <span id="cb1-9"><a href="#cb1-9"></a></span>
 <span id="cb1-10"><a href="#cb1-10"></a><span class="co"># run t test</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a>(t <span class="ot">&lt;-</span> <span class="fu">t.test</span>(y))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-11"><a href="#cb1-11"></a>(t <span class="ot">&lt;-</span> <span class="fu">t.test</span>(y))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -347,8 +326,8 @@ mean of x
 </div>
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># run equivalent linear regression</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>(lm_t <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">lm</span>(y <span class="sc">~</span> <span class="dv">1</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># run equivalent linear regression</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>(lm_t <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">lm</span>(y <span class="sc">~</span> <span class="dv">1</span>)))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -418,7 +397,7 @@ Residual standard error: 0.926 on 49 degrees of freedom</code></pre>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="co"># sample size</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a>n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
@@ -432,7 +411,7 @@ Residual standard error: 0.926 on 49 degrees of freedom</code></pre>
 <span id="cb5-12"><a href="#cb5-12"></a><span class="co"># run paired t test</span></span>
 <span id="cb5-13"><a href="#cb5-13"></a>paired_t <span class="ot">&lt;-</span> <span class="fu">t.test</span>(y1, y2, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb5-14"><a href="#cb5-14"></a></span>
-<span id="cb5-15"><a href="#cb5-15"></a>paired_t</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-15"><a href="#cb5-15"></a>paired_t</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -449,13 +428,13 @@ mean difference
 </div>
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># difference between the 2 variables</span></span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># difference between the 2 variables</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>diff_y <span class="ot">&lt;-</span> y1 <span class="sc">-</span> y2</span>
 <span id="cb7-3"><a href="#cb7-3"></a></span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="co"># run model</span></span>
 <span id="cb7-5"><a href="#cb7-5"></a>lm_paired_t <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="at">formula =</span> diff_y <span class="sc">~</span> <span class="dv">1</span>))</span>
 <span id="cb7-6"><a href="#cb7-6"></a></span>
-<span id="cb7-7"><a href="#cb7-7"></a>lm_paired_t</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-7"><a href="#cb7-7"></a>lm_paired_t</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -520,7 +499,7 @@ Residual standard error: 1.32 on 49 degrees of freedom</code></pre>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># set seed</span></span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># set seed</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb9-3"><a href="#cb9-3"></a></span>
 <span id="cb9-4"><a href="#cb9-4"></a><span class="co"># number of observations</span></span>
@@ -541,7 +520,7 @@ Residual standard error: 1.32 on 49 degrees of freedom</code></pre>
 <span id="cb9-19"><a href="#cb9-19"></a><span class="co"># run paired t test</span></span>
 <span id="cb9-20"><a href="#cb9-20"></a>indep_t <span class="ot">&lt;-</span> <span class="fu">t.test</span>(xy_data_cat<span class="sc">$</span>y[xy_data_cat<span class="sc">$</span>x1 <span class="sc">==</span> <span class="st">"a"</span>], xy_data_cat<span class="sc">$</span>y[xy_data_cat<span class="sc">$</span>x1 <span class="sc">==</span> <span class="st">"b"</span>])</span>
 <span id="cb9-21"><a href="#cb9-21"></a></span>
-<span id="cb9-22"><a href="#cb9-22"></a>indep_t</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-22"><a href="#cb9-22"></a>indep_t</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -558,10 +537,10 @@ mean of x mean of y
 </div>
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># run regression model</span></span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># run regression model</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a>lm_indep_t <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="at">formula =</span> y <span class="sc">~</span> x1, <span class="at">data =</span> xy_data_cat))</span>
 <span id="cb11-3"><a href="#cb11-3"></a></span>
-<span id="cb11-4"><a href="#cb11-4"></a>lm_indep_t</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-4"><a href="#cb11-4"></a>lm_indep_t</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -632,7 +611,7 @@ F-statistic:  151 on 1 and 48 DF,  p-value: &lt;2e-16</code></pre>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># set seed</span></span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># set seed</span></span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb13-3"><a href="#cb13-3"></a></span>
 <span id="cb13-4"><a href="#cb13-4"></a><span class="co"># number of observations</span></span>
@@ -650,7 +629,7 @@ F-statistic:  151 on 1 and 48 DF,  p-value: &lt;2e-16</code></pre>
 <span id="cb13-16"><a href="#cb13-16"></a><span class="co"># create data frame</span></span>
 <span id="cb13-17"><a href="#cb13-17"></a>xy_data_cat2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x1, y)</span>
 <span id="cb13-18"><a href="#cb13-18"></a></span>
-<span id="cb13-19"><a href="#cb13-19"></a><span class="fu">head</span>(xy_data_cat2)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-19"><a href="#cb13-19"></a><span class="fu">head</span>(xy_data_cat2)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="kable-table">
@@ -694,10 +673,10 @@ F-statistic:  151 on 1 and 48 DF,  p-value: &lt;2e-16</code></pre>
 <div class="cell" data-print_df="default">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># ANOVA function</span></span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># ANOVA function</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a>anv_1w <span class="ot">&lt;-</span> <span class="fu">anova</span>(<span class="fu">aov</span>(<span class="at">formula =</span> y1 <span class="sc">~</span> x1, <span class="at">data =</span> xy_data_cat2))</span>
 <span id="cb14-3"><a href="#cb14-3"></a></span>
-<span id="cb14-4"><a href="#cb14-4"></a>anv_1w</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-4"><a href="#cb14-4"></a>anv_1w</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="kable-table">
@@ -735,10 +714,10 @@ F-statistic:  151 on 1 and 48 DF,  p-value: &lt;2e-16</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># linear regression</span></span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># linear regression</span></span>
 <span id="cb15-2"><a href="#cb15-2"></a>lm_anv_1w <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">lm</span>(<span class="at">formula =</span> y1 <span class="sc">~</span> x1, <span class="at">data =</span> xy_data_cat2))</span>
 <span id="cb15-3"><a href="#cb15-3"></a></span>
-<span id="cb15-4"><a href="#cb15-4"></a>lm_anv_1w</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-4"><a href="#cb15-4"></a>lm_anv_1w</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -801,14 +780,14 @@ F-statistic: 2.73 on 2 and 47 DF,  p-value: 0.0755</code></pre>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Contingency table</span></span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Contingency table</span></span>
 <span id="cb17-2"><a href="#cb17-2"></a><span class="co"># modified from https://lindeloev.github.io/tests-as-linear/</span></span>
 <span id="cb17-3"><a href="#cb17-3"></a>mood_data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
 <span id="cb17-4"><a href="#cb17-4"></a>  <span class="at">data =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">70</span>, <span class="dv">30</span>, <span class="dv">32</span>, <span class="dv">110</span>, <span class="dv">120</span>), <span class="at">nrow =</span> <span class="dv">2</span>,</span>
 <span id="cb17-5"><a href="#cb17-5"></a>  <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">handedness =</span> <span class="fu">c</span>(<span class="st">"left_handed"</span>, <span class="st">"right_handed"</span>), <span class="at">mood =</span> <span class="fu">c</span>(<span class="st">"happy"</span>, <span class="st">"meh"</span>, <span class="st">"sad"</span>))</span>
 <span id="cb17-6"><a href="#cb17-6"></a>)</span>
 <span id="cb17-7"><a href="#cb17-7"></a></span>
-<span id="cb17-8"><a href="#cb17-8"></a>mood_data</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb17-8"><a href="#cb17-8"></a>mood_data</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>              mood
@@ -825,10 +804,10 @@ handedness     happy meh sad
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># Built-in chi-square. It requires matrix format.</span></span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># Built-in chi-square. It requires matrix format.</span></span>
 <span id="cb19-2"><a href="#cb19-2"></a>chi_mod <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(mood_data)</span>
 <span id="cb19-3"><a href="#cb19-3"></a></span>
-<span id="cb19-4"><a href="#cb19-4"></a>chi_mod</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-4"><a href="#cb19-4"></a>chi_mod</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -839,13 +818,13 @@ X-squared = 5.1, df = 2, p-value = 0.078</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># convert to long</span></span>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># convert to long</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a>mood_data_long <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">as.table</span>(mood_data))</span>
 <span id="cb21-3"><a href="#cb21-3"></a></span>
 <span id="cb21-4"><a href="#cb21-4"></a><span class="co"># log linear model from MASS package</span></span>
 <span id="cb21-5"><a href="#cb21-5"></a>log_lm_mod <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">loglm</span>(Freq <span class="sc">~</span> handedness <span class="sc">+</span> mood, <span class="at">data =</span> mood_data_long)</span>
 <span id="cb21-6"><a href="#cb21-6"></a></span>
-<span id="cb21-7"><a href="#cb21-7"></a>log_lm_mod</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb21-7"><a href="#cb21-7"></a>log_lm_mod</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
@@ -895,21 +874,21 @@ Pearson          5.0999  2 0.078087</code></pre>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># simulate variable</span></span>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># simulate variable</span></span>
 <span id="cb23-2"><a href="#cb23-2"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb23-3"><a href="#cb23-3"></a>y <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">5</span>), <span class="dv">2</span>)</span>
 <span id="cb23-4"><a href="#cb23-4"></a></span>
-<span id="cb23-5"><a href="#cb23-5"></a>y</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb23-5"><a href="#cb23-5"></a>y</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -0.56 -0.23  1.56  0.07  0.13</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># convert to ranks</span></span>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># convert to ranks</span></span>
 <span id="cb25-2"><a href="#cb25-2"></a>rank_y <span class="ot">&lt;-</span> <span class="fu">rank</span>(y)</span>
 <span id="cb25-3"><a href="#cb25-3"></a></span>
-<span id="cb25-4"><a href="#cb25-4"></a>rank_y</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb25-4"><a href="#cb25-4"></a>rank_y</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1 2 5 3 4</code></pre>
@@ -922,7 +901,7 @@ Pearson          5.0999  2 0.078087</code></pre>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># set seed</span></span>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># set seed</span></span>
 <span id="cb27-2"><a href="#cb27-2"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb27-3"><a href="#cb27-3"></a></span>
 <span id="cb27-4"><a href="#cb27-4"></a><span class="co"># number of observations</span></span>
@@ -933,7 +912,7 @@ Pearson          5.0999  2 0.078087</code></pre>
 <span id="cb27-9"><a href="#cb27-9"></a>y_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y)</span>
 <span id="cb27-10"><a href="#cb27-10"></a></span>
 <span id="cb27-11"><a href="#cb27-11"></a></span>
-<span id="cb27-12"><a href="#cb27-12"></a>y</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb27-12"><a href="#cb27-12"></a>y</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] -0.3604756 -0.0301775  1.7587083  0.2705084  0.3292877  1.9150650
@@ -948,10 +927,10 @@ Pearson          5.0999  2 0.078087</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="co"># Wilcoxon / Mann-Whitney U</span></span>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="co"># Wilcoxon / Mann-Whitney U</span></span>
 <span id="cb29-2"><a href="#cb29-2"></a>wilcx_mod <span class="ot">&lt;-</span> <span class="fu">wilcox.test</span>(y_data<span class="sc">$</span>y)</span>
 <span id="cb29-3"><a href="#cb29-3"></a></span>
-<span id="cb29-4"><a href="#cb29-4"></a>wilcx_mod</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb29-4"><a href="#cb29-4"></a>wilcx_mod</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -963,12 +942,12 @@ alternative hypothesis: true location is not equal to 0</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>signed_rank <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sign</span>(x) <span class="sc">*</span> <span class="fu">rank</span>(<span class="fu">abs</span>(x))</span>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>signed_rank <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sign</span>(x) <span class="sc">*</span> <span class="fu">rank</span>(<span class="fu">abs</span>(x))</span>
 <span id="cb31-2"><a href="#cb31-2"></a></span>
 <span id="cb31-3"><a href="#cb31-3"></a><span class="co"># As linear model with our dummy-coded group_y2:</span></span>
 <span id="cb31-4"><a href="#cb31-4"></a>wicx_lm_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">signed_rank</span>(y) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> y_data) <span class="co"># compare to</span></span>
 <span id="cb31-5"><a href="#cb31-5"></a></span>
-<span id="cb31-6"><a href="#cb31-6"></a><span class="fu">summary</span>(wicx_lm_mod)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb31-6"><a href="#cb31-6"></a><span class="fu">summary</span>(wicx_lm_mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -1022,12 +1001,12 @@ Residual standard error: 28.9 on 49 degrees of freedom</code></pre>
 <p>&nbsp;</p>
 <hr>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Información de la sesión
+Información de la sesión
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -1037,69 +1016,71 @@ Residual standard error: 28.9 on 49 degrees of freedom</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>─ Session info ───────────────────────────────────────────────────────────────
  setting  value
- version  R version 4.6.1 (2026-06-24 ucrt)
- os       Windows 11 x64 (build 22631)
- system   x86_64, mingw32
- ui       RTerm
+ version  R version 4.6.1 (2026-06-24)
+ os       Ubuntu 22.04.5 LTS
+ system   x86_64, linux-gnu
+ ui       X11
  language (EN)
- collate  Spanish_Costa Rica.utf8
- ctype    Spanish_Costa Rica.utf8
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
  tz       America/Costa_Rica
- date     2026-09-20
- pandoc   3.8.3 @ C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools/ (via rmarkdown)
- quarto   1.9.38 @ C:\\PROGRA~1\\RStudio\\RESOUR~1\\app\\bin\\quarto\\bin\\quarto.exe
+ date     2026-09-21
+ pandoc   3.8.3 @ /usr/lib/rstudio/resources/app/bin/quarto/bin/tools/x86_64/ (via rmarkdown)
+ quarto   1.7.31 @ /usr/local/bin/quarto
 
 ─ Packages ───────────────────────────────────────────────────────────────────
  package      * version date (UTC) lib source
- cachem         1.1.0   2024-05-16 [1] CRAN (R 4.6.1)
- cli            3.6.6   2026-04-09 [1] CRAN (R 4.6.1)
- devtools       2.5.2   2026-04-30 [1] CRAN (R 4.6.1)
- digest         0.6.39  2025-11-19 [1] CRAN (R 4.6.1)
- dplyr          1.2.1   2026-04-03 [1] CRAN (R 4.6.1)
- ellipsis       0.3.3   2026-04-04 [1] CRAN (R 4.6.1)
- evaluate       1.0.5   2025-08-27 [1] CRAN (R 4.6.1)
- farver         2.1.2   2024-05-13 [1] CRAN (R 4.6.1)
- fastmap        1.2.0   2024-05-15 [1] CRAN (R 4.6.1)
- fs             2.1.0   2026-04-18 [1] CRAN (R 4.6.1)
- generics       0.1.4   2025-05-09 [1] CRAN (R 4.6.1)
- ggplot2      * 4.0.3   2026-04-22 [1] CRAN (R 4.6.1)
- glue           1.8.1   2026-04-17 [1] CRAN (R 4.6.1)
- gridExtra      2.3.1   2026-06-25 [1] CRAN (R 4.6.1)
- gtable         0.3.6   2024-10-25 [1] CRAN (R 4.6.1)
- htmltools      0.5.9   2025-12-04 [1] CRAN (R 4.6.1)
- htmlwidgets    1.6.4   2023-12-06 [1] CRAN (R 4.6.1)
- jsonlite       2.0.0   2025-03-27 [1] CRAN (R 4.6.1)
- knitr        * 1.51    2025-12-20 [1] CRAN (R 4.6.1)
- lifecycle      1.0.5   2026-01-08 [1] CRAN (R 4.6.1)
- magrittr       2.0.5   2026-04-04 [1] CRAN (R 4.6.1)
- MASS           7.3-65  2025-02-28 [2] CRAN (R 4.6.1)
- memoise        2.0.1   2021-11-26 [1] CRAN (R 4.6.1)
- otel           0.2.0   2025-08-29 [1] CRAN (R 4.6.1)
- pillar         1.11.1  2025-09-17 [1] CRAN (R 4.6.1)
- pkgbuild       1.4.8   2025-05-26 [1] CRAN (R 4.6.1)
- pkgconfig      2.0.3   2019-09-22 [1] CRAN (R 4.6.1)
- pkgload        1.5.3   2026-06-15 [1] CRAN (R 4.6.1)
- purrr          1.2.2   2026-04-10 [1] CRAN (R 4.6.1)
- R6             2.6.1   2025-02-15 [1] CRAN (R 4.6.1)
- RColorBrewer   1.1-3   2022-04-03 [1] CRAN (R 4.6.0)
- rlang          1.3.0   2026-07-05 [1] CRAN (R 4.6.1)
- rmarkdown      2.31    2026-03-26 [1] CRAN (R 4.6.1)
- rstudioapi     0.19.0  2026-06-11 [1] CRAN (R 4.6.1)
- S7             0.2.2   2026-04-22 [1] CRAN (R 4.6.1)
- scales         1.4.0   2025-04-24 [1] CRAN (R 4.6.1)
- sessioninfo    1.2.4   2026-06-04 [1] CRAN (R 4.6.1)
- tibble         3.3.1   2026-01-11 [1] CRAN (R 4.6.1)
- tidyselect     1.2.1   2024-03-11 [1] CRAN (R 4.6.1)
- usethis        3.2.1   2025-09-06 [1] CRAN (R 4.6.1)
- vctrs          0.7.3   2026-04-11 [1] CRAN (R 4.6.1)
- viridis      * 0.6.5   2024-01-29 [1] CRAN (R 4.6.1)
- viridisLite  * 0.4.3   2026-02-04 [1] CRAN (R 4.6.1)
- withr          3.0.3   2026-06-19 [1] CRAN (R 4.6.1)
- xfun           0.60    2026-07-09 [1] CRAN (R 4.6.1)
- yaml           2.3.12  2025-12-10 [1] CRAN (R 4.6.1)
+ cachem         1.1.0   2024-05-16 [2] CRAN (R 4.6.1)
+ cli            3.6.6   2026-04-09 [2] CRAN (R 4.6.1)
+ devtools       2.5.2   2026-04-30 [2] CRAN (R 4.6.1)
+ digest         0.6.39  2025-11-19 [2] CRAN (R 4.6.1)
+ dplyr          1.2.1   2026-04-03 [2] CRAN (R 4.6.1)
+ ellipsis       0.3.3   2026-04-04 [2] CRAN (R 4.6.1)
+ evaluate       1.0.5   2025-08-27 [2] CRAN (R 4.6.1)
+ farver         2.1.2   2024-05-13 [2] CRAN (R 4.6.1)
+ fastmap        1.2.0   2024-05-15 [2] CRAN (R 4.6.1)
+ fs             2.1.0   2026-04-18 [2] CRAN (R 4.6.1)
+ generics       0.1.4   2025-05-09 [2] CRAN (R 4.6.1)
+ ggplot2      * 4.0.3   2026-04-22 [2] CRAN (R 4.6.1)
+ glue           1.8.1   2026-04-17 [2] CRAN (R 4.6.1)
+ gridExtra      2.3.1   2026-06-25 [2] CRAN (R 4.6.1)
+ gtable         0.3.6   2024-10-25 [2] CRAN (R 4.6.1)
+ htmltools      0.5.9   2025-12-04 [2] CRAN (R 4.6.1)
+ htmlwidgets    1.6.4   2023-12-06 [2] CRAN (R 4.6.1)
+ jsonlite       2.0.0   2025-03-27 [2] CRAN (R 4.6.1)
+ knitr        * 1.51    2025-12-20 [2] CRAN (R 4.6.1)
+ lifecycle      1.0.5   2026-01-08 [2] CRAN (R 4.6.1)
+ magrittr       2.0.5   2026-04-04 [2] CRAN (R 4.6.1)
+ MASS           7.3-66  2026-07-15 [2] CRAN (R 4.6.1)
+ memoise        2.0.1   2021-11-26 [2] CRAN (R 4.6.1)
+ otel           0.2.0   2025-08-29 [2] CRAN (R 4.6.1)
+ pillar         1.11.1  2025-09-17 [2] CRAN (R 4.6.1)
+ pkgbuild       1.4.8   2025-05-26 [2] CRAN (R 4.6.1)
+ pkgconfig      2.0.3   2019-09-22 [2] CRAN (R 4.6.1)
+ pkgload        1.5.3   2026-06-15 [2] CRAN (R 4.6.1)
+ purrr          1.2.2   2026-04-10 [2] CRAN (R 4.6.1)
+ R6             2.6.1   2025-02-15 [2] CRAN (R 4.6.1)
+ RColorBrewer   1.1-3   2022-04-03 [2] CRAN (R 4.6.1)
+ rlang          1.3.0   2026-07-05 [2] CRAN (R 4.6.1)
+ rmarkdown      2.31    2026-03-26 [2] CRAN (R 4.6.1)
+ rstudioapi     0.19.0  2026-06-11 [2] CRAN (R 4.6.1)
+ S7             0.2.2   2026-04-22 [2] CRAN (R 4.6.1)
+ scales         1.4.0   2025-04-24 [2] CRAN (R 4.6.1)
+ sessioninfo    1.2.4   2026-06-04 [2] CRAN (R 4.6.1)
+ tibble         3.3.1   2026-01-11 [2] CRAN (R 4.6.1)
+ tidyselect     1.2.1   2024-03-11 [2] CRAN (R 4.6.1)
+ usethis        3.2.1   2025-09-06 [2] CRAN (R 4.6.1)
+ vctrs          0.7.3   2026-04-11 [2] CRAN (R 4.6.1)
+ viridis      * 0.6.5   2024-01-29 [2] CRAN (R 4.6.1)
+ viridisLite  * 0.4.3   2026-02-04 [2] CRAN (R 4.6.1)
+ withr          3.0.3   2026-06-19 [2] CRAN (R 4.6.1)
+ xfun           0.60    2026-07-09 [2] CRAN (R 4.6.1)
+ yaml           2.3.12  2025-12-10 [2] CRAN (R 4.6.1)
 
- [1] C:/Users/Biologia-UCR/AppData/Local/R/win-library/4.6
- [2] C:/Program Files/R/R-4.6.1/library
+ [1] /home/m/R/x86_64-pc-linux-gnu-library/4.6
+ [2] /usr/local/lib/R/site-library
+ [3] /usr/lib/R/site-library
+ [4] /usr/lib/R/library
  * ── Packages attached to the search path.
 
 ──────────────────────────────────────────────────────────────────────────────</code></pre>
@@ -1166,14 +1147,13 @@ Residual standard error: 28.9 on 49 degrees of freedom</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1571,7 +1551,7 @@ Residual standard error: 28.9 on 49 degrees of freedom</code></pre>
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Ejecutar el código</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<div class="sourceCode" id="cb34" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &lt;font size="7"&gt;&lt;b&gt;Modelos estádisticos tradicionales como regresiones&lt;/b&gt;&lt;/font&gt;</span></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -1978,7 +1958,7 @@ Residual standard error: 28.9 on 49 degrees of freedom</code></pre>
 <span id="cb34-421"><a href="#cb34-421" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb34-422"><a href="#cb34-422" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-423"><a href="#cb34-423" aria-hidden="true" tabindex="-1"></a>:::</span>
-</code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</code><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

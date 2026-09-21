@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>instructor – R avanzado 2026</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -74,10 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-c875dbb4c9335aca9cc352e974a4ec92.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ae0b5334a1ec0bf99af3d0c304a697d2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d3c39859024bd7df398072cc9f90fe21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a5f0e07c88d63b2cffd0e8312cae9cf7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -226,7 +223,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Fecha de publicación</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">20 de septiembre de 2026</p>
+      <p class="date">21 de septiembre de 2026</p>
     </div>
   </div>
   
@@ -252,7 +249,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </font></main><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Ejecutar el código</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">    css: styles.css</span></span>
@@ -266,7 +263,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">font</span><span class="ot"> size</span><span class="op">=</span><span class="st">"3"</span><span class="dt">&gt;</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>Un ecólogo del comportamiento mas que acabó haciendo mucha programación solo para poder hacer bien el análisis de datos. Ademas de la investigación, también trabajo en hacer herramientas computacionales para el análisis de datos biológicos (no genéticos), principalmente relacionados con el comportamiento animal y la bioacústica. Soy el desarrollador de los paquetes de R <span class="co">[</span><span class="ot">warbleR</span><span class="co">](https://marce10.github.io/warbleR/index.html)</span> y <span class="co">[</span><span class="ot">Rraven</span><span class="co">](https://marce10.github.io/Rraven/index.html)</span> los cuales tienen funciones para agilizar el análisis acústico de sonidos de los animales. Más recientemente, sacamos los paquetes <span class="co">[</span><span class="ot">baRulho</span><span class="co">](https://marce10.github.io/baRulho/index.html)</span>, para cuantificar la transmisión y la degradación de la señal acústica, <span class="co">[</span><span class="ot">ohun</span><span class="co">](https://marce10.github.io/ohun/index.html)</span>, para optimizar la detección automática y <span class="co">[</span><span class="ot">PhenotypeSpace</span><span class="co">](https://marce10.github.io/PhenotypeSpace/index.html)</span> para cuantificar los espacios de rasgos multidimensionales. Recientemente también desarrollé el paquete <span class="co">[</span><span class="ot">sketchy</span><span class="co">](https://marce10.github.io/sketchy/index.html)</span> para organizar compendios de investigación.</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>Un ecólogo del comportamiento mas que acabó haciendo mucha programación solo para poder hacer bien el análisis de datos. Ademas de la investigación, también trabajo en hacer herramientas computacionales para el análisis de datos biológicos (no genéticos), principalmente relacionados con el comportamiento animal y la bioacústica. Soy el desarrollador de los paquetes de R <span class="co">[</span><span class="ot">warbleR</span><span class="co">](https://marce10.github.io/warbleR/index.html)</span> y <span class="co">[</span><span class="ot">Rraven</span><span class="co">](https://marce10.github.io/Rraven/index.html)</span> los cuales tienen funciones para agilizar el análisis acústico de sonidos de los animales. Más recientemente, sacamos los paquetes <span class="co">[</span><span class="ot">baRulho</span><span class="co">](https://marce10.github.io/baRulho/index.html)</span>, para cuantificar la transmisión y la degradación de la señal acústica, <span class="co">[</span><span class="ot">ohun</span><span class="co">](https://marce10.github.io/ohun/index.html)</span>, para optimizar la detección automática y <span class="co">[</span><span class="ot">PhenotypeSpace</span><span class="co">](https://marce10.github.io/PhenotypeSpace/index.html)</span> para cuantificar los espacios de rasgos multidimensionales. Recientemente también desarrollé el paquete <span class="co">[</span><span class="ot">sketchy</span><span class="co">](https://marce10.github.io/sketchy/index.html)</span> para organizar compendios de investigación.</span></code><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div><font size="3"> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -319,14 +316,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

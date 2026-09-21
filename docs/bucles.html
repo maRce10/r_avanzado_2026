@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Bucles – R avanzado 2024</title>
+<title>Bucles – R avanzado 2026</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -74,10 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-c875dbb4c9335aca9cc352e974a4ec92.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ae0b5334a1ec0bf99af3d0c304a697d2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d3c39859024bd7df398072cc9f90fe21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a5f0e07c88d63b2cffd0e8312cae9cf7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -121,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">R avanzado 2024</span>
+    <span class="navbar-title">R avanzado 2026</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Buscar"></div>
@@ -173,29 +170,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
     </ul>
   </li>
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tareas" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Tareas</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-tareas">    
-        <li>
-    <a class="dropdown-item" href="./tarea4.html">
- <span class="dropdown-text">Tarea 4</span></a>
+  <li class="nav-item">
+    <span class="nav-link">
+<span class="menu-text">Tareas</span>
+    </span>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./solucion_tarea4.html">
- <span class="dropdown-text">Solución tarea 4</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./tarea5.html">
- <span class="dropdown-text">Tarea 5</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./respuestas_tarea5.html">
- <span class="dropdown-text">Solución Tarea 5</span></a>
-  </li>  
-    </ul>
-  </li>
   <li class="nav-item">
     <a class="nav-link" href="./preparacion_curso.html"> 
 <span class="menu-text">Preparación para el curso</span></a>
@@ -211,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/maRce10/R_avanzado_2024/"> <i class="bi bi-github" role="img" aria-label="GitHub">
+    <a class="nav-link" href="https://github.com/maRce10/R_avanzado_2026/"> <i class="bi bi-github" role="img" aria-label="GitHub">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -269,7 +248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Fecha de publicación</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">20 de septiembre de 2026</p>
+      <p class="date">21 de septiembre de 2026</p>
     </div>
   </div>
   
@@ -300,7 +279,7 @@ pre.numberSource code
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># definir directorio a donde guardar los archivos</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># definir directorio a donde guardar los archivos</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>directorio <span class="ot">&lt;-</span> <span class="st">"DIRECCION_DONDE_GUARDAR_LOS ARCHIVOS_DE_EJEMPLO"</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="co"># guardar archivos</span></span>
@@ -324,7 +303,7 @@ pre.numberSource code
 <span id="cb1-22"><a href="#cb1-22"></a>    <span class="at">path =</span> directorio,</span>
 <span id="cb1-23"><a href="#cb1-23"></a>    <span class="at">full.names =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb1-24"><a href="#cb1-24"></a>    <span class="at">pattern =</span> <span class="st">"TXT$"</span></span>
-<span id="cb1-25"><a href="#cb1-25"></a>  )</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-25"><a href="#cb1-25"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>&nbsp;</p>
@@ -333,7 +312,7 @@ pre.numberSource code
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">length</span>(archivos_txt)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">length</span>(archivos_txt)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 19</code></pre>
@@ -499,11 +478,11 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>vctr <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> <span class="co"># vector sobre el cual iterar el bucle</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>vctr <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> <span class="co"># vector sobre el cual iterar el bucle</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="cf">for</span> (i <span class="cf">in</span> vctr) { <span class="co"># inicio del bucle</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">print</span>(i<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb4-5"><a href="#cb4-5"></a>} <span class="co"># cuerpo del bucle</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-5"><a href="#cb4-5"></a>} <span class="co"># cuerpo del bucle</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1
@@ -517,13 +496,13 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>vctr <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> <span class="co"># vector sobre el cual iterar el bucle</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>vctr <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> <span class="co"># vector sobre el cual iterar el bucle</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="cf">for</span> (i <span class="cf">in</span> vctr) { <span class="co"># inicio del bucle</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"# corriendo iteración"</span>, i))</span>
 <span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">2</span>) <span class="co"># pausar 2 segundos</span></span>
 <span id="cb6-6"><a href="#cb6-6"></a>  <span class="fu">print</span>(i<span class="sc">^</span><span class="dv">2</span>) <span class="co"># cuerpo del bucle</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a>}</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-7"><a href="#cb6-7"></a>}</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "# corriendo iteración 1"
@@ -545,7 +524,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># vector sobre el cual iterar el bucle</span></span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># vector sobre el cual iterar el bucle</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>vctr <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span></span>
 <span id="cb8-3"><a href="#cb8-3"></a></span>
 <span id="cb8-4"><a href="#cb8-4"></a><span class="co"># vector vacio</span></span>
@@ -561,7 +540,7 @@ flowchart LR
 <span id="cb8-14"><a href="#cb8-14"></a>}</span>
 <span id="cb8-15"><a href="#cb8-15"></a></span>
 <span id="cb8-16"><a href="#cb8-16"></a><span class="co"># ver resultados</span></span>
-<span id="cb8-17"><a href="#cb8-17"></a>resultados</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-17"><a href="#cb8-17"></a>resultados</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1 4 9</code></pre>
@@ -572,7 +551,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># vector sobre el cual iterar el bucle</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># vector sobre el cual iterar el bucle</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>vctr <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span></span>
 <span id="cb10-3"><a href="#cb10-3"></a></span>
 <span id="cb10-4"><a href="#cb10-4"></a><span class="co"># vector vacio</span></span>
@@ -587,7 +566,7 @@ flowchart LR
 <span id="cb10-13"><a href="#cb10-13"></a>  resultados[<span class="fu">length</span>(resultados) <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> i2</span>
 <span id="cb10-14"><a href="#cb10-14"></a>}</span>
 <span id="cb10-15"><a href="#cb10-15"></a></span>
-<span id="cb10-16"><a href="#cb10-16"></a>resultados</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-16"><a href="#cb10-16"></a>resultados</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1 4 9</code></pre>
@@ -597,7 +576,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># vector sobre el cual iterar el bucle</span></span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># vector sobre el cual iterar el bucle</span></span>
 <span id="cb12-2"><a href="#cb12-2"></a>vctr <span class="ot">&lt;-</span> <span class="fu">unique</span>(iris<span class="sc">$</span>Species)</span>
 <span id="cb12-3"><a href="#cb12-3"></a></span>
 <span id="cb12-4"><a href="#cb12-4"></a><span class="co"># vector vacio</span></span>
@@ -615,7 +594,7 @@ flowchart LR
 <span id="cb12-16"><a href="#cb12-16"></a><span class="co"># añadir nombre de especies</span></span>
 <span id="cb12-17"><a href="#cb12-17"></a><span class="fu">names</span>(resultados) <span class="ot">&lt;-</span> vctr</span>
 <span id="cb12-18"><a href="#cb12-18"></a></span>
-<span id="cb12-19"><a href="#cb12-19"></a>resultados</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-19"><a href="#cb12-19"></a>resultados</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>    setosa versicolor  virginica 
@@ -640,7 +619,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># leer primer archivo</span></span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># leer primer archivo</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a>archivo1 <span class="ot">&lt;-</span></span>
 <span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">read.table</span>(archivos_txt[<span class="dv">1</span>],</span>
 <span id="cb14-4"><a href="#cb14-4"></a>             <span class="at">header =</span> <span class="cn">TRUE</span>,</span>
@@ -648,7 +627,7 @@ flowchart LR
 <span id="cb14-6"><a href="#cb14-6"></a>             <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span>
 <span id="cb14-7"><a href="#cb14-7"></a></span>
 <span id="cb14-8"><a href="#cb14-8"></a><span class="co"># ver pirmeras 6 filas y 8 columnas</span></span>
-<span id="cb14-9"><a href="#cb14-9"></a><span class="fu">head</span>(archivo1[, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>])</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="fu">head</span>(archivo1[, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>])</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="kable-table">
@@ -746,7 +725,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">nrow</span>(archivo1)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">nrow</span>(archivo1)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 39</code></pre>
@@ -757,7 +736,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># vector vacio</span></span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># vector vacio</span></span>
 <span id="cb17-2"><a href="#cb17-2"></a>resultados <span class="ot">&lt;-</span> <span class="fu">vector</span>()</span>
 <span id="cb17-3"><a href="#cb17-3"></a></span>
 <span id="cb17-4"><a href="#cb17-4"></a><span class="co"># inicio del bucle</span></span>
@@ -774,7 +753,7 @@ flowchart LR
 <span id="cb17-15"><a href="#cb17-15"></a>  resultados <span class="ot">&lt;-</span> <span class="fu">append</span>(resultados, n_sp)</span>
 <span id="cb17-16"><a href="#cb17-16"></a>}</span>
 <span id="cb17-17"><a href="#cb17-17"></a></span>
-<span id="cb17-18"><a href="#cb17-18"></a>resultados</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb17-18"><a href="#cb17-18"></a>resultados</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 39  1  2 12 14  9 12  8 32 36 21 12 22 27 29 19  8 12 26</code></pre>
@@ -785,13 +764,13 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># organizar en data frame</span></span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># organizar en data frame</span></span>
 <span id="cb19-2"><a href="#cb19-2"></a>n_sp_df <span class="ot">&lt;-</span></span>
 <span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">data.frame</span>(<span class="at">archivo =</span> <span class="fu">basename</span>(archivos_txt), </span>
 <span id="cb19-4"><a href="#cb19-4"></a>             <span class="at">n_sp =</span> resultados)</span>
 <span id="cb19-5"><a href="#cb19-5"></a></span>
 <span id="cb19-6"><a href="#cb19-6"></a><span class="co"># ver primeras 6 filas</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a><span class="fu">head</span>(n_sp_df)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="fu">head</span>(n_sp_df)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="kable-table">
@@ -839,7 +818,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(archivo1<span class="sc">$</span>Family))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(archivo1<span class="sc">$</span>Family))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 19</code></pre>
@@ -851,9 +830,9 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>n_familias_df <span class="ot">&lt;-</span></span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>n_familias_df <span class="ot">&lt;-</span></span>
 <span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">data.frame</span>(<span class="at">archivo =</span> <span class="fu">basename</span>(archivos_txt), </span>
-<span id="cb22-3"><a href="#cb22-3"></a>             <span class="at">n_familias =</span> resultados)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb22-3"><a href="#cb22-3"></a>             <span class="at">n_familias =</span> resultados)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>&nbsp;</p>
@@ -865,10 +844,10 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>n_sp_df<span class="sc">$</span>profundidad <span class="ot">&lt;-</span></span>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>n_sp_df<span class="sc">$</span>profundidad <span class="ot">&lt;-</span></span>
 <span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">" m"</span>, <span class="st">""</span>, <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">,"</span>, </span>
 <span id="cb23-3"><a href="#cb23-3"></a>                                 <span class="st">"."</span>, </span>
-<span id="cb23-4"><a href="#cb23-4"></a>                                 n_sp_df<span class="sc">$</span>profundidad)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb23-4"><a href="#cb23-4"></a>                                 n_sp_df<span class="sc">$</span>profundidad)))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>1.5 ¿Cuál es la correlación entre el número de especies observadas (que es igual al número de filas) y la profundidad? (pista: <code>cor.test()</code>)</p>
@@ -880,7 +859,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># vector vacio</span></span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># vector vacio</span></span>
 <span id="cb24-2"><a href="#cb24-2"></a>df_resultados <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb24-3"><a href="#cb24-3"></a></span>
 <span id="cb24-4"><a href="#cb24-4"></a><span class="co"># inicio del bucle</span></span>
@@ -895,7 +874,7 @@ flowchart LR
 <span id="cb24-13"><a href="#cb24-13"></a>  df_resultados <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df_resultados, txt)</span>
 <span id="cb24-14"><a href="#cb24-14"></a>}</span>
 <span id="cb24-15"><a href="#cb24-15"></a></span>
-<span id="cb24-16"><a href="#cb24-16"></a><span class="fu">nrow</span>(df_resultados) <span class="sc">==</span> <span class="fu">sum</span>(n_sp_df<span class="sc">$</span>filas)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb24-16"><a href="#cb24-16"></a><span class="fu">nrow</span>(df_resultados) <span class="sc">==</span> <span class="fu">sum</span>(n_sp_df<span class="sc">$</span>filas)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE</code></pre>
@@ -910,7 +889,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">apropos</span>(<span class="st">"apply$"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">apropos</span>(<span class="st">"apply$"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] ".mapply"    "apply"      "dendrapply" "eapply"     "kernapply" 
@@ -949,7 +928,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">lapply</span>(<span class="at">X =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>), <span class="at">FUN =</span> sqrt)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">lapply</span>(<span class="at">X =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>), <span class="at">FUN =</span> sqrt)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
@@ -967,7 +946,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">lapply</span>(<span class="at">X =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>), <span class="at">FUN =</span> sqrt)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">lapply</span>(<span class="at">X =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>), <span class="at">FUN =</span> sqrt)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
@@ -985,10 +964,10 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># promedio de largo y ancho de setalo</span></span>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># promedio de largo y ancho de setalo</span></span>
 <span id="cb32-2"><a href="#cb32-2"></a><span class="fu">apply</span>(<span class="at">X =</span> iris[, <span class="fu">c</span>(<span class="st">"Sepal.Length"</span>, <span class="st">"Sepal.Width"</span>)], </span>
 <span id="cb32-3"><a href="#cb32-3"></a>      <span class="at">MARGIN =</span> <span class="dv">2</span>, </span>
-<span id="cb32-4"><a href="#cb32-4"></a>      <span class="at">FUN =</span> mean)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb32-4"><a href="#cb32-4"></a>      <span class="at">FUN =</span> mean)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Sepal.Length  Sepal.Width 
@@ -1001,9 +980,9 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">tapply</span>(<span class="at">X =</span> iris<span class="sc">$</span>Petal.Length, </span>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">tapply</span>(<span class="at">X =</span> iris<span class="sc">$</span>Petal.Length, </span>
 <span id="cb34-2"><a href="#cb34-2"></a>       <span class="at">INDEX =</span> iris<span class="sc">$</span>Species, </span>
-<span id="cb34-3"><a href="#cb34-3"></a>       <span class="at">FUN =</span> mean)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb34-3"><a href="#cb34-3"></a>       <span class="at">FUN =</span> mean)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>    setosa versicolor  virginica 
@@ -1015,7 +994,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># funcion desde fuera del bucle</span></span>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># funcion desde fuera del bucle</span></span>
 <span id="cb36-2"><a href="#cb36-2"></a>n_filas <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
 <span id="cb36-3"><a href="#cb36-3"></a>  <span class="co"># leer archivo</span></span>
 <span id="cb36-4"><a href="#cb36-4"></a>  txt <span class="ot">&lt;-</span> <span class="fu">read.table</span>(x,</span>
@@ -1032,7 +1011,7 @@ flowchart LR
 <span id="cb36-15"><a href="#cb36-15"></a>filas <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> archivos_txt, <span class="at">FUN =</span> n_filas)</span>
 <span id="cb36-16"><a href="#cb36-16"></a></span>
 <span id="cb36-17"><a href="#cb36-17"></a><span class="co"># ver resultados</span></span>
-<span id="cb36-18"><a href="#cb36-18"></a><span class="fu">head</span>(filas)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb36-18"><a href="#cb36-18"></a><span class="fu">head</span>(filas)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
@@ -1059,25 +1038,25 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># correr bucle</span></span>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># correr bucle</span></span>
 <span id="cb38-2"><a href="#cb38-2"></a>filas <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="at">X =</span> archivos_txt, <span class="at">FUN =</span> n_filas)</span>
 <span id="cb38-3"><a href="#cb38-3"></a></span>
 <span id="cb38-4"><a href="#cb38-4"></a><span class="co"># ver resultados</span></span>
-<span id="cb38-5"><a href="#cb38-5"></a><span class="fu">head</span>(filas)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb38-5"><a href="#cb38-5"></a><span class="fu">head</span>(filas)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>       ./data/2022-09-02_R3-LcamT3-RcamN4_Pel1_2021-09-24_MaxN.TXT 
-                                                                39 
-./data/2022-09-03_S6-LB13-RB12_PuntaMariaOeste_2022-03-24_MaxN.TXT 
-                                                                 1 
-./data/2022-09-03_T4-LB19-RB18_PuntaMariaOeste_2022-03-24_MaxN.TXT 
-                                                                 2 
-           ./data/2022-09-04_S1-LB10-RN9_Arco2_2022-07-15_MaxN.TXT 
-                                                                12 
-        ./data/2022-09-07_P1-LB12-RB13_Gissler_2022-03-30_MaxN.TXT 
-                                                                14 
-          ./data/2022-09-11_P1-LB14-RB13_Risco_2022-03-26_MaxN.TXT 
-                                                                 9 </code></pre>
+<pre><code>       ./data//2022-09-02_R3-LcamT3-RcamN4_Pel1_2021-09-24_MaxN.TXT 
+                                                                 39 
+./data//2022-09-03_S6-LB13-RB12_PuntaMariaOeste_2022-03-24_MaxN.TXT 
+                                                                  1 
+./data//2022-09-03_T4-LB19-RB18_PuntaMariaOeste_2022-03-24_MaxN.TXT 
+                                                                  2 
+           ./data//2022-09-04_S1-LB10-RN9_Arco2_2022-07-15_MaxN.TXT 
+                                                                 12 
+        ./data//2022-09-07_P1-LB12-RB13_Gissler_2022-03-30_MaxN.TXT 
+                                                                 14 
+          ./data//2022-09-11_P1-LB14-RB13_Risco_2022-03-26_MaxN.TXT 
+                                                                  9 </code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -1085,7 +1064,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="co"># correr bucle</span></span>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="co"># correr bucle</span></span>
 <span id="cb40-2"><a href="#cb40-2"></a>filas <span class="ot">&lt;-</span> <span class="fu">sapply</span>(</span>
 <span id="cb40-3"><a href="#cb40-3"></a>  <span class="at">X =</span> archivos_txt,</span>
 <span id="cb40-4"><a href="#cb40-4"></a>  <span class="at">FUN =</span> <span class="cf">function</span>(x) {</span>
@@ -1099,21 +1078,21 @@ flowchart LR
 <span id="cb40-12"><a href="#cb40-12"></a>)</span>
 <span id="cb40-13"><a href="#cb40-13"></a></span>
 <span id="cb40-14"><a href="#cb40-14"></a><span class="co"># ver resultados</span></span>
-<span id="cb40-15"><a href="#cb40-15"></a><span class="fu">head</span>(filas)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb40-15"><a href="#cb40-15"></a><span class="fu">head</span>(filas)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>       ./data/2022-09-02_R3-LcamT3-RcamN4_Pel1_2021-09-24_MaxN.TXT 
-                                                                39 
-./data/2022-09-03_S6-LB13-RB12_PuntaMariaOeste_2022-03-24_MaxN.TXT 
-                                                                 1 
-./data/2022-09-03_T4-LB19-RB18_PuntaMariaOeste_2022-03-24_MaxN.TXT 
-                                                                 2 
-           ./data/2022-09-04_S1-LB10-RN9_Arco2_2022-07-15_MaxN.TXT 
-                                                                12 
-        ./data/2022-09-07_P1-LB12-RB13_Gissler_2022-03-30_MaxN.TXT 
-                                                                14 
-          ./data/2022-09-11_P1-LB14-RB13_Risco_2022-03-26_MaxN.TXT 
-                                                                 9 </code></pre>
+<pre><code>       ./data//2022-09-02_R3-LcamT3-RcamN4_Pel1_2021-09-24_MaxN.TXT 
+                                                                 39 
+./data//2022-09-03_S6-LB13-RB12_PuntaMariaOeste_2022-03-24_MaxN.TXT 
+                                                                  1 
+./data//2022-09-03_T4-LB19-RB18_PuntaMariaOeste_2022-03-24_MaxN.TXT 
+                                                                  2 
+           ./data//2022-09-04_S1-LB10-RN9_Arco2_2022-07-15_MaxN.TXT 
+                                                                 12 
+        ./data//2022-09-07_P1-LB12-RB13_Gissler_2022-03-30_MaxN.TXT 
+                                                                 14 
+          ./data//2022-09-11_P1-LB14-RB13_Risco_2022-03-26_MaxN.TXT 
+                                                                  9 </code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -1129,20 +1108,20 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">expr =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">expr =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>          [,1]     [,2]      [,3]
- [1,]  0.93803 -0.66193  1.260921
- [2,] -0.53373  0.91211 -0.454825
- [3,]  0.16752  0.93092  0.087946
- [4,] -1.17792  0.99841 -1.554884
- [5,]  0.43400  0.98234 -0.315554
- [6,]  0.26600  1.75646 -0.037419
- [7,] -0.65209 -0.47734 -0.179877
- [8,]  0.74705  0.41419  1.385805
- [9,]  1.17747 -0.81919  0.157353
-[10,] -0.57779  0.98782 -0.840657</code></pre>
+<pre><code>          [,1]      [,2]     [,3]
+ [1,] -0.80276  1.006067  1.20963
+ [2,]  0.45856  0.360679  0.42343
+ [3,]  0.36394 -0.422433  0.29566
+ [4,]  0.38874  1.188486  2.59618
+ [5,]  0.94028  0.436882  0.92874
+ [6,] -1.64925  0.039198  1.70704
+ [7,]  0.32167  0.495808  1.23968
+ [8,] -0.43358 -1.888878 -0.27195
+ [9,] -1.14801 -1.517271  2.75912
+[10,] -2.18596  3.713952  1.04997</code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -1192,7 +1171,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="co"># crear vector vacio</span></span>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="co"># crear vector vacio</span></span>
 <span id="cb44-2"><a href="#cb44-2"></a>cc_vector <span class="ot">&lt;-</span> <span class="fu">vector</span>()</span>
 <span id="cb44-3"><a href="#cb44-3"></a></span>
 <span id="cb44-4"><a href="#cb44-4"></a><span class="cf">repeat</span>{</span>
@@ -1212,10 +1191,10 @@ flowchart LR
 <span id="cb44-18"><a href="#cb44-18"></a>  <span class="cf">if</span> (corr_coef <span class="sc">&gt;</span> <span class="fl">0.5</span>) <span class="cf">break</span></span>
 <span id="cb44-19"><a href="#cb44-19"></a>}</span>
 <span id="cb44-20"><a href="#cb44-20"></a></span>
-<span id="cb44-21"><a href="#cb44-21"></a><span class="fu">head</span>(cc_vector)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb44-21"><a href="#cb44-21"></a><span class="fu">head</span>(cc_vector)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.079474 -0.355613 -0.020991 -0.064960 -0.285025 -0.222097</code></pre>
+<pre><code>[1] -0.336995  0.094881 -0.216820  0.295577 -0.129282 -0.212588</code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -1223,7 +1202,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="co"># poner en un data frame</span></span>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="co"># poner en un data frame</span></span>
 <span id="cb46-2"><a href="#cb46-2"></a>cc <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> cc_vector, <span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(cc_vector))</span>
 <span id="cb46-3"><a href="#cb46-3"></a></span>
 <span id="cb46-4"><a href="#cb46-4"></a><span class="fu">ggplot</span>(<span class="at">data =</span> cc, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
@@ -1232,7 +1211,7 @@ flowchart LR
 <span id="cb46-7"><a href="#cb46-7"></a>             <span class="at">lwd =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
 <span id="cb46-8"><a href="#cb46-8"></a>  <span class="fu">geom_line</span>(<span class="at">col =</span> <span class="st">"#66C2A5"</span>, <span class="at">lwd =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
 <span id="cb46-9"><a href="#cb46-9"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Iteraciones"</span>, <span class="at">y =</span> <span class="st">"Correlación de pearson (r)"</span>) <span class="sc">+</span></span>
-<span id="cb46-10"><a href="#cb46-10"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">25</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb46-10"><a href="#cb46-10"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">25</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1278,7 +1257,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="co"># definir valor inicial</span></span>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="co"># definir valor inicial</span></span>
 <span id="cb47-2"><a href="#cb47-2"></a>corr_coef <span class="ot">&lt;-</span> <span class="dv">0</span></span>
 <span id="cb47-3"><a href="#cb47-3"></a></span>
 <span id="cb47-4"><a href="#cb47-4"></a><span class="co"># iniciar bucle</span></span>
@@ -1298,7 +1277,7 @@ flowchart LR
 <span id="cb47-18"><a href="#cb47-18"></a>  </span>
 <span id="cb47-19"><a href="#cb47-19"></a>}</span>
 <span id="cb47-20"><a href="#cb47-20"></a></span>
-<span id="cb47-21"><a href="#cb47-21"></a>corr_coef</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb47-21"><a href="#cb47-21"></a>corr_coef</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -1342,7 +1321,7 @@ flowchart LR
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a><span class="co"># definir valor inicial</span></span>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r numberLines lineAnchors code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a><span class="co"># definir valor inicial</span></span>
 <span id="cb49-2"><a href="#cb49-2"></a>corr_coef <span class="ot">&lt;-</span> <span class="dv">0</span></span>
 <span id="cb49-3"><a href="#cb49-3"></a></span>
 <span id="cb49-4"><a href="#cb49-4"></a><span class="co"># crear vector vacio</span></span>
@@ -1362,7 +1341,7 @@ flowchart LR
 <span id="cb49-18"><a href="#cb49-18"></a>  cc_vector[<span class="fu">length</span>(cc_vector) <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> corr_coef</span>
 <span id="cb49-19"><a href="#cb49-19"></a>}</span>
 <span id="cb49-20"><a href="#cb49-20"></a></span>
-<span id="cb49-21"><a href="#cb49-21"></a><span class="fu">head</span>(cc_vector)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb49-21"><a href="#cb49-21"></a><span class="fu">head</span>(cc_vector)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -0.047693  0.232015  0.133767 -0.089900  0.364152  0.203306</code></pre>
@@ -1395,20 +1374,24 @@ flowchart LR
 <p><font size="5">Session information</font></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.6.1 (2026-06-24 ucrt)
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 22631)
+<pre><code>R version 4.6.1 (2026-06-24)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 22.04.5 LTS
 
 Matrix products: default
-  LAPACK version 3.12.1
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0 
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0  LAPACK version 3.10.0
 
 locale:
-[1] LC_COLLATE=Spanish_Costa Rica.utf8  LC_CTYPE=Spanish_Costa Rica.utf8   
-[3] LC_MONETARY=Spanish_Costa Rica.utf8 LC_NUMERIC=C                       
-[5] LC_TIME=Spanish_Costa Rica.utf8    
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=es_CR.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=es_CR.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=es_CR.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=es_CR.UTF-8 LC_IDENTIFICATION=C       
 
 time zone: America/Costa_Rica
-tzcode source: internal
+tzcode source: system (glibc)
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
@@ -1487,14 +1470,13 @@ loaded via a namespace (and not attached):
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1560,7 +1542,7 @@ loaded via a namespace (and not attached):
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/marce10\.github\.io\/R_avanzado_2024\/");
+        var filterRegex = new RegExp("https:\/\/marce10\.github\.io\/R_avanzado_2026\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -1892,7 +1874,7 @@ loaded via a namespace (and not attached):
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Ejecutar el código</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb52" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<div class="sourceCode" id="cb52" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &lt;font size="7"&gt;&lt;b&gt;Bucles&lt;/b&gt;&lt;/font&gt;</span></span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -2102,7 +2084,7 @@ loaded via a namespace (and not attached):
 <span id="cb52-220"><a href="#cb52-220" aria-hidden="true" tabindex="-1"></a>    C --&gt; D(Guardar resultado)</span>
 <span id="cb52-221"><a href="#cb52-221" aria-hidden="true" tabindex="-1"></a>    D --&gt; C(Usar resultado previo)</span>
 <span id="cb52-222"><a href="#cb52-222" aria-hidden="true" tabindex="-1"></a>    D --&gt; B</span>
-<span id="cb52-223"><a href="#cb52-223" aria-hidden="true" tabindex="-1"></a>    B -- No --&gt; E(Fin del bucle <span class="cf">for</span>)</span>
+<span id="cb52-223"><a href="#cb52-223" aria-hidden="true" tabindex="-1"></a>    B -- No --&gt; E(Fin del bucle <span class="kw">for</span>)</span>
 <span id="cb52-224"><a href="#cb52-224" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb52-225"><a href="#cb52-225" aria-hidden="true" tabindex="-1"></a>    style A fill:<span class="co">#28192F66, stroke:#000, stroke-width:2px, color:#FFF</span></span>
 <span id="cb52-226"><a href="#cb52-226" aria-hidden="true" tabindex="-1"></a>    style B fill:<span class="co">#40498E66, stroke:#000, stroke-width:2px, color:#FFF</span></span>
@@ -2831,7 +2813,7 @@ loaded via a namespace (and not attached):
 <span id="cb52-983"><a href="#cb52-983" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb52-984"><a href="#cb52-984" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
 <span id="cb52-985"><a href="#cb52-985" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-</code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</code><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
@@ -2840,7 +2822,7 @@ loaded via a namespace (and not attached):
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>Copyright 2024 | <a href="https://marce10.github.io">Marcelo Araya-Salas</a></p>
+<p>Copyright 2026 | <a href="https://marce10.github.io">Marcelo Araya-Salas</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

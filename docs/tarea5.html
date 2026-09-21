@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Tarea 5 – R avanzado 2026</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -74,10 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-c875dbb4c9335aca9cc352e974a4ec92.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ae0b5334a1ec0bf99af3d0c304a697d2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d3c39859024bd7df398072cc9f90fe21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a5f0e07c88d63b2cffd0e8312cae9cf7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -170,29 +167,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
     </ul>
   </li>
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tareas" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Tareas</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-tareas">    
-        <li>
-    <a class="dropdown-item" href="./tarea4.html">
- <span class="dropdown-text">Tarea 4</span></a>
+  <li class="nav-item">
+    <span class="nav-link">
+<span class="menu-text">Tareas</span>
+    </span>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./solucion_tarea4.html">
- <span class="dropdown-text">Solución tarea 4</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./tarea5.html">
- <span class="dropdown-text">Tarea 5</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./respuestas_tarea5.html">
- <span class="dropdown-text">Solución Tarea 5</span></a>
-  </li>  
-    </ul>
-  </li>
   <li class="nav-item">
     <a class="nav-link" href="./preparacion_curso.html"> 
 <span class="menu-text">Preparación para el curso</span></a>
@@ -245,7 +224,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Fecha de publicación</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">20 de septiembre de 2026</p>
+      <p class="date">21 de septiembre de 2026</p>
     </div>
   </div>
   
@@ -287,7 +266,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># definir directorio a donde guardar los archivos</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># definir directorio a donde guardar los archivos</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>directorio <span class="ot">&lt;-</span> <span class="st">"DIRECCION_DONDE_GUARDAR_LOS ARCHIVOS_DE_EJEMPLO"</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># guardar archivos</span></span>
@@ -311,7 +290,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> directorio,</span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">full.names =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"TXT$"</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>&nbsp;</p>
@@ -320,7 +299,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(archivos_txt)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(archivos_txt)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 19</code></pre>
@@ -579,12 +558,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <hr>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Información de la sesión
+Información de la sesión
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -594,52 +573,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>─ Session info ───────────────────────────────────────────────────────────────
  setting  value
- version  R version 4.6.1 (2026-06-24 ucrt)
- os       Windows 11 x64 (build 22631)
- system   x86_64, mingw32
- ui       RTerm
+ version  R version 4.6.1 (2026-06-24)
+ os       Ubuntu 22.04.5 LTS
+ system   x86_64, linux-gnu
+ ui       X11
  language (EN)
- collate  Spanish_Costa Rica.utf8
- ctype    Spanish_Costa Rica.utf8
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
  tz       America/Costa_Rica
- date     2026-09-20
- pandoc   3.8.3 @ C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools/ (via rmarkdown)
- quarto   1.9.38 @ C:\\PROGRA~1\\RStudio\\RESOUR~1\\app\\bin\\quarto\\bin\\quarto.exe
+ date     2026-09-21
+ pandoc   3.8.3 @ /usr/lib/rstudio/resources/app/bin/quarto/bin/tools/x86_64/ (via rmarkdown)
+ quarto   1.7.31 @ /usr/local/bin/quarto
 
 ─ Packages ───────────────────────────────────────────────────────────────────
  package     * version date (UTC) lib source
- cachem        1.1.0   2024-05-16 [1] CRAN (R 4.6.1)
- cli           3.6.6   2026-04-09 [1] CRAN (R 4.6.1)
- devtools      2.5.2   2026-04-30 [1] CRAN (R 4.6.1)
- digest        0.6.39  2025-11-19 [1] CRAN (R 4.6.1)
- ellipsis      0.3.3   2026-04-04 [1] CRAN (R 4.6.1)
- evaluate      1.0.5   2025-08-27 [1] CRAN (R 4.6.1)
- fastmap       1.2.0   2024-05-15 [1] CRAN (R 4.6.1)
- fs            2.1.0   2026-04-18 [1] CRAN (R 4.6.1)
- glue          1.8.1   2026-04-17 [1] CRAN (R 4.6.1)
- htmltools     0.5.9   2025-12-04 [1] CRAN (R 4.6.1)
- htmlwidgets   1.6.4   2023-12-06 [1] CRAN (R 4.6.1)
- jsonlite      2.0.0   2025-03-27 [1] CRAN (R 4.6.1)
- knitr       * 1.51    2025-12-20 [1] CRAN (R 4.6.1)
- lifecycle     1.0.5   2026-01-08 [1] CRAN (R 4.6.1)
- magrittr      2.0.5   2026-04-04 [1] CRAN (R 4.6.1)
- memoise       2.0.1   2021-11-26 [1] CRAN (R 4.6.1)
- otel          0.2.0   2025-08-29 [1] CRAN (R 4.6.1)
- pkgbuild      1.4.8   2025-05-26 [1] CRAN (R 4.6.1)
- pkgload       1.5.3   2026-06-15 [1] CRAN (R 4.6.1)
- purrr         1.2.2   2026-04-10 [1] CRAN (R 4.6.1)
- R6            2.6.1   2025-02-15 [1] CRAN (R 4.6.1)
- rlang         1.3.0   2026-07-05 [1] CRAN (R 4.6.1)
- rmarkdown     2.31    2026-03-26 [1] CRAN (R 4.6.1)
- rstudioapi    0.19.0  2026-06-11 [1] CRAN (R 4.6.1)
- sessioninfo   1.2.4   2026-06-04 [1] CRAN (R 4.6.1)
- usethis       3.2.1   2025-09-06 [1] CRAN (R 4.6.1)
- vctrs         0.7.3   2026-04-11 [1] CRAN (R 4.6.1)
- xfun          0.60    2026-07-09 [1] CRAN (R 4.6.1)
- yaml          2.3.12  2025-12-10 [1] CRAN (R 4.6.1)
+ cachem        1.1.0   2024-05-16 [2] CRAN (R 4.6.1)
+ cli           3.6.6   2026-04-09 [2] CRAN (R 4.6.1)
+ devtools      2.5.2   2026-04-30 [2] CRAN (R 4.6.1)
+ digest        0.6.39  2025-11-19 [2] CRAN (R 4.6.1)
+ ellipsis      0.3.3   2026-04-04 [2] CRAN (R 4.6.1)
+ evaluate      1.0.5   2025-08-27 [2] CRAN (R 4.6.1)
+ fastmap       1.2.0   2024-05-15 [2] CRAN (R 4.6.1)
+ fs            2.1.0   2026-04-18 [2] CRAN (R 4.6.1)
+ glue          1.8.1   2026-04-17 [2] CRAN (R 4.6.1)
+ htmltools     0.5.9   2025-12-04 [2] CRAN (R 4.6.1)
+ htmlwidgets   1.6.4   2023-12-06 [2] CRAN (R 4.6.1)
+ jsonlite      2.0.0   2025-03-27 [2] CRAN (R 4.6.1)
+ knitr       * 1.51    2025-12-20 [2] CRAN (R 4.6.1)
+ lifecycle     1.0.5   2026-01-08 [2] CRAN (R 4.6.1)
+ magrittr      2.0.5   2026-04-04 [2] CRAN (R 4.6.1)
+ memoise       2.0.1   2021-11-26 [2] CRAN (R 4.6.1)
+ otel          0.2.0   2025-08-29 [2] CRAN (R 4.6.1)
+ pkgbuild      1.4.8   2025-05-26 [2] CRAN (R 4.6.1)
+ pkgload       1.5.3   2026-06-15 [2] CRAN (R 4.6.1)
+ purrr         1.2.2   2026-04-10 [2] CRAN (R 4.6.1)
+ R6            2.6.1   2025-02-15 [2] CRAN (R 4.6.1)
+ rlang         1.3.0   2026-07-05 [2] CRAN (R 4.6.1)
+ rmarkdown     2.31    2026-03-26 [2] CRAN (R 4.6.1)
+ rstudioapi    0.19.0  2026-06-11 [2] CRAN (R 4.6.1)
+ sessioninfo   1.2.4   2026-06-04 [2] CRAN (R 4.6.1)
+ usethis       3.2.1   2025-09-06 [2] CRAN (R 4.6.1)
+ vctrs         0.7.3   2026-04-11 [2] CRAN (R 4.6.1)
+ xfun          0.60    2026-07-09 [2] CRAN (R 4.6.1)
+ yaml          2.3.12  2025-12-10 [2] CRAN (R 4.6.1)
 
- [1] C:/Users/Biologia-UCR/AppData/Local/R/win-library/4.6
- [2] C:/Program Files/R/R-4.6.1/library
+ [1] /home/m/R/x86_64-pc-linux-gnu-library/4.6
+ [2] /usr/local/lib/R/site-library
+ [3] /usr/lib/R/site-library
+ [4] /usr/lib/R/library
  * ── Packages attached to the search path.
 
 ──────────────────────────────────────────────────────────────────────────────</code></pre>
@@ -703,14 +684,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
