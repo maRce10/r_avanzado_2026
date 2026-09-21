@@ -1,0 +1,80 @@
+project:
+  type: website
+  output-dir: docs
+  
+website:
+  page-footer: Copyright 2026 | <a href="https://marce10.github.io">Marcelo Araya-Salas</a>
+  title: "R avanzado 2026"
+  search: true
+  site-url: https://marce10.github.io/R_avanzado_2026/
+  repo-url: https://github.com/maRce10/R_avanzado_2026/
+  navbar:
+    background: white
+    right:
+      - icon: github
+        href: https://github.com/maRce10/R_avanzado_2026/
+        aria-label: GitHub
+    left:
+      - href: index.qmd
+        text: " "
+      # - text: "Programa"
+      #   href: program.qmd
+      - text: "Manuales"
+        menu:
+        - text: "Fundamentos de R"
+          href: fundamentos_de_r.qmd
+        - text: "Reportes dinámicos"
+          href: reportes_dinamicos.qmd
+        - text: "Funciones"
+          href: funciones.qmd
+        - text: "Bucles"
+          href: bucles.qmd
+        - text: "Simular datos"
+          href: como_simular_datos.qmd
+        - text: "Modelos de regresión"
+          href: modelos_de_regresion.qmd
+        - text: "Estadística tradicional como regresión"
+          href: estadistica_tradicional_regresion.qmd
+        - text: "Gráficos con ggplot2"
+          href: ggplot2.qmd
+      - text: "Tareas"
+        # menu:
+        # - text: "Tarea 4"
+        #   href: tarea4.qmd
+        # - text: "Solución tarea 4"
+        #   href: solucion_tarea4.qmd
+        # - text: "Tarea 5"
+        #   href: tarea5.qmd
+        # - text: "Solución Tarea 5"
+        #   href: respuestas_tarea5.qmd
+      - text: "Preparación para el curso"
+        href: preparacion_curso.qmd
+      - text: "Compartir código"
+        href: https://codefile.io/f/inMsojTFoN
+      - text: "Instructor"
+        href: instructor.qmd
+
+
+toc: true
+toc-depth: 2
+toc-location: left
+toc-title: Contenidos
+number-sections: true
+code-line-numbers: false
+highlight-style: pygments
+code-overflow: wrap
+code-copy: true
+date: today
+lang: es
+embed-resources: false
+format:
+  html:
+    css: styles.css
+    toc: true
+    df-print: kable
+    code-fold: show
+    code-tools: true
+    link-external-icon: false
+    link-external-newwindow: true  
+      
+editor: visual

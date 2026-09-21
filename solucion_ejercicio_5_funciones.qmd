@@ -1,0 +1,283 @@
+---
+title: "Untitled"
+editor_options: 
+  chunk_output_type: console
+---
+
+
+# 5.1 Cree una función que calcule el promedio, la desviación estándar y el error estándar de un vector numérico. Estos valores deben ser devueltos como una lista con nombres.
+
+```{r}
+
+ee_fun <- function(x){
+  sd(x) / sqrt(length(x))
+}
+
+f1 <- function(x) {
+  
+  prom <- mean(x)
+  de <- sd(x)
+  ee <- ee_fun(x)
+  
+  resultado <- list(prom = prom, de = de, ee = ee)
+
+  return(resultado)
+  }
+ 
+v1 <- c(1, 4, 6,7,9, 10, 11, 12, 13,12, 10, 11, 12, 14, 9, 8, 7, 10)
+
+f1(v1)
+
+```
+
+# 5.2 Permita a los usuarios ignorar los NAs (similar al argumento na.rm en mean(), pista: añada un argumento lógico, puede utilizar la funcion na.omit())
+
+```{r}
+
+f2 <- function(x, na.rm = FALSE) {
+  
+  if (na.rm){
+    x <- na.omit(x)
+  }
+  
+  prom <- mean(x)
+  de <- sd(x)
+  ee <- ee_fun(x)
+  
+  resultado <- list(prom = prom, de = de, ee = ee)
+  
+  return(resultado)
+}
+
+v1 <- c(1, 4, 6,7,9, 10, 11, 12, 13,12, 10, 11, 12, 14, 9, 8, 7, 10, NA)
+
+f2(v1, na.rm = TRUE)
+
+```
+
+# 5.3 Haga que la función además produzca un histograma del vector numérico proporcionado por el usuario
+
+
+```{r}
+f3 <- function(x, na.rm = FALSE) {
+  
+  if (na.rm){
+    x <- na.omit(x)
+  }
+  
+  prom <- mean(x)
+  de <- sd(x)
+  ee <- ee_fun(x)
+  
+  hist(x)
+  resultado <- list(prom = prom, de = de, ee = ee)
+  
+  return(resultado)
+}
+
+v1 <- c(1, 4, 6,7,9, 10, 11, 12, 13,12, 10, 11, 12, 14, 9, 8, 7, 10, NA)
+
+f3(v1, na.rm = TRUE)
+```
+ 
+# 5.4 Haga que la función permita al usuario definir el color para las barras del histograma
+```{r}
+
+f4 <- function(x, na.rm = FALSE, col = "tomato") {
+  
+  if (na.rm){
+    x <- na.omit(x)
+  }
+  
+  prom <- mean(x)
+  de <- sd(x)
+  ee <- ee_fun(x)
+  
+  hist(x, col = col)
+  resultado <- list(prom = prom, de = de, ee = ee)
+  
+  return(resultado)
+}
+
+v1 <- c(1, 4, 6,7,9, 10, 11, 12, 13,12, 10, 11, 12, 14, 9, 8, 7, 10, NA)
+
+f4(v1, na.rm = TRUE, col = "orange")
+```
+
+# 5.5 Añada un argumento a la función que permita el usuario, si lo desea, calcular la sumatoria (sum()) junto con el resto de los descriptores estadísticos
+
+```{r}
+
+f5 <- function(x, na.rm = FALSE, col = "tomato", suma = FALSE) {
+  
+  if (na.rm){
+    x <- na.omit(x)
+  }
+  
+  prom <- mean(x)
+  de <- sd(x)
+  ee <- ee_fun(x)
+  
+  hist(x, col = col)
+  
+  if (suma){
+    suma <- sum(x)
+    resultado <- list(prom = prom, de = de, ee = ee, suma = suma)
+  } else {
+  resultado <- list(prom = prom, de = de, ee = ee)
+  }
+  
+  return(resultado)
+}
+
+v1 <- c(1, 4, 6,7,9, 10, 11, 12, 13,12, 10, 11, 12, 14, 9, 8, 7, 10, NA)
+
+f5(v1, na.rm = TRUE, col = "orange", suma = TRUE)
+```
+ 
+# 5.6 Agregue el promedio y la desviación estándar al título del histograma (pista: use paste())
+
+```{r}
+
+f6 <- function(x, na.rm = FALSE, col = "tomato", suma = FALSE) {
+  
+  if (na.rm){
+    x <- na.omit(x)
+  }
+  
+  prom <- mean(x)
+  de <- sd(x)
+  ee <- ee_fun(x)
+  
+  titulo <- paste("prom:", round(prom, 2), ", DE:", round(de, 2)) 
+  
+  hist(x, col = col, main = titulo)
+  
+  if (suma){
+    suma <- sum(x)
+    resultado <- list(prom = prom, de = de, ee = ee, suma = suma)
+  } else {
+  resultado <- list(prom = prom, de = de, ee = ee)
+  }
+  
+  return(resultado)
+}
+
+v1 <- c(1, 4, 6,7,9, 10, 11, 12, 13,12, 10, 11, 12, 14, 9, 8, 7, 10, NA)
+
+f6(v1, na.rm = TRUE, col = "orange", suma = TRUE)
+
+```
+
+ 
+# 5.7 Modifique la función para que también cree una linea vertical indicando el promedio del vector numérico proporcionado por el usuario (pista abline())
+
+```{r}
+
+f7 <- function(x, na.rm = FALSE, col = "tomato", suma = FALSE) {
+  
+  if (na.rm){
+    x <- na.omit(x)
+  }
+  
+  prom <- mean(x)
+  de <- sd(x)
+  ee <- ee_fun(x)
+  
+  titulo <- paste("prom:", round(prom, 2), ", DE:", round(de, 2)) 
+  
+  hist(x, col = col, main = titulo)
+  abline(v = prom, lty = 2, col = "red", lwd = 3)
+  
+  if (suma){
+    suma <- sum(x)
+    resultado <- list(prom = prom, de = de, ee = ee, suma = suma)
+  } else {
+  resultado <- list(prom = prom, de = de, ee = ee)
+  }
+  
+  return(resultado)
+}
+
+v1 <- c(1, 4, 6,7,9, 10, 11, 12, 13,12, 10, 11, 12, 14, 9, 8, 7, 10, NA)
+
+f7(v1, na.rm = TRUE, col = "orange", suma = TRUE)
+
+```
+
+# 5.8 Modifique la función para que añada un polígono transparente sobre el área que cubre el promedio +/- la desviación estándar (puede usar la función rect())
+
+```{r}
+
+f8 <- function(x, na.rm = FALSE, col = "tomato", suma = FALSE) {
+  
+  if (na.rm){
+    x <- na.omit(x)
+  }
+  
+  prom <- mean(x)
+  de <- sd(x)
+  ee <- ee_fun(x)
+  
+  titulo <- paste("prom:", round(prom, 2), ", DE:", round(de, 2)) 
+  
+  hist(x, col = col, main = titulo, freq = FALSE)
+  
+  rect(ybottom = -10, ytop = 2, xleft = prom - de, xright = prom + de, col = adjustcolor("gray", alpha.f = 0.5), border = NA)
+  abline(v = prom, lty = 2, col = "red", lwd = 3)
+  
+  
+  
+  if (suma){
+    suma <- sum(x)
+    resultado <- list(prom = prom, de = de, ee = ee, suma = suma)
+  } else {
+  resultado <- list(prom = prom, de = de, ee = ee)
+  }
+  
+  return(resultado)
+}
+
+v1 <- c(1, 4, 6,7,9, 10, 11, 12, 13,12, 10, 11, 12, 14, 9, 8, 7, 10, NA)
+
+f8(v1, na.rm = TRUE, col = adjustcolor("tomato", alpha.f = 0.6), suma = TRUE)
+
+```
+
+# 5.9 Modifique la función con un argumento lógico que permita al usuario controlar si se crea un gráfico o no
+
+```{r}
+f9 <- function(x, na.rm = FALSE, col = "tomato", suma = FALSE, plot = TRUE) {
+  
+  if (na.rm){
+    x <- na.omit(x)
+  }
+  
+  prom <- mean(x)
+  de <- sd(x)
+  ee <- ee_fun(x)
+  
+  titulo <- paste("prom:", round(prom, 2), ", DE:", round(de, 2)) 
+  
+  if (plot){
+  hist(x, col = col, main = titulo, freq = FALSE)
+  
+  rect(ybottom = -10, ytop = 2, xleft = prom - de, xright = prom + de, col = adjustcolor("gray", alpha.f = 0.5), border = NA)
+  abline(v = prom, lty = 2, col = "red", lwd = 3)
+  }
+  
+  if (suma){
+    suma <- sum(x)
+    resultado <- list(prom = prom, de = de, ee = ee, suma = suma)
+  } else {
+  resultado <- list(prom = prom, de = de, ee = ee)
+  }
+  
+  return(resultado)
+}
+
+v1 <- c(1, 4, 6,7,9, 10, 11, 12, 13,12, 10, 11, 12, 14, 9, 8, 7, 10, NA)
+
+f9(v1, na.rm = TRUE, col = adjustcolor("blue", alpha.f = 0.6), suma = TRUE, plot = TRUE)
+```
+
