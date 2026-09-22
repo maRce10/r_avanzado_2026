@@ -89,7 +89,7 @@ flowchart LR
     BF --> BA(Funciones Básicas)
     BF --> OP(Operadores)
     F --> PF(Paquetes)
-    F --> UF(Funciones Definidas por el Usuario)
+    F --> UF("Funciones Definidas</br>por el Usuario")
 
     class R,D,D1,D2,F largeText;
 
@@ -443,13 +443,12 @@ flowchart LR
     BF --> OP(Operadores)
     BF --> BA(Funciones Básicas)
     F --> PF(Paquetes)
-    F --> UF(Funciones Definidas por el Usuario)
+    F --> UF("Funciones Definidas</br>por el Usuario")
 
     class R,D,D1,D2,F largeText;
 
     style F fill:#357BA266, stroke:#000, stroke-width:2px, color:#FFF, width:120px
     style BF fill:#A0DFB966, stroke:#000, stroke-width:2px, color:#000
-    style BA fill:#DEF5E566, stroke:#000, stroke-width:2px, color:#000
     style OP fill:#DEF5E566, stroke:#000, stroke-width:2px, color:#000    
     style PF fill:#A0DFB966, stroke:#000, stroke-width:2px, color:#000000
     style UF fill:#A0DFB966, stroke:#000, stroke-width:2px, color:#000
@@ -1011,7 +1010,7 @@ Los paquetes también pueden incluir demostraciones de código extendidas ("demo
 ```{r, eval=F}
 demo(package="stats")
 
-# call demo directly
+# llamar la demo directamente
 demo("nlm")
 
 ```
@@ -1034,7 +1033,7 @@ demo("nlm")
 
  
 
----
+------------------------------------------------------------------------
 
 ## Referencias
 
@@ -1042,7 +1041,7 @@ demo("nlm")
 - [Google's R Style Guide](https://google.github.io/styleguide/Rguide.xml)\
 - Hands-On Programming with R (Grolemund, 2014)
 
----
+------------------------------------------------------------------------
 
 ::: {.callout-note collapse="true"}
 ## Información de la sesión {.unnumbered .unlisted}
