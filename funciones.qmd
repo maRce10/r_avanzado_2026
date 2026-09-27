@@ -74,7 +74,7 @@ flowchart LR
     BF --> OP(Operadores)
     BF --> BA(Funciones Básicas)
     F --> PF(Paquetes)
-    F --> UF(Funciones Definidas por el Usuario)
+    F --> UF("Funciones Definidas</br>por el Usuario")
 
     class R,D,D1,D2,F largeText;
 
@@ -407,8 +407,7 @@ class(sd)
 
  
 
-
----
+------------------------------------------------------------------------
 
 ## Nombre
 
@@ -1024,14 +1023,13 @@ Esto ya debería ser obvio a este punto.
 ::: {.alert .alert-info}
 ## Ejercicio 5
 
-5.1 Cree una función que tome un único argumento (`x`) y con este calcule el promedio, la desviación estándar y el error estándar. Estos valores deben ser devueltos como un cuadro de datos (data frame) con cada valor en una columna con su respectivo nombre (pista: no existe función predeterminada para error estandar). 
+5.1 Cree una función que tome un único argumento (`x`) y con este calcule el promedio, la desviación estándar y el error estándar. Estos valores deben ser devueltos como un cuadro de datos (data frame) con cada valor en una columna con su respectivo nombre (pista: no existe función predeterminada para error estandar).
 
 5.2 Modifique la función del punto anterior para que permita a los usuarios ignorar los `NAs` (similar al argumento `na.rm` en `mean()`, pista: añada un argumento lógico, puede utilizar la funcion `na.omit()` en el cuerpo de la función)
 
-5.3 La función `shapiro.test()` permite ejecutar [la prueba de normalidad de Shapiro-Wilk](https://es.wikipedia.org/wiki/Prueba_de_Shapiro-Wilk), la cual evalua si un vector numérico está normalmente distribuido. Añada una columna al resultado de la función de los puntos anteriores que incluya el valor de p estimado por `shapiro.test()` sobre el vector del argumento `x`. 
+5.3 La función `shapiro.test()` permite ejecutar [la prueba de normalidad de Shapiro-Wilk](https://es.wikipedia.org/wiki/Prueba_de_Shapiro-Wilk), la cual evalua si un vector numérico está normalmente distribuido. Añada una columna al resultado de la función de los puntos anteriores que incluya el valor de p estimado por `shapiro.test()` sobre el vector del argumento `x`.
 
 5.2 Modifique la función de los puntos anteriores para que revise si el argumento `x` es numérico. Si no lo es, haga que la función pare usando `stop()` inmediatamente despues de la revisión. Puede incluir un mensaje de error dentro de `stop()` (e.g. `stop("x no es numérico")`).
-
 :::
 
  
