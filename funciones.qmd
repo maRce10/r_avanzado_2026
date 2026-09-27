@@ -10,6 +10,7 @@ pre.numberSource code
   { counter-reset: none; }
 </style>
 ```
+
 ```{r,echo=FALSE,message=FALSE}
 
 options("digits" = 5)
@@ -25,22 +26,22 @@ knitr::opts_chunk$set(
 ::: {.alert .alert-info}
 # Objetivo del manual {.unnumbered .unlisted}
 
--   Identificar los elementos básicos que componen una función
+- Identificar los elementos básicos que componen una función
 
--   Comprender las características de los principales tipos de argumentos en las funciones
+- Comprender las características de los principales tipos de argumentos en las funciones
 
--   Ser capaz de construir funciones propias
+- Ser capaz de construir funciones propias
 :::
 
 # Funciones en R
 
--   Todo lo que sucede en `R` es una llamada de una función (i.e. las manipulaciones y cálculos de objetos en `R` se realizan a través de una función)
+- Todo lo que sucede en `R` es una llamada de una función (i.e. las manipulaciones y cálculos de objetos en `R` se realizan a través de una función)
 
--   Una función es una subrutina que tiene como objetivo realizar una tarea específica
+- Una función es una subrutina que tiene como objetivo realizar una tarea específica
 
--   Permite a los usuarios juntar bloques de código que se usan con frecuencia y, por lo tanto, resulta conveniente encapsular en un objeto que se puede llamar fácilmente cuando sea necesario
+- Permite a los usuarios juntar bloques de código que se usan con frecuencia y, por lo tanto, resulta conveniente encapsular en un objeto que se puede llamar fácilmente cuando sea necesario
 
--   Las funciones cargadas desde los paquetes (incluido `R` básico) también se pueden modificar y sobrescribir
+- Las funciones cargadas desde los paquetes (incluido `R` básico) también se pueden modificar y sobrescribir
 
 ------------------------------------------------------------------------
 
@@ -88,35 +89,31 @@ flowchart LR
 ```
 
 ### Uso de funciones
- 
+
 Para usar (o "llamar") una función en `R` se escribe su nombre seguido de paréntesis. Dentro de los paréntesis se colocan los *argumentos* que la función necesita para hacer su trabajo:
- 
-```
+
+```         
 nombre_funcion(argumento1, argumento2, ...)
 ```
- 
+
 Por ejemplo, la función `sqrt()` calcula la raíz cuadrada de un número:
- 
+
 ```{r}
  
 sqrt(16)
  
 ```
- 
- 
- 
+
 La función `round()` redondea un número decimal a una cantidad determinada de dígitos:
- 
+
 ```{r}
  
 round(3.14159, digits = 2)
  
 ```
- 
- 
- 
+
 Muchas funciones pueden tomar más de un argumento y también aceptan vectores como entrada (recuerde que `R` está vectorizado):
- 
+
 ```{r}
  
 sum(1:10)
@@ -126,16 +123,14 @@ mean(c(4, 8, 15, 16, 23, 42))
 paste("Hola", "mundo")
  
 ```
- 
- 
- 
+
 No siempre es necesario escribir el nombre de cada argumento al llamar una función; muchas veces basta con el orden en que se escriben ("coincidencia por posición"). Este y otros detalles sobre los argumentos se explican con más detalle en la sección de Argumentos más adelante en este manual. Por ahora basta con saber que la mayoría de las funciones que usaremos ya vienen definidas en `R` y solo es necesario llamarlas con los valores adecuados.
- 
+
 ::: {.alert .alert-warning}
 ### Obtener ayuda sobre una función
- 
+
 Casi todas las funciones de `R` (incluidas las de paquetes) tienen documentación integrada. Para consultarla se usa `?` seguido del nombre de la función, o la función `help()`:
- 
+
 ```{r, eval = F}
  
 ?mean
@@ -143,13 +138,11 @@ Casi todas las funciones de `R` (incluidas las de paquetes) tienen documentació
 help(mean)
  
 ```
- 
+
 En Rstudio también podemos presionar F1 cuando el cursos está sobre el nombre de la función para acceder a su docmentación.
 
 La ayuda muestra, entre otras cosas, qué argumentos acepta la función, cuáles tienen valores predeterminados y ejemplos de uso, algo que exploraremos con más detalle en las próximas secciones.
 :::
- 
- 
 
 ### Operadores
 
@@ -305,9 +298,8 @@ R recicla vectores de longitud desigual:
 
 ### Funciones de paquetes adicionales
 
-
 Estas son funciones que son incluidas en paquetes adicionales que se pueden instalar y cargar en R. Para ser utilizadas el paquete debe ser instalado y cargado. Por ejemplo, para usar la función `viridis()` del paquete "viridis" primero debemos instalarlo. Los paquetes son instalados del servidor de CRAN (Comprehensive R Archive Network) con la función `install.packages()`:
- 
+
 ```{r}
 #| eval: false
  
@@ -315,30 +307,31 @@ install.packages("viridis")
  
  
 ```
- 
+
 .. y cargar el paquete:
- 
+
 ```{r}
  
 library(viridis)
  
 ```
- 
+
 Una vez instalado y cargado 'viridis', podemos llamar a la función `viridis()` para generar una paleta de colores:
- 
+
 ```{r}
  
 viridis(5)
  
 ```
- 
+
 Esta función es particularmente útil porque genera paletas de colores perceptualmente uniformes y aptas para personas con daltonismo, algo muy recomendable al graficar datos científicos. Por ejemplo, podemos usarla para colorear las barras de un gráfico:
- 
+
 ```{r}
  
 barplot(1:5, col = viridis(5, alpha = 0.6))
  
 ```
+
 El uso de paquetes externos es la caracteristica mas util de R ya que permite hacer uso de un número casi infinito de funciones especializadas en diferentes tareas así como de campos muy diversos de la ciencia y la industria.
 
 Podemos explorar los paquetes disponibles para R en [la página de CRAN](https://cran.r-project.org/) (hacer click en el enlace "packages").
@@ -414,24 +407,8 @@ class(sd)
 
  
 
-Los operadores son funciones:
 
-```{r}
-
-1 + 1
-
-
-"+"(1, 1)
-
-2 * 3
-
-
-"*"(2, 3)
-```
-
- 
-
-------------------------------------------------------------------------
+---
 
 ## Nombre
 
@@ -442,15 +419,15 @@ knitr::include_graphics("./images/nombre.png")
 
 Los nombres de las funciones tienen pocas restricciones. Siguen las mismas reglas que otros objetos en `R`. Algunas recomendaciones/reglas:
 
--   No utilice nombres de objetos comunes `R` (por ejemplo, `iris`, `x`) u objetos que ya están en el entorno
+- No utilice nombres de objetos comunes `R` (por ejemplo, `iris`, `x`) u objetos que ya están en el entorno
 
--   No use nombres de funciones de uso frecuente (por ejemplo, `mean`)
+- No use nombres de funciones de uso frecuente (por ejemplo, `mean`)
 
--   No puede comenzar con un número
+- No puede comenzar con un número
 
--   Debería sugerir lo que hace
+- Debería sugerir lo que hace
 
--   No debe ser muy largo
+- No debe ser muy largo
 
 En caso de que tenga varias funciones con el mismo nombre, puede llamarlas individualmente utilizando el nombre del paquete (o *namespace*) seguido de `::`:
 
@@ -657,11 +634,11 @@ knitr::include_graphics("./images/cuerpo.png")
 
 El cuerpo de una función puede contener:
 
--   Comprobación de argumentos
+- Comprobación de argumentos
 
--   Manipulación de datos
+- Manipulación de datos
 
--   Definición de resultados
+- Definición de resultados
 
 El cuerpo de la función puede tomar el mismo tipo de código utilizado en cualquier rutina de `R`. Sin embargo, los objetos creados no estarán disponibles en el entorno.
 
@@ -713,9 +690,9 @@ f2 <- function(x, y) {
   return(c(z1, z2, z3, z4))
 }
 
-f2(5, 3)
+f2(1, 2)
 
-f2_out <- f2(5, 3)
+f2_out <- f2(1, 2)
 
 f2_out
 ```
@@ -735,9 +712,9 @@ f3 <- function(x, y) {
   c(z1, z2, z3, z4)
 }
 
-f3(5, 3)
+f3(1, 2)
 
-f3_out <- f3(5, 3)
+f3_out <- f3(1, 2)
 
 f3_out
 ```
@@ -773,22 +750,7 @@ f4(10, 5)
 
  
 
-Podemos acceder a elementos específicos de la salida de una función mediante indexación:
-
-```{r}
-# elemento 1
-f4(10, 5)[[1]]
-
-# elemento 2
-f4(10, 5)[[2]]
-
-# elemento 3
-f4(10, 5)[[3]]
-```
-
- 
-
-Por supuesto, también podemos guardar el resultado como un objeto y acceder a cada elemento mediante la indexación:
+Podemos guardar el resultado como un objeto y acceder a cada elemento mediante la indexación:
 
 ```{r}
 
@@ -949,15 +911,15 @@ Los objetos creados dentro del cuerpo no están disponibles en el entorno actual
 rm(list = ls())
 
 f5 <- function(x) {
-  sqr <- x * x
-  lg_sqr <- log(x)
-  return(lg_sqr)
+  cuad <- x * x
+  log_cuad <- log(cuad)
+  return(log_cuad)
 }
 
 f5(7)
 
-exists("sqr")
-exists("lg_sqr")
+exists("cuad")
+exists("log_cuad")
 ```
 
  
@@ -965,12 +927,12 @@ exists("lg_sqr")
 ```{r}
 
 x <- 7
-sqr <- x * x
-lg_sqr <- log(x)
+cuad <- x * x
+log_cuad <- log(cuad)
 
 
-exists("sqr")
-exists("lg_sqr")
+exists("cuad")
+exists("log_cuad")
 ```
 
  
@@ -981,17 +943,17 @@ Se pueden invocar funciones desde archivos de `R` externos sin estar definidas e
 
 ```{r}
 
-fnctn_X <- function(sq_mt, vctr) {
+fnctn_X <- function(mt_cuad, vctr) {
   # trasponer matriz y calcular est dev
-  stp1 <- t(sq_mt)
-  stp2 <- vctr * vctr
+  paso1 <- t(mt_cuad)
+  paso2 <- vctr * vctr
 
   # guardar en lista
-  rslt <- list(stp1, stp2)
+  rslt <- list(paso1, paso2)
   return(rslt)
 }
 
-fnctn_X(sq_mt = cbind(c(1, 2), c(3, 4)), vctr = c(2, 3))
+fnctn_X(mt_cuad = cbind(c(1, 2), c(3, 4)), vctr = c(2, 3))
 ```
 
  
@@ -1007,12 +969,12 @@ rm(fnctn_X)
 source("function_X.R")
 
 # run it
-fnctn_X(sq_mt = cbind(c(1, 2), c(3, 4)), vctr = c(2, 3))
+fnctn_X(mt_cuad = cbind(c(1, 2), c(3, 4)), vctr = c(2, 3))
 ```
 
 ```{r, eval=T, echo=F}
 
-fnctn_X(sq_mt = cbind(c(1, 2), c(3, 4)), vctr = c(2, 3))
+fnctn_X(mt_cuad = cbind(c(1, 2), c(3, 4)), vctr = c(2, 3))
 ```
 
  
@@ -1031,7 +993,7 @@ exists("fnctn_X")
 source(
   paste0(
     "https://raw.githubusercontent.com/maRce10/",
-    "r_avanzado_2023/master/data/function_x.r"
+    "r_avanzado_2026/master/data/function_x.r"
   )
 )
 
@@ -1048,37 +1010,28 @@ Esto ya debería ser obvio a este punto.
 
 ## Otros consejos
 
--   Construir funciones cortas:
-    -   Fácil de leer
-    -   Fácil de arreglar y actualizar
-    -   Si es demasiado largo, probablemente debería dividirse en varias funciones
-    -   Genera modularidad
--   Añadir comentarios a todo el código  
--   Agregar descripciones a cada uno de los argumentos que toma  
--   Función de prueba con diferentes valores/escenarios
+- Construir funciones cortas:
+  - Fácil de leer
+  - Fácil de arreglar y actualizar
+  - Si es demasiado largo, probablemente debería dividirse en varias funciones
+  - Genera modularidad
+- Añadir comentarios a todo el código  
+- Agregar descripciones a cada uno de los argumentos que toma  
+- Función de prueba con diferentes valores/escenarios
 
 ------------------------------------------------------------------------
 
 ::: {.alert .alert-info}
 ## Ejercicio 5
 
-5.1 Cree una función que calcule el promedio, la desviación estándar y el error estándar de un vector numérico. Estos valores deben ser devueltos como una lista con nombres.
+5.1 Cree una función que tome un único argumento (`x`) y con este calcule el promedio, la desviación estándar y el error estándar. Estos valores deben ser devueltos como un cuadro de datos (data frame) con cada valor en una columna con su respectivo nombre (pista: no existe función predeterminada para error estandar). 
 
-5.2 Permita a los usuarios ignorar los `NAs` (similar al argumento `na.rm` en `mean()`, pista: añada un argumento lógico, puede utilizar la funcion `na.omit()`)
+5.2 Modifique la función del punto anterior para que permita a los usuarios ignorar los `NAs` (similar al argumento `na.rm` en `mean()`, pista: añada un argumento lógico, puede utilizar la funcion `na.omit()` en el cuerpo de la función)
 
-5.3 Haga que la función además produzca un histograma del vector numérico proporcionado por el usuario
+5.3 La función `shapiro.test()` permite ejecutar [la prueba de normalidad de Shapiro-Wilk](https://es.wikipedia.org/wiki/Prueba_de_Shapiro-Wilk), la cual evalua si un vector numérico está normalmente distribuido. Añada una columna al resultado de la función de los puntos anteriores que incluya el valor de p estimado por `shapiro.test()` sobre el vector del argumento `x`. 
 
-5.4 Haga que la función permita al usuario definir el color para las barras del histograma
+5.2 Modifique la función de los puntos anteriores para que revise si el argumento `x` es numérico. Si no lo es, haga que la función pare usando `stop()` inmediatamente despues de la revisión. Puede incluir un mensaje de error dentro de `stop()` (e.g. `stop("x no es numérico")`).
 
-5.5 Añada un argumento a la función que permita el usuario, si lo desea, calcular la sumatoria (`sum()`) junto con el resto de los descriptores estadísticos
-
-5.6 Agregue el promedio y la desviación estándar al título del histograma (pista: use `paste()`)
-
-5.7 Modifique la función para que también cree una linea vertical indicando el promedio del vector numérico proporcionado por el usuario (pista `abline()`)
-
-5.8 Modifique la función para que añada un polígono transparente sobre el área que cubre el promedio +/- la desviación estándar (puede usar la función `rect()`)
-
-5.9 Modifique la función con un argumento lógico que permita al usuario controlar si se crea un gráfico o no
 :::
 
  
@@ -1087,21 +1040,19 @@ Esto ya debería ser obvio a este punto.
 
 ## Lecturas adicionales
 
--   <a href="http://nicercode.github.io/intro/writing-functions.html"> Introduction to R guide to writing functions with information for a total beginner</a>
+- <a href="http://nicercode.github.io/intro/writing-functions.html"> Introduction to R guide to writing functions with information for a total beginner</a>
 
--   <a href="https://twitter.com/hadleywickham">Information on functions for intermediate and advanced users (Hadley Wickham)</a>.
+- <a href="https://twitter.com/hadleywickham">Information on functions for intermediate and advanced users (Hadley Wickham)</a>.
 
--   <a href="http://cran.r-project.org/doc/manuals/R-intro.html#Writing-your-own-R-intro.html#Writing-your-own-functions">The official R intro material on writing your own functions</a> (ir a "Writing your own function")
+- <a href="http://cran.r-project.org/doc/manuals/R-intro.html#Writing-your-own-R-intro.html#Writing-your-own-functions">The official R intro material on writing your own functions</a> (ir a "Writing your own function")
 
 ------------------------------------------------------------------------
 
 ## Referencias
 
--   Wickham, Hadley, and Garrett Grolemund. 2016. *R for data science: import, tidy, transform, visualize, and model data*. [website](http://r4ds.had.co.nz)
+- Wickham, Hadley, and Garrett Grolemund. 2016. *R for data science: import, tidy, transform, visualize, and model data*. [website](http://r4ds.had.co.nz)
 
----
-
-
+------------------------------------------------------------------------
 
 ::: {.callout-note collapse="true"}
 ## Información de la sesión {.unnumbered .unlisted}

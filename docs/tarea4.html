@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Tarea 4 – R avanzado 2026</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -36,10 +39,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ae0b5334a1ec0bf99af3d0c304a697d2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c875dbb4c9335aca9cc352e974a4ec92.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a5f0e07c88d63b2cffd0e8312cae9cf7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d3c39859024bd7df398072cc9f90fe21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -111,7 +114,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">Funciones</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./bucles.html">
+    <a class="dropdown-item" href="./bucles_sin_while-repeat.html">
  <span class="dropdown-text">Bucles</span></a>
   </li>  
         <li>
@@ -189,7 +192,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Fecha de publicación</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">21 de septiembre de 2026</p>
+      <p class="date">27 de septiembre de 2026</p>
     </div>
   </div>
   
@@ -204,7 +207,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="instrucciones" class="level2 unnumbered unlisted alert alert-warning">
 <h2 class="unnumbered unlisted anchored" data-anchor-id="instrucciones">Instrucciones</h2>
 <ul>
-<li>La fecha de entrega es el 11 de octubre a las 05:00 pm</li>
+<li>La fecha de entrega es el 9 de octubre a las 05:00 pm</li>
 <li>La tarea debe ser escrita en el formato para reportes dinámicos Rmarkdown o quarto</li>
 <li>Debe entregar el archivo html generado del documento Rmarkdown/quarto por medio de mediación virtual (hay un enlace para someter la tarea). No envíe el archivo Rmd/qmd.</li>
 <li>El reporte debe utilizar secciones de código (“chunks”) separados para cada ejercicio y subtítulos para cada uno así como comentarios en texto</li>
@@ -301,13 +304,14 @@ ul.task-list li input[type="checkbox"] {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

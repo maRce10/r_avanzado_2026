@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Reportes dinámicos – R avanzado 2026</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -71,10 +74,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ae0b5334a1ec0bf99af3d0c304a697d2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c875dbb4c9335aca9cc352e974a4ec92.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a5f0e07c88d63b2cffd0e8312cae9cf7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d3c39859024bd7df398072cc9f90fe21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -103,15 +106,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <link href="site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+
 <script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
 <link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+
 <script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
+
 <link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+
 <script src="site_libs/proj4-2.6.2/proj4.min.js"></script>
+
 <script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+
 <link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+
 <script src="site_libs/leaflet-binding-2.2.3/leaflet.js"></script>
+
 
 
 <link rel="stylesheet" href="styles.css">
@@ -156,7 +169,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">Funciones</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./bucles.html">
+    <a class="dropdown-item" href="./bucles_sin_while-repeat.html">
  <span class="dropdown-text">Bucles</span></a>
   </li>  
         <li>
@@ -286,7 +299,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Fecha de publicación</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">21 de septiembre de 2026</p>
+      <p class="date">27 de septiembre de 2026</p>
     </div>
   </div>
   
@@ -310,7 +323,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cargar paquetes</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cargar paquetes</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>sketchy<span class="sc">::</span><span class="fu">load_packages</span>(</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(</span>
@@ -325,7 +338,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="st">"rticles"</span>,</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="st">"tufte"</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>&nbsp;</p>
@@ -497,7 +510,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">include_graphics</span>(<span class="st">"./images/rmarkdown_icon.png"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">include_graphics</span>(<span class="st">"./images/rmarkdown_icon.png"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Resultado:</p>
@@ -566,11 +579,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(iris)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(iris)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>iris<span class="sc">$</span>random.var <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="fu">nrow</span>(iris))</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(iris)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(iris)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div class="kable-table">
@@ -600,7 +613,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.4</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">2.44032</td>
+<td style="text-align: right;">-0.63787</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4.9</td>
@@ -608,7 +621,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.4</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">0.81061</td>
+<td style="text-align: right;">-0.66248</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">4.7</td>
@@ -616,7 +629,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.3</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">0.62217</td>
+<td style="text-align: right;">-0.88724</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4.6</td>
@@ -624,7 +637,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.5</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">1.07296</td>
+<td style="text-align: right;">1.51520</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">5.0</td>
@@ -632,7 +645,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.4</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">0.59870</td>
+<td style="text-align: right;">-0.46716</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">5.4</td>
@@ -640,7 +653,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.7</td>
 <td style="text-align: right;">0.4</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">1.37263</td>
+<td style="text-align: right;">0.21391</td>
 </tr>
 </tbody>
 </table>
@@ -694,7 +707,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.4</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">1.82706</td>
+<td style="text-align: right;">0.94610</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4.9</td>
@@ -702,7 +715,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.4</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">-2.07583</td>
+<td style="text-align: right;">-0.83651</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">4.7</td>
@@ -710,7 +723,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.3</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">0.98039</td>
+<td style="text-align: right;">-1.31064</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4.6</td>
@@ -718,7 +731,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.5</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">0.38171</td>
+<td style="text-align: right;">0.60831</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">5.0</td>
@@ -726,7 +739,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.4</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">1.15378</td>
+<td style="text-align: right;">-0.39665</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">5.4</td>
@@ -734,7 +747,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.7</td>
 <td style="text-align: right;">0.4</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">-0.72060</td>
+<td style="text-align: right;">0.25532</td>
 </tr>
 </tbody>
 </table>
@@ -851,7 +864,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>title<span class="sc">:</span> <span class="st">"Un titulo descriptivo y sin faltas ortograficas"</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>author<span class="sc">:</span> <span class="st">"Marcelo Araya"</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>date<span class="sc">:</span> <span class="st">"`r Sys.Date()`"</span></span>
@@ -862,7 +875,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    toc<span class="sc">:</span> yes</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    toc_float<span class="sc">:</span> yes</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    df_print<span class="sc">:</span> paged</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p><a href="https://bookdown.org/yihui/rmarkdown/html-document.html">En este enlace</a> se explican en detalle las opciones disponibles en el encabezado YAML de archivos Rmarkdown.</p>
@@ -873,7 +886,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>El paquete <a href="https://github.com/hadley/emo">emo</a> permite añadir emojis al evaluar un código:</p>
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>emo<span class="sc">::</span><span class="fu">ji</span>(<span class="st">"costa_rica"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>emo<span class="sc">::</span><span class="fu">ji</span>(<span class="st">"costa_rica"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>🇨🇷</p>
 <p>Tambien se puede incrustar en el texto 🇨🇷, como lo vimos <a href="#incrustar-código-de-r-en-el-texto">mas arriba</a> ⬆️ (<code>ji("up_arrow")</code>)</p>
@@ -885,7 +898,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(iris[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, ])</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(iris[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, ])</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
@@ -917,7 +930,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.4</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">1.82706</td>
+<td style="text-align: right;">0.94610</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4.9</td>
@@ -925,7 +938,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.4</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">-2.07583</td>
+<td style="text-align: right;">-0.83651</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">4.7</td>
@@ -933,7 +946,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.3</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">0.98039</td>
+<td style="text-align: right;">-1.31064</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4.6</td>
@@ -941,7 +954,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.5</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">0.38171</td>
+<td style="text-align: right;">0.60831</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">5.0</td>
@@ -949,7 +962,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.4</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">1.15378</td>
+<td style="text-align: right;">-0.39665</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">5.4</td>
@@ -957,7 +970,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.7</td>
 <td style="text-align: right;">0.4</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">-0.72060</td>
+<td style="text-align: right;">0.25532</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">4.6</td>
@@ -965,7 +978,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.4</td>
 <td style="text-align: right;">0.3</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">1.85729</td>
+<td style="text-align: right;">-0.46648</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">5.0</td>
@@ -973,7 +986,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.5</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">-0.98516</td>
+<td style="text-align: right;">1.12970</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">4.4</td>
@@ -981,7 +994,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.4</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">0.10730</td>
+<td style="text-align: right;">0.52266</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4.9</td>
@@ -989,7 +1002,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">1.5</td>
 <td style="text-align: right;">0.1</td>
 <td style="text-align: left;">setosa</td>
-<td style="text-align: right;">0.02393</td>
+<td style="text-align: right;">0.60007</td>
 </tr>
 </tbody>
 </table>
@@ -1006,7 +1019,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">root.dir =</span> <span class="st">".."</span>, <span class="at">eval =</span> <span class="cn">TRUE</span>, <span class="at">echo =</span> <span class="cn">FALSE</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">root.dir =</span> <span class="st">".."</span>, <span class="at">eval =</span> <span class="cn">TRUE</span>, <span class="at">echo =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>&nbsp;</p>
@@ -1060,7 +1073,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>El siguiente código utiliza el paquete <code>leaflet</code> para generar un mapa interactivo:</p>
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sketchy<span class="sc">::</span><span class="fu">load_packages</span>(<span class="st">"leaflet"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sketchy<span class="sc">::</span><span class="fu">load_packages</span>(<span class="st">"leaflet"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>ll_map <span class="ot">&lt;-</span> <span class="fu">leaflet</span>()</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -1079,10 +1092,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat =</span> <span class="fl">5.527448</span>,</span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">lng =</span> <span class="sc">-</span><span class="fl">87.057245</span>,</span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">popup =</span> <span class="st">'Isla del Coco'</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="leaflet html-widget html-fill-item" id="htmlwidget-5ef69e50afc4bc6096ad" style="width:100%;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-5ef69e50afc4bc6096ad">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addPopups","args":[5.527448,-87.05724499999999,"Isla del Coco",null,null,{"maxWidth":300,"minWidth":50,"autoPan":true,"keepInView":false,"closeButton":true,"className":""}]}],"setView":[[5.527448,-87.05724499999999],13,[]],"limits":{"lat":[5.527448,5.527448],"lng":[-87.05724499999999,-87.05724499999999]}},"evals":[],"jsHooks":[]}</script>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-cde3cff4ab22388c562e" style="width:100%;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-cde3cff4ab22388c562e">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addPopups","args":[5.527448,-87.05724499999999,"Isla del Coco",null,null,{"maxWidth":300,"minWidth":50,"autoPan":true,"keepInView":false,"closeButton":true,"className":""}]}],"setView":[[5.527448,-87.05724499999999],13,[]],"limits":{"lat":[5.527448,5.527448],"lng":[-87.05724499999999,-87.05724499999999]}},"evals":[],"jsHooks":[]}</script>
 <p>&nbsp;</p>
 </section>
 <section id="aplicaciones-shiny" class="level2" data-number="6.2">
@@ -1091,11 +1104,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>title<span class="sc">:</span> <span class="st">"Documento Shiny"</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>output<span class="sc">:</span> html_document</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>runtime<span class="sc">:</span> shiny</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>&nbsp;</p>
@@ -1103,7 +1116,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sketchy<span class="sc">::</span><span class="fu">load_packages</span>(<span class="st">"shiny"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sketchy<span class="sc">::</span><span class="fu">load_packages</span>(<span class="st">"shiny"</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -1138,7 +1151,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear Shiny app</span></span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>&nbsp;</p>
@@ -1194,14 +1207,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">tempdir</span>()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">tempdir</span>()</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">make_compendium</span>(</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">"proyecto_x"</span>,</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> path,</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"basic"</span>,</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rproj =</span> <span class="cn">TRUE</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Creating directories ...
@@ -1245,12 +1258,12 @@ Done.</code></pre>
 </ul>
 <hr>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Información de la sesión
+<span class="screen-reader-only">Nota</span>Información de la sesión
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -1260,74 +1273,72 @@ Información de la sesión
 <div class="cell-output cell-output-stdout">
 <pre><code>─ Session info ───────────────────────────────────────────────────────────────
  setting  value
- version  R version 4.6.1 (2026-06-24)
- os       Ubuntu 22.04.5 LTS
- system   x86_64, linux-gnu
- ui       X11
+ version  R version 4.6.1 (2026-06-24 ucrt)
+ os       Windows 11 x64 (build 22631)
+ system   x86_64, mingw32
+ ui       RTerm
  language (EN)
- collate  en_US.UTF-8
- ctype    en_US.UTF-8
+ collate  Spanish_Costa Rica.utf8
+ ctype    Spanish_Costa Rica.utf8
  tz       America/Costa_Rica
- date     2026-09-21
- pandoc   3.8.3 @ /usr/lib/rstudio/resources/app/bin/quarto/bin/tools/x86_64/ (via rmarkdown)
- quarto   1.7.31 @ /usr/local/bin/quarto
+ date     2026-09-27
+ pandoc   3.8.3 @ C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools/ (via rmarkdown)
+ quarto   1.9.38 @ C:\\PROGRA~1\\RStudio\\RESOUR~1\\app\\bin\\quarto\\bin\\quarto.exe
 
 ─ Packages ───────────────────────────────────────────────────────────────────
  package       * version    date (UTC) lib source
- assertthat      0.2.1      2019-03-21 [2] CRAN (R 4.6.1)
- bookdown        0.47       2026-06-16 [1] CRAN (R 4.6.1)
- cachem          1.1.0      2024-05-16 [2] CRAN (R 4.6.1)
- cli             3.6.6      2026-04-09 [2] CRAN (R 4.6.1)
- crayon          1.5.3      2024-06-20 [2] CRAN (R 4.6.1)
- crosstalk       1.2.2      2025-08-26 [2] CRAN (R 4.6.1)
- devtools        2.5.2      2026-04-30 [2] CRAN (R 4.6.1)
- digest          0.6.39     2025-11-19 [2] CRAN (R 4.6.1)
- ellipsis        0.3.3      2026-04-04 [2] CRAN (R 4.6.1)
- emo           * 0.0.0.9000 2026-08-03 [2] Github (hadley/emo@3f03b11)
- evaluate        1.0.5      2025-08-27 [2] CRAN (R 4.6.1)
- fastmap         1.2.0      2024-05-15 [2] CRAN (R 4.6.1)
- fs              2.1.0      2026-04-18 [2] CRAN (R 4.6.1)
- generics        0.1.4      2025-05-09 [2] CRAN (R 4.6.1)
- glue            1.8.1      2026-04-17 [2] CRAN (R 4.6.1)
- htmltools       0.5.9      2025-12-04 [2] CRAN (R 4.6.1)
- htmlwidgets     1.6.4      2023-12-06 [2] CRAN (R 4.6.1)
- jquerylib       0.1.4      2021-04-26 [2] CRAN (R 4.6.1)
- jsonlite        2.0.0      2025-03-27 [2] CRAN (R 4.6.1)
- knitr         * 1.51       2025-12-20 [2] CRAN (R 4.6.1)
- leaflet       * 2.2.3      2025-09-04 [2] CRAN (R 4.6.1)
- lifecycle       1.0.5      2026-01-08 [2] CRAN (R 4.6.1)
- lubridate       1.9.5      2026-02-04 [2] CRAN (R 4.6.1)
- magrittr        2.0.5      2026-04-04 [2] CRAN (R 4.6.1)
- memoise         2.0.1      2021-11-26 [2] CRAN (R 4.6.1)
- otel            0.2.0      2025-08-29 [2] CRAN (R 4.6.1)
- packrat         0.9.3      2025-06-16 [2] CRAN (R 4.6.1)
- pkgbuild        1.4.8      2025-05-26 [2] CRAN (R 4.6.1)
- pkgload         1.5.3      2026-06-15 [2] CRAN (R 4.6.1)
- purrr           1.2.2      2026-04-10 [2] CRAN (R 4.6.1)
- R6              2.6.1      2025-02-15 [2] CRAN (R 4.6.1)
- remotes       * 2.5.0      2024-03-17 [2] CRAN (R 4.6.1)
+ assertthat      0.2.1      2019-03-21 [1] CRAN (R 4.6.1)
+ bookdown        0.48       2026-08-28 [1] CRAN (R 4.6.1)
+ cachem          1.1.0      2024-05-16 [1] CRAN (R 4.6.1)
+ cli             3.6.6      2026-04-09 [1] CRAN (R 4.6.1)
+ crayon          1.5.3      2024-06-20 [1] CRAN (R 4.6.1)
+ crosstalk       1.2.2      2025-08-26 [1] CRAN (R 4.6.1)
+ devtools        2.5.2      2026-04-30 [1] CRAN (R 4.6.1)
+ digest          0.6.39     2025-11-19 [1] CRAN (R 4.6.1)
+ ellipsis        0.3.3      2026-04-04 [1] CRAN (R 4.6.1)
+ emo           * 0.0.0.9000 2026-08-19 [1] Github (hadley/emo@3f03b11)
+ evaluate        1.0.5      2025-08-27 [1] CRAN (R 4.6.1)
+ fastmap         1.2.0      2024-05-15 [1] CRAN (R 4.6.1)
+ fs              2.1.0      2026-04-18 [1] CRAN (R 4.6.1)
+ generics        0.1.4      2025-05-09 [1] CRAN (R 4.6.1)
+ glue            1.8.1      2026-04-17 [1] CRAN (R 4.6.1)
+ htmltools       0.5.9      2025-12-04 [1] CRAN (R 4.6.1)
+ htmlwidgets     1.6.4      2023-12-06 [1] CRAN (R 4.6.1)
+ jquerylib       0.1.4      2021-04-26 [1] CRAN (R 4.6.1)
+ jsonlite        2.0.0      2025-03-27 [1] CRAN (R 4.6.1)
+ knitr         * 1.51       2025-12-20 [1] CRAN (R 4.6.1)
+ leaflet       * 2.2.3      2025-09-04 [1] CRAN (R 4.6.1)
+ lifecycle       1.0.5      2026-01-08 [1] CRAN (R 4.6.1)
+ lubridate       1.9.5      2026-02-04 [1] CRAN (R 4.6.1)
+ magrittr        2.0.5      2026-04-04 [1] CRAN (R 4.6.1)
+ memoise         2.0.1      2021-11-26 [1] CRAN (R 4.6.1)
+ otel            0.2.0      2025-08-29 [1] CRAN (R 4.6.1)
+ packrat         0.9.3      2025-06-16 [1] CRAN (R 4.6.1)
+ pkgbuild        1.4.8      2025-05-26 [1] CRAN (R 4.6.1)
+ pkgload         1.5.3      2026-06-15 [1] CRAN (R 4.6.1)
+ purrr           1.2.2      2026-04-10 [1] CRAN (R 4.6.1)
+ R6              2.6.1      2025-02-15 [1] CRAN (R 4.6.1)
+ remotes       * 2.5.0      2024-03-17 [1] CRAN (R 4.6.1)
  revealjs      * 0.10.0     2025-04-03 [1] CRAN (R 4.6.1)
- rlang           1.3.0      2026-07-05 [2] CRAN (R 4.6.1)
- rmarkdown     * 2.31       2026-03-26 [2] CRAN (R 4.6.1)
+ rlang           1.3.0      2026-07-05 [1] CRAN (R 4.6.1)
+ rmarkdown     * 2.31       2026-03-26 [1] CRAN (R 4.6.1)
  rmdformats    * 1.0.4      2022-05-17 [1] CRAN (R 4.6.1)
- rstudioapi      0.19.0     2026-06-11 [2] CRAN (R 4.6.1)
+ rstudioapi      0.19.0     2026-06-11 [1] CRAN (R 4.6.1)
  rticles       * 0.27       2024-04-06 [1] CRAN (R 4.6.1)
- sessioninfo     1.2.4      2026-06-04 [2] CRAN (R 4.6.1)
- sketchy       * 1.0.5      2025-01-16 [2] CRAN (R 4.6.1)
- stringi         1.8.7      2025-03-27 [2] CRAN (R 4.6.1)
- stringr         1.6.0      2025-11-04 [2] CRAN (R 4.6.1)
- timechange      0.4.0      2026-01-29 [2] CRAN (R 4.6.1)
+ sessioninfo     1.2.4      2026-06-04 [1] CRAN (R 4.6.1)
+ sketchy       * 1.0.5      2025-01-16 [1] CRAN (R 4.6.1)
+ stringi         1.8.9      2026-08-04 [1] CRAN (R 4.6.1)
+ stringr         1.6.0      2025-11-04 [1] CRAN (R 4.6.1)
+ timechange      0.4.0      2026-01-29 [1] CRAN (R 4.6.1)
  tufte         * 0.15.0     2026-05-21 [1] CRAN (R 4.6.1)
- usethis         3.2.1      2025-09-06 [2] CRAN (R 4.6.1)
- vctrs           0.7.3      2026-04-11 [2] CRAN (R 4.6.1)
- xaringanExtra   0.8.0      2024-05-19 [2] CRAN (R 4.6.1)
- xfun            0.60       2026-07-09 [2] CRAN (R 4.6.1)
- yaml            2.3.12     2025-12-10 [2] CRAN (R 4.6.1)
+ usethis         3.2.1      2025-09-06 [1] CRAN (R 4.6.1)
+ vctrs           0.7.3      2026-04-11 [1] CRAN (R 4.6.1)
+ xaringanExtra   0.8.0      2024-05-19 [1] CRAN (R 4.6.1)
+ xfun            0.60       2026-07-09 [1] CRAN (R 4.6.1)
+ yaml            2.3.12     2025-12-10 [1] CRAN (R 4.6.1)
 
- [1] /home/m/R/x86_64-pc-linux-gnu-library/4.6
- [2] /usr/local/lib/R/site-library
- [3] /usr/lib/R/site-library
- [4] /usr/lib/R/library
+ [1] C:/Users/Biologia-UCR/AppData/Local/R/win-library/4.6
+ [2] C:/Program Files/R/R-4.6.1/library
  * ── Packages attached to the search path.
 
 ──────────────────────────────────────────────────────────────────────────────</code></pre>
@@ -1395,13 +1406,14 @@ Información de la sesión
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1799,7 +1811,7 @@ Información de la sesión
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Ejecutar el código</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb14" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &lt;font size="7"&gt;&lt;b&gt;Reportes dinámicos&lt;/b&gt;&lt;/font&gt;</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -1818,9 +1830,9 @@ Información de la sesión
 <span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
 <span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="fu"># Objetivos del manual {.unnumbered .unlisted}</span></span>
 <span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Familiarizarse con el formato para reportes dinámicos Rmarkdown/quarto</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Familiarizarse con el formato para reportes dinámicos Rmarkdown/quarto</span>
 <span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Ser capaz de documentar el manejo y análisis de datos en R usando Rmarkdown/quarto</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ser capaz de documentar el manejo y análisis de datos en R usando Rmarkdown/quarto</span>
 <span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
@@ -1884,19 +1896,19 @@ Información de la sesión
 <span id="cb14-85"><a href="#cb14-85" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-86"><a href="#cb14-86" aria-hidden="true" tabindex="-1"></a><span class="fu">## Ventajas de los reportes dinámicos con Rmarkdown/quarto:</span></span>
 <span id="cb14-87"><a href="#cb14-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-88"><a href="#cb14-88" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>El **código R se puede incrustar en el informe**, por lo que no es necesario mantener el informe y el código de R por separado</span>
+<span id="cb14-88"><a href="#cb14-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>El **código R se puede incrustar en el informe**, por lo que no es necesario mantener el informe y el código de R por separado</span>
 <span id="cb14-89"><a href="#cb14-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-90"><a href="#cb14-90" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Incluir el código R directamente en un informe proporciona una **estructura intuitiva** para reproducir los análisis</span>
+<span id="cb14-90"><a href="#cb14-90" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Incluir el código R directamente en un informe proporciona una **estructura intuitiva** para reproducir los análisis</span>
 <span id="cb14-91"><a href="#cb14-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-92"><a href="#cb14-92" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>El texto del informe está **escrito como texto normal**, por lo que no se requieren conocimientos de programación (i.e. R o HTML) para comprenderlos</span>
+<span id="cb14-92"><a href="#cb14-92" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>El texto del informe está **escrito como texto normal**, por lo que no se requieren conocimientos de programación (i.e. R o HTML) para comprenderlos</span>
 <span id="cb14-93"><a href="#cb14-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-94"><a href="#cb14-94" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**El resultado es un archivo HTML** que incluye imágenes, bloques de código con los comandos de R, los resultados de estos códigos y texto. No se necesitan archivos adicionales, todo está incorporado en el archivo HTML.</span>
+<span id="cb14-94"><a href="#cb14-94" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**El resultado es un archivo HTML** que incluye imágenes, bloques de código con los comandos de R, los resultados de estos códigos y texto. No se necesitan archivos adicionales, todo está incorporado en el archivo HTML.</span>
 <span id="cb14-95"><a href="#cb14-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-96"><a href="#cb14-96" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Los informes son **fáciles de compartir por correo o publicarlos en línea**</span>
+<span id="cb14-96"><a href="#cb14-96" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Los informes son **fáciles de compartir por correo o publicarlos en línea**</span>
 <span id="cb14-97"><a href="#cb14-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-98"><a href="#cb14-98" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Estos informes **facilitan la colaboración y mejoran la reproducibilidad** (entender los análisis es mucho mas fácil cuando hay texto explicativo, código de R, los resultados del código y los gráficos en un mismo archivo)</span>
+<span id="cb14-98"><a href="#cb14-98" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Estos informes **facilitan la colaboración y mejoran la reproducibilidad** (entender los análisis es mucho mas fácil cuando hay texto explicativo, código de R, los resultados del código y los gráficos en un mismo archivo)</span>
 <span id="cb14-99"><a href="#cb14-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-100"><a href="#cb14-100" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Se actualizan fácilmente** para incluir nuevos análisis y/o integrar nuevos datos</span>
+<span id="cb14-100"><a href="#cb14-100" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Se actualizan fácilmente** para incluir nuevos análisis y/o integrar nuevos datos</span>
 <span id="cb14-101"><a href="#cb14-101" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-102"><a href="#cb14-102" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
 <span id="cb14-103"><a href="#cb14-103" aria-hidden="true" tabindex="-1"></a></span>
@@ -2325,10 +2337,10 @@ Información de la sesión
 <span id="cb14-528"><a href="#cb14-528" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-529"><a href="#cb14-529" aria-hidden="true" tabindex="-1"></a>El paquete Rmarkdown puede generar resultados en HTML, PDF, MS Word, viñetas de paquetes de R, presentaciones Beamer y HTML5. Los formatos adicionales (o 'variantes' de estos formatos) están disponibles en otros paquetes de R. Algunos de esos paquetes son:</span>
 <span id="cb14-530"><a href="#cb14-530" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-531"><a href="#cb14-531" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>rmdformats</span>
-<span id="cb14-532"><a href="#cb14-532" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>reveljs</span>
-<span id="cb14-533"><a href="#cb14-533" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>artículos</span>
-<span id="cb14-534"><a href="#cb14-534" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>tufte</span>
+<span id="cb14-531"><a href="#cb14-531" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>rmdformats</span>
+<span id="cb14-532"><a href="#cb14-532" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>reveljs</span>
+<span id="cb14-533"><a href="#cb14-533" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>artículos</span>
+<span id="cb14-534"><a href="#cb14-534" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>tufte</span>
 <span id="cb14-535"><a href="#cb14-535" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-536"><a href="#cb14-536" aria-hidden="true" tabindex="-1"></a>Una vez estos paquetes han sido instalados, los nuevos formatos estarán disponibles a través del nuevo cuadro de diálogo Rmarkdown:</span>
 <span id="cb14-537"><a href="#cb14-537" aria-hidden="true" tabindex="-1"></a></span>
@@ -2507,19 +2519,19 @@ Información de la sesión
 <span id="cb14-712"><a href="#cb14-712" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
 <span id="cb14-713"><a href="#cb14-713" aria-hidden="true" tabindex="-1"></a><span class="fu">## Ejercicio 4</span></span>
 <span id="cb14-714"><a href="#cb14-714" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-715"><a href="#cb14-715" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cree un reporte dinámico que incluya un mapa dinámico de Costa Rica usando el paquete <span class="in">`leaflet`</span></span>
+<span id="cb14-715"><a href="#cb14-715" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cree un reporte dinámico que incluya un mapa dinámico de Costa Rica usando el paquete <span class="in">`leaflet`</span></span>
 <span id="cb14-716"><a href="#cb14-716" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-717"><a href="#cb14-717" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Reproduzca alguno de los ejemplos disponibles en el sitio del paquete dygraphs (<span class="ot">&lt;https://rstudio.github.io/dygraphs/&gt;</span>) e incrústelo en su reporte dinámico</span>
+<span id="cb14-717"><a href="#cb14-717" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reproduzca alguno de los ejemplos disponibles en el sitio del paquete dygraphs (<span class="ot">&lt;https://rstudio.github.io/dygraphs/&gt;</span>) e incrústelo en su reporte dinámico</span>
 <span id="cb14-718"><a href="#cb14-718" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-719"><a href="#cb14-719" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Instale el paquete <span class="in">`kableExtra`</span> y incruste en su reporte el códifo de ejemplo en la documentación de la función <span class="in">`kable_styling()`</span> de ese paquete</span>
+<span id="cb14-719"><a href="#cb14-719" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Instale el paquete <span class="in">`kableExtra`</span> y incruste en su reporte el códifo de ejemplo en la documentación de la función <span class="in">`kable_styling()`</span> de ese paquete</span>
 <span id="cb14-720"><a href="#cb14-720" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-721"><a href="#cb14-721" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cree una presentación Rmarkdown utilizando la opción "Presentation" en la ventana de creación</span>
+<span id="cb14-721"><a href="#cb14-721" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cree una presentación Rmarkdown utilizando la opción "Presentation" en la ventana de creación</span>
 <span id="cb14-722"><a href="#cb14-722" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-723"><a href="#cb14-723" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Genere un reporte dinámico en formato PDF</span>
+<span id="cb14-723"><a href="#cb14-723" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Genere un reporte dinámico en formato PDF</span>
 <span id="cb14-724"><a href="#cb14-724" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-725"><a href="#cb14-725" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cree un proyecto de Rstudio para organizar los contenidos del curso</span>
+<span id="cb14-725"><a href="#cb14-725" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cree un proyecto de Rstudio para organizar los contenidos del curso</span>
 <span id="cb14-726"><a href="#cb14-726" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-727"><a href="#cb14-727" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cree un compendio de investigación con sketchy</span>
+<span id="cb14-727"><a href="#cb14-727" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cree un compendio de investigación con sketchy</span>
 <span id="cb14-728"><a href="#cb14-728" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb14-729"><a href="#cb14-729" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-730"><a href="#cb14-730" aria-hidden="true" tabindex="-1"></a>&nbsp;</span>
@@ -2528,31 +2540,30 @@ Información de la sesión
 <span id="cb14-733"><a href="#cb14-733" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-734"><a href="#cb14-734" aria-hidden="true" tabindex="-1"></a><span class="fu">## Referencias</span></span>
 <span id="cb14-735"><a href="#cb14-735" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-736"><a href="#cb14-736" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">R Markdown: The Definitive Guide</span><span class="co">](https://bookdown.org/yihui/rmarkdown/)</span></span>
-<span id="cb14-737"><a href="#cb14-737" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Rmarkdown custom format</span><span class="co">](https://blog.rstudio.com/2016/03/21/r-markdown-custom-formats/)</span></span>
-<span id="cb14-738"><a href="#cb14-738" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Rmarkdown website</span><span class="co">](https://rmarkdown.rstudio.com/index.html)</span></span>
-<span id="cb14-739"><a href="#cb14-739" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Jacolien van Rij: Rmarkdown variants</span><span class="co">](http://www.jacolienvanrij.com/Tutorials/tutorialMarkdown.html)</span></span>
-<span id="cb14-740"><a href="#cb14-740" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Danielle Quinn: R Lessons</span><span class="co">](https://github.com/DanielleQuinn/RLessons)</span></span>
-<span id="cb14-741"><a href="#cb14-741" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vaidyanathan, Ramnath, Yihui Xie, JJ Allaire, Joe Cheng, and Kenton Russell. 2019. Htmlwidgets: HTML Widgets for R. https://github.com/ramnathv/htmlwidgets.</span>
+<span id="cb14-736"><a href="#cb14-736" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">R Markdown: The Definitive Guide</span><span class="co">](https://bookdown.org/yihui/rmarkdown/)</span></span>
+<span id="cb14-737"><a href="#cb14-737" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Rmarkdown custom format</span><span class="co">](https://blog.rstudio.com/2016/03/21/r-markdown-custom-formats/)</span></span>
+<span id="cb14-738"><a href="#cb14-738" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Rmarkdown website</span><span class="co">](https://rmarkdown.rstudio.com/index.html)</span></span>
+<span id="cb14-739"><a href="#cb14-739" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Jacolien van Rij: Rmarkdown variants</span><span class="co">](http://www.jacolienvanrij.com/Tutorials/tutorialMarkdown.html)</span></span>
+<span id="cb14-740"><a href="#cb14-740" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Danielle Quinn: R Lessons</span><span class="co">](https://github.com/DanielleQuinn/RLessons)</span></span>
+<span id="cb14-741"><a href="#cb14-741" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Vaidyanathan, Ramnath, Yihui Xie, JJ Allaire, Joe Cheng, and Kenton Russell. 2019. Htmlwidgets: HTML Widgets for R. https://github.com/ramnathv/htmlwidgets.</span>
 <span id="cb14-742"><a href="#cb14-742" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-743"><a href="#cb14-743" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb14-743"><a href="#cb14-743" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
 <span id="cb14-744"><a href="#cb14-744" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-745"><a href="#cb14-745" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-746"><a href="#cb14-746" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true"}</span>
-<span id="cb14-747"><a href="#cb14-747" aria-hidden="true" tabindex="-1"></a><span class="fu">## Información de la sesión {.unnumbered .unlisted}</span></span>
-<span id="cb14-748"><a href="#cb14-748" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-749"><a href="#cb14-749" aria-hidden="true" tabindex="-1"></a><span class="in">```{r session info}</span></span>
-<span id="cb14-750"><a href="#cb14-750" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb14-751"><a href="#cb14-751" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-752"><a href="#cb14-752" aria-hidden="true" tabindex="-1"></a><span class="co"># if devtools is installed use devtools::session_info()</span></span>
-<span id="cb14-753"><a href="#cb14-753" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"devtools"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
-<span id="cb14-754"><a href="#cb14-754" aria-hidden="true" tabindex="-1"></a>  devtools<span class="sc">::</span><span class="fu">session_info</span>()</span>
-<span id="cb14-755"><a href="#cb14-755" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb14-756"><a href="#cb14-756" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sessionInfo</span>()</span>
-<span id="cb14-757"><a href="#cb14-757" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-758"><a href="#cb14-758" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-759"><a href="#cb14-759" aria-hidden="true" tabindex="-1"></a>:::</span>
-</code><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<span id="cb14-745"><a href="#cb14-745" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true"}</span>
+<span id="cb14-746"><a href="#cb14-746" aria-hidden="true" tabindex="-1"></a><span class="fu">## Información de la sesión {.unnumbered .unlisted}</span></span>
+<span id="cb14-747"><a href="#cb14-747" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-748"><a href="#cb14-748" aria-hidden="true" tabindex="-1"></a><span class="in">```{r session info}</span></span>
+<span id="cb14-749"><a href="#cb14-749" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb14-750"><a href="#cb14-750" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-751"><a href="#cb14-751" aria-hidden="true" tabindex="-1"></a><span class="co"># if devtools is installed use devtools::session_info()</span></span>
+<span id="cb14-752"><a href="#cb14-752" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"devtools"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb14-753"><a href="#cb14-753" aria-hidden="true" tabindex="-1"></a>  devtools<span class="sc">::</span><span class="fu">session_info</span>()</span>
+<span id="cb14-754"><a href="#cb14-754" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb14-755"><a href="#cb14-755" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sessionInfo</span>()</span>
+<span id="cb14-756"><a href="#cb14-756" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-757"><a href="#cb14-757" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-758"><a href="#cb14-758" aria-hidden="true" tabindex="-1"></a>:::</span>
+</code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

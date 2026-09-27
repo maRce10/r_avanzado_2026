@@ -10,6 +10,7 @@ pre.numberSource code
   { counter-reset: none; }
 </style>
 ```
+
 ```{r,echo=FALSE,message=FALSE}
 
 options("digits" = 5)
@@ -32,9 +33,9 @@ cols <- brewer.pal(10, "Spectral")
 ::: {.alert .alert-info}
 # Objetivos del manual {.unnumbered .unlisted}
 
--   Aprender a aplicar de forma serial operaciones que deben repetirse sobre diferentes objetos
--   Familiarizarse con el uso de bucles en la plataforma R
--   Tener una noción general de los opciones disponibles en R para construir bucles
+- Aprender a aplicar de forma serial operaciones que deben repetirse sobre diferentes objetos
+- Familiarizarse con el uso de bucles en la plataforma R
+- Tener una noción general de los opciones disponibles en R para construir bucles
 :::
 
 ------------------------------------------------------------------------
@@ -109,9 +110,9 @@ length(archivos_txt)
 ::: {.alert .alert-warning}
 # Bucles (loops)
 
--   Proceso automatizado de varios pasos organizado como secuencias de acciones (p. Ej., procesos 'por lotes')
--   Se usa para acelerar los procedimientos en los que se aplica la misma acción a muchos objetos (similares)
--   Crítico para la gestión de grandes bases de datos ('big data', y buenas prácticas de programación)
+- Proceso automatizado de varios pasos organizado como secuencias de acciones (p. Ej., procesos 'por lotes')
+- Se usa para acelerar los procedimientos en los que se aplica la misma acción a muchos objetos (similares)
+- Crítico para la gestión de grandes bases de datos ('big data', y buenas prácticas de programación)
 
 ```{mermaid}
 
@@ -257,8 +258,8 @@ En este caso vemos como el bucle toma una pausa entre cada iteración y luego ha
 
 Si deseamos guardar el resultado de las operaciones debemos añadirlo a un vector vacío. Para hacer esto hay 2 opciones:
 
--   Usando la función `append()`
--   Agregar nuevos elementos a un vector usando indexación
+- Usando la función `append()`
+- Agregar nuevos elementos a un vector usando indexación
 
 El siguiente código guarda los resultados usando `append()`:
 
@@ -948,8 +949,8 @@ ggplot(data = cc, aes(x, y)) +
 
 ## Referencias
 
--   [Advanced R, H Wickham](http://adv-r.had.co.nz/Functionals.html)
--   [A Tutorial on Loops in R - Usage and Alternatives, DataCamp](https://www.datacamp.com/community/tutorials/tutorial-on-loops-in-r)
+- [Advanced R, H Wickham](http://adv-r.had.co.nz/Functionals.html)
+- [A Tutorial on Loops in R - Usage and Alternatives, DataCamp](https://www.datacamp.com/community/tutorials/tutorial-on-loops-in-r)
 
 ------------------------------------------------------------------------
 

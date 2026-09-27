@@ -28,7 +28,7 @@ website:
         - text: "Funciones"
           href: funciones.qmd
         - text: "Bucles"
-          href: bucles.qmd
+          href: bucles_sin_while-repeat.qmd
         - text: "Simular datos"
           href: como_simular_datos.qmd
         - text: "Modelos de regresión"
@@ -38,9 +38,9 @@ website:
         - text: "Gráficos con ggplot2"
           href: ggplot2.qmd
       - text: "Tareas"
-        # menu:
-        # - text: "Tarea 4"
-        #   href: tarea4.qmd
+        menu:
+        - text: "Tarea 4"
+          href: tarea4.qmd
         # - text: "Solución tarea 4"
         #   href: solucion_tarea4.qmd
         # - text: "Tarea 5"

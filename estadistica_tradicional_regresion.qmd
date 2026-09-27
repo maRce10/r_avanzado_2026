@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ::: {.alert .alert-info}
 # Objetivo del manual {.unnumbered .unlisted}
 
--   Entender los abordajes estadísticos tradicionales como regresiones
+- Entender los abordajes estadísticos tradicionales como regresiones
 :::
 
  
@@ -392,12 +392,11 @@ df
 
 # Referencias
 
--   [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/)
+- [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/)
 
  
 
----
-
+------------------------------------------------------------------------
 
 ::: {.callout-note collapse="true"}
 ## Información de la sesión {.unnumbered .unlisted}

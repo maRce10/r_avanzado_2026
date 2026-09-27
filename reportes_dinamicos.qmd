@@ -17,9 +17,9 @@ knitr::opts_chunk$set(
 ::: {.alert .alert-info}
 # Objetivos del manual {.unnumbered .unlisted}
 
--   Familiarizarse con el formato para reportes dinámicos Rmarkdown/quarto
+- Familiarizarse con el formato para reportes dinámicos Rmarkdown/quarto
 
--   Ser capaz de documentar el manejo y análisis de datos en R usando Rmarkdown/quarto
+- Ser capaz de documentar el manejo y análisis de datos en R usando Rmarkdown/quarto
 :::
 
  
@@ -84,19 +84,19 @@ Quarto es una herramienta muy similar a Rmarkdown. La diferencia mas importante 
 
 ## Ventajas de los reportes dinámicos con Rmarkdown/quarto:
 
--   El **código R se puede incrustar en el informe**, por lo que no es necesario mantener el informe y el código de R por separado
+- El **código R se puede incrustar en el informe**, por lo que no es necesario mantener el informe y el código de R por separado
 
--   Incluir el código R directamente en un informe proporciona una **estructura intuitiva** para reproducir los análisis
+- Incluir el código R directamente en un informe proporciona una **estructura intuitiva** para reproducir los análisis
 
--   El texto del informe está **escrito como texto normal**, por lo que no se requieren conocimientos de programación (i.e. R o HTML) para comprenderlos
+- El texto del informe está **escrito como texto normal**, por lo que no se requieren conocimientos de programación (i.e. R o HTML) para comprenderlos
 
--   **El resultado es un archivo HTML** que incluye imágenes, bloques de código con los comandos de R, los resultados de estos códigos y texto. No se necesitan archivos adicionales, todo está incorporado en el archivo HTML.
+- **El resultado es un archivo HTML** que incluye imágenes, bloques de código con los comandos de R, los resultados de estos códigos y texto. No se necesitan archivos adicionales, todo está incorporado en el archivo HTML.
 
--   Los informes son **fáciles de compartir por correo o publicarlos en línea**
+- Los informes son **fáciles de compartir por correo o publicarlos en línea**
 
--   Estos informes **facilitan la colaboración y mejoran la reproducibilidad** (entender los análisis es mucho mas fácil cuando hay texto explicativo, código de R, los resultados del código y los gráficos en un mismo archivo)
+- Estos informes **facilitan la colaboración y mejoran la reproducibilidad** (entender los análisis es mucho mas fácil cuando hay texto explicativo, código de R, los resultados del código y los gráficos en un mismo archivo)
 
--   **Se actualizan fácilmente** para incluir nuevos análisis y/o integrar nuevos datos
+- **Se actualizan fácilmente** para incluir nuevos análisis y/o integrar nuevos datos
 
  
 
@@ -526,10 +526,10 @@ Los reportes dinámicos se pueden generar en otros formatos incluyendo presentac
 
 El paquete Rmarkdown puede generar resultados en HTML, PDF, MS Word, viñetas de paquetes de R, presentaciones Beamer y HTML5. Los formatos adicionales (o 'variantes' de estos formatos) están disponibles en otros paquetes de R. Algunos de esos paquetes son:
 
--   rmdformats
--   reveljs
--   artículos
--   tufte
+- rmdformats
+- reveljs
+- artículos
+- tufte
 
 Una vez estos paquetes han sido instalados, los nuevos formatos estarán disponibles a través del nuevo cuadro de diálogo Rmarkdown:
 
@@ -709,19 +709,19 @@ El paquete crea archivos Rmarkdown con plantillas para el análisis de datos (ca
 ::: {.alert .alert-info}
 ## Ejercicio 4
 
--   Cree un reporte dinámico que incluya un mapa dinámico de Costa Rica usando el paquete `leaflet`
+- Cree un reporte dinámico que incluya un mapa dinámico de Costa Rica usando el paquete `leaflet`
 
--   Reproduzca alguno de los ejemplos disponibles en el sitio del paquete dygraphs (<https://rstudio.github.io/dygraphs/>) e incrústelo en su reporte dinámico
+- Reproduzca alguno de los ejemplos disponibles en el sitio del paquete dygraphs (<https://rstudio.github.io/dygraphs/>) e incrústelo en su reporte dinámico
 
--   Instale el paquete `kableExtra` y incruste en su reporte el códifo de ejemplo en la documentación de la función `kable_styling()` de ese paquete
+- Instale el paquete `kableExtra` y incruste en su reporte el códifo de ejemplo en la documentación de la función `kable_styling()` de ese paquete
 
--   Cree una presentación Rmarkdown utilizando la opción "Presentation" en la ventana de creación
+- Cree una presentación Rmarkdown utilizando la opción "Presentation" en la ventana de creación
 
--   Genere un reporte dinámico en formato PDF
+- Genere un reporte dinámico en formato PDF
 
--   Cree un proyecto de Rstudio para organizar los contenidos del curso
+- Cree un proyecto de Rstudio para organizar los contenidos del curso
 
--   Cree un compendio de investigación con sketchy
+- Cree un compendio de investigación con sketchy
 :::
 
  
@@ -730,15 +730,14 @@ El paquete crea archivos Rmarkdown con plantillas para el análisis de datos (ca
 
 ## Referencias
 
--   [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
--   [Rmarkdown custom format](https://blog.rstudio.com/2016/03/21/r-markdown-custom-formats/)
--   [Rmarkdown website](https://rmarkdown.rstudio.com/index.html)
--   [Jacolien van Rij: Rmarkdown variants](http://www.jacolienvanrij.com/Tutorials/tutorialMarkdown.html)
--   [Danielle Quinn: R Lessons](https://github.com/DanielleQuinn/RLessons)
--   Vaidyanathan, Ramnath, Yihui Xie, JJ Allaire, Joe Cheng, and Kenton Russell. 2019. Htmlwidgets: HTML Widgets for R. https://github.com/ramnathv/htmlwidgets.
+- [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
+- [Rmarkdown custom format](https://blog.rstudio.com/2016/03/21/r-markdown-custom-formats/)
+- [Rmarkdown website](https://rmarkdown.rstudio.com/index.html)
+- [Jacolien van Rij: Rmarkdown variants](http://www.jacolienvanrij.com/Tutorials/tutorialMarkdown.html)
+- [Danielle Quinn: R Lessons](https://github.com/DanielleQuinn/RLessons)
+- Vaidyanathan, Ramnath, Yihui Xie, JJ Allaire, Joe Cheng, and Kenton Russell. 2019. Htmlwidgets: HTML Widgets for R. https://github.com/ramnathv/htmlwidgets.
 
----
-
+------------------------------------------------------------------------
 
 ::: {.callout-note collapse="true"}
 ## Información de la sesión {.unnumbered .unlisted}

@@ -16,14 +16,14 @@ format:
 ::: {.alert .alert-warning}
 **Instrucciones**
 
--   La fecha de entrega es el 1^ero^ de noviembre a las 5:00 pm
--   La tarea debe ser escrita en el formato para reportes dinámicos Rmarkdown o quarto
--   Debe entregar el archivo html generado del documento Rmarkdown/quarto por medio de mediación virtual (hay un enlace para someter la tarea). No envíe el archivo Rmd.
--   El reporte debe utilizar secciones de código ("chunks") separados para cada ejercicio y subtítulos para cada uno así como comentarios en texto
--   El código de los bloques siempre debe ser visible (no use `echo = FALSE`)
--   El código dentro de los bloques de código debe estar documentado con comentarios (usando #)
--   Debe usar R básico para la manipulación de datos
--   Cada item tiene un valor de 5 puntos
+- La fecha de entrega es el 1^ero^ de noviembre a las 5:00 pm
+- La tarea debe ser escrita en el formato para reportes dinámicos Rmarkdown o quarto
+- Debe entregar el archivo html generado del documento Rmarkdown/quarto por medio de mediación virtual (hay un enlace para someter la tarea). No envíe el archivo Rmd.
+- El reporte debe utilizar secciones de código ("chunks") separados para cada ejercicio y subtítulos para cada uno así como comentarios en texto
+- El código de los bloques siempre debe ser visible (no use `echo = FALSE`)
+- El código dentro de los bloques de código debe estar documentado con comentarios (usando #)
+- Debe usar R básico para la manipulación de datos
+- Cada item tiene un valor de 5 puntos
 :::
 
  
@@ -268,8 +268,7 @@ head(sp_dat, 3)
 ```
 :::
 
----
-
+------------------------------------------------------------------------
 
 ::: {.callout-note collapse="true"}
 ## Información de la sesión {.unnumbered .unlisted}
