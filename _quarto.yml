@@ -6,13 +6,13 @@ website:
   page-footer: Copyright 2026 | <a href="https://marce10.github.io">Marcelo Araya-Salas</a>
   title: "R avanzado 2026"
   search: true
-  site-url: https://marce10.github.io/R_avanzado_2026/
-  repo-url: https://github.com/maRce10/R_avanzado_2026/
+  site-url: https://marce10.github.io/r_avanzado_2026/
+  repo-url: https://github.com/maRce10/r_avanzado_2026/
   navbar:
     background: white
     right:
       - icon: github
-        href: https://github.com/maRce10/R_avanzado_2026/
+        href: https://github.com/maRce10/r_avanzado_2026/
         aria-label: GitHub
     left:
       - href: index.qmd

@@ -1,1 +1,1 @@
-Sitemap: https://marce10.github.io/R_avanzado_2026/sitemap.xml
+Sitemap: https://marce10.github.io/r_avanzado_2026/sitemap.xml
