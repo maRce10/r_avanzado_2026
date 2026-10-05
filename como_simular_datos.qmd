@@ -22,9 +22,7 @@ geom_smooth <- function(...) ggplot2::geom_smooth(..., color = viridis(10,  alph
 
 geom_boxplot <- function(...) ggplot2::geom_boxplot(..., fill = viridis(10, alpha = 0.5)[7])
 
-geom_pointrange <- function(...) ggplot2::geom_pointrange(..., show.legend = FALSE, color = viridis(10, alpha = 0.5)[7], size = 2) 
-
-plot_model <- function(...) sjPlot::plot_model(xy_mod, type = "diag", colors = viridis(10, alpha = 0.5)[7])
+geom_pointrange <- function(...) ggplot2::geom_pointrange(..., show.legend = FALSE, color = viridis(10, alpha = 0.5)[7], size = 2)
 
 theme_set(theme_classic(base_size = 20))
 
@@ -37,7 +35,7 @@ theme_set(theme_classic(base_size = 20))
 
 - Aprender las principales herramientas de simulación de datos en R
 
-- Comprender la utlidad de usar datos simulados para entender el comportamiento de las herramientas estadísticas
+- Comprender la utilidad de usar datos simulados para entender el comportamiento de las herramientas estadísticas
 :::
 
  
@@ -146,18 +144,25 @@ round(x = v1, digits = 0)
 
 - Ejecútela y haga histogramas de sus resultados
 
-- ¿Qué hacen los argumentos 'mean' y 'sd' en `rnorm()`? Juegue con diferentes valores y comprueba el histograma para hacerse una idea de su efecto en la simulación
+- ¿Qué hacen los argumentos 'mean' y 'sd' en `rnorm()`? Juegue con diferentes valores y compruebe el histograma para hacerse una idea de su efecto en la simulación
 :::
 
  
 
 ## Generación de variables categóricas
 
-La forma más sencilla de generar variables categóricas es utilizar el vector de ejemplo `letters' (o`LETTERS') para asignar niveles de categoría. Podemos hacerlo utilizando la función `rep()`. Por ejemplo, el siguiente código crea un vector categórico (caracteres) con dos niveles, cada uno con 4 observaciones:
+La forma más sencilla de generar variables categóricas es utilizar el vector de ejemplo `letters` (o `LETTERS`) para asignar niveles de categoría. Podemos hacerlo utilizando la función `rep()`. Por ejemplo, el siguiente código crea un vector categórico (caracteres) con dos niveles, cada uno con 4 observaciones:
 
 ```{r}
 
 rep(letters[1:2], each = 4)
+
+```
+
+
+```{r}
+
+rep(c("bajo", "medio", "alto"), each = 4)
 
 ```
 
@@ -173,18 +178,18 @@ rep(letters[1:2], each = 4, times = 2)
 
  
 
-Otra opción es simular una variable a partir de una distribución binomial y luego convertirla en un factor:
+Otra opción es simular una variable numérica y luego convertirla en un factor:
 
 ```{r}
-# correr rbinom
-binom_var <- rbinom(n = 50, size = 1, prob = 0.5)
+# variable binaria 
+binar_var <- sample(c(0, 1), 10,replace = TRUE)
 
-binom_var
+binar_var
 ```
 
 ```{r}
 # convertir a factor
-categ_var <- factor(binom_var, labels = c("a", "b"))
+categ_var <- factor(binar_var, labels = c("a", "b"))
 
 categ_var
 ```
@@ -254,7 +259,7 @@ repl_rnorm
 
 ## Hacer que las simulaciones sean reproducibles
 
-El último truco que necesitamos para ejecutar simulaciones en R es la capacidad de reproducir una simulación (es decir, obtener exactamente los mismos datos y resultados simulados). Esto puede ser útil para que otros investigadores puedan ejecutar nuestros análisis exactamente de la misma manera. Esto puede hacerse fácilmente con la función `set.seed()`. Pruebe a ejecutar el siguiente código. Debería obtener la misma salida:
+El último truco que necesitamos para ejecutar simulaciones en R es la capacidad de reproducir una simulación (es decir, obtener exactamente los mismos datos y resultados simulados). Esto puede ser útil para que otros investigadores puedan ejecutar nuestros análisis exactamente de la misma manera. Esto puede hacerse fácilmente con la función `set.seed()`. Pruebe a ejecutar el siguiente código. Debería obtener la misma salida en ambas llamadas (y la misma que se muestra aquí):
 
 ```{r}
 
@@ -262,6 +267,12 @@ El último truco que necesitamos para ejecutar simulaciones en R es la capacidad
 set.seed(10)
 
 # crear variable uniforme
+runif(n = 2)
+
+# definir la misma semilla otra vez
+set.seed(10)
+
+# se obtienen exactamente los mismos valores
 runif(n = 2)
 
 ```
@@ -272,14 +283,14 @@ runif(n = 2)
 
 ## Juegos de datos con variables numéricas y categóricas
 
-Ahora que sabemos cómo simular variables continuas y categóricas. Podemos juntarlas para crear conjuntos de datos simulados. Esto se puede hacer utilizando la función `data.frame()`:
+Ahora que sabemos cómo simular variables continuas y categóricas, podemos juntarlas para crear conjuntos de datos simulados. Esto se puede hacer utilizando la función `data.frame()`:
 
 ```{r}
 
 # crear variable categorica
 grupo <- rep(letters[1:2], each = 3)
 
-# crear variable continuaa
+# crear variable continua
 tamano <- rnorm(n = 6, mean = 5, sd = 1)
 
 # poner juntas en un data frame
@@ -290,13 +301,13 @@ df
 
 ```
 
-Por supuesto, podríamos añadir más variables a este cuadro de datos:
+Por supuesto, podríamos añadir más variables a este juego de datos:
 
 ```{r}
 
 # crear variable categorica
 grupo <- rep(letters[1:2], each = 3)
-individuo <- rep(LETTERS[1:6])
+individuo <- LETTERS[1:6]
 
 # crear variables continuas
 tamano <- rnorm(n = 6, mean = 5, sd = 1)
@@ -320,29 +331,20 @@ Y eso es un juego de datos simulados en su forma más básica. Se parece mucho a
 
 ## Prueba de concepto: *el Teorema del Límite Central*
 
-El [Teorema del Límite Central](https://en.wikipedia.org/wiki/Central_limit_theorem) afirma que, si tomamos muestras aleatorias de una población, los promedios de esas muestras seguirán una distribución normal, aunque la población no esté distribuida normalmente. Además, la distribución normal resultante debe tener un promedio cercano al promedio de la población. El teorema es un concepto clave para la estadística inferencial, ya que implica que los métodos estadísticos que funcionan para las distribuciones normales pueden ser aplicables a muchos problemas que implican otros tipos de distribuciones. No obstante, el objetivo aquí es sólo mostrar cómo se pueden utilizar las simulaciones para entender el comportamiento de los métodos estadísticos.
+El [Teorema del Límite Central](https://en.wikipedia.org/wiki/Central_limit_theorem) afirma que, si tomamos muestras aleatorias de una población (con varianza finita), los promedios de esas muestras seguirán *aproximadamente* una distribución normal, aunque la población no esté distribuida normalmente. Esta aproximación mejora conforme aumenta el tamaño de cada muestra. Además, la desviación estándar de esa distribución de promedios (el **error estándar**) es igual a la desviación estándar de la población dividida entre la raíz cuadrada del tamaño de muestra ($\sigma / \sqrt{n}$). Por otro lado, el promedio de esa distribución de promedios es igual al promedio de la población (es decir, el promedio muestral es un estimador insesgado). El teorema es un concepto clave para la estadística inferencial, ya que implica que los métodos estadísticos que funcionan para las distribuciones normales pueden ser aplicables a muchos problemas que implican otros tipos de distribuciones. No obstante, el objetivo aquí es sólo mostrar cómo se pueden utilizar las simulaciones para entender el comportamiento de los métodos estadísticos.
 
 Para comprobar si esas afirmaciones básicas sobre el Teorema del Límite Central son ciertas, podemos utilizar datos simulados en R. Vamos a simular una población de 1000 observaciones con una distribución uniforme:
 
-```{r, eval=FALSE}
+```{r}
 
-# simular popublacion uniforme
+# definir semilla
+set.seed(10)
+
+# simular poblacion uniforme
 unif_pop <- runif(1000, min = 0, max = 10)
 
 # ver histograma
-ggplot(data = data.frame(unif_pop), mapping = aes(x = unif_pop)) + geom_histogram() 
-
-```
-
-```{r, echo=FALSE}
-set.seed(10)
-
-# simulate uniform population
-unif_pop <- runif(1000, min = 0, max = 10)
-
-# ver distribucion
-ggplot(data = data.frame(unif_pop), mapping = aes(x = unif_pop)) + geom_histogram() 
-
+ggplot(data = data.frame(unif_pop), mapping = aes(x = unif_pop)) + geom_histogram()
 
 ```
 
@@ -363,32 +365,24 @@ Este proceso puede ser replicado varias veces con `replicate()`:
 ```{r}
 
 # replicar
-samples <- replicate(n = 100, expr = mean(sample(x = unif_pop, size = 30)))
+samples <- replicate(n = 1000, expr = mean(sample(x = unif_pop, size = 30)))
 
 ```
 
  
 
-El código anterior toma 100 muestras con 30 valores cada una. Ahora podemos comprobar la distribución de las muestras:
+El código anterior toma 1000 muestras con 30 valores cada una y calcula el promedio de cada una. Ahora podemos comprobar la distribución de los promedios de las muestras:
 
-```{r, eval=FALSE}
+```{r}
 
 # ver distribucion/ histograma
-ggplot(data = data.frame(samples), mapping = aes(x = samples)) + geom_histogram() 
-
-
-```
-
-```{r, echo=FALSE}
-
-# ver distribucion
-ggplot(data = data.frame(samples), mapping = aes(x = samples)) + geom_histogram() 
+ggplot(data = data.frame(samples), mapping = aes(x = samples)) + geom_histogram()
 
 ```
 
  
 
-... asi como el promedio:
+... así como su promedio:
 
 ```{r}
 
@@ -398,7 +392,7 @@ mean(samples)
 
  
 
-Como era de esperar, las muestras siguen una distribución normal con una media cercana a la media de la población, que es:
+Como era de esperar, los promedios de las muestras siguen una distribución aproximadamente normal con un promedio muy cercano al promedio de la población, que es:
 
 ```{r}
 
@@ -406,11 +400,23 @@ mean(unif_pop)
 
 ```
 
+También podemos comprobar que la desviación estándar de los promedios (el error estándar) es cercana a la predicha por el teorema ($\sigma / \sqrt{n}$):
+
+```{r}
+
+# desviacion estandar de los promedios
+sd(samples)
+
+# valor esperado segun el teorema
+sd(unif_pop) / sqrt(30)
+
+```
+
  
 
 Probemos con una distribución más compleja. Por ejemplo, una distribución bimodal:
 
-```{r, eval=FALSE}
+```{r}
 
 # usar semilla
 set.seed(123)
@@ -423,40 +429,17 @@ norm2 <- rnorm(n = 1000, mean = 20, sd = 3)
 bimod_pop <- c(norm1, norm2)
 
 # ver histograma
-ggplot(data = data.frame(bimod_pop), mapping = aes(x = bimod_pop)) + geom_histogram() 
+ggplot(data = data.frame(bimod_pop), mapping = aes(x = bimod_pop)) + geom_histogram()
 
 ```
 
-```{r, echo=FALSE}
-
-# definir semilla
-set.seed(123)
-
-norm1 <- rnorm(n = 1000, mean = 10, sd = 3)
-norm2 <- rnorm(n = 1000, mean = 20, sd = 3)
-
-bimod_pop <- c(norm1, norm2)
-
-# ver distribucion
-ggplot(data = data.frame(bimod_pop), mapping = aes(x = bimod_pop)) + geom_histogram() 
-```
-
-```{r, eval=FALSE}
+```{r}
 
 # replicar muestreo
-samples <- replicate(200, mean(sample(bimod_pop, 10)))
+samples <- replicate(1000, mean(sample(bimod_pop, 10)))
 
 # ver histograma
-ggplot(data = data.frame(samples), mapping = aes(x = samples)) + geom_histogram() 
-
-```
-
-```{r, echo=FALSE}
-
-samples <- replicate(200, mean(sample(bimod_pop, 10)))
-
-# ver distribucion
-ggplot(data = data.frame(samples), mapping = aes(x = samples)) + geom_histogram() 
+ggplot(data = data.frame(samples), mapping = aes(x = samples)) + geom_histogram()
 
 ```
 
@@ -467,6 +450,34 @@ mean(samples)
 mean(bimod_pop)
 ```
 
+El teorema dice que la aproximación a la normal mejora conforme aumenta el tamaño de cada muestra. Podemos comprobarlo repitiendo el muestreo con diferentes tamaños de muestra:
+
+```{r, out.width = "100%"}
+
+# tamanos de muestra a evaluar
+tamanos <- c(2, 5, 30)
+
+# replicar muestreo para cada tamano de muestra
+prom_tamanos <- lapply(tamanos, function(x) {
+  data.frame(tamano = paste("n =", x),
+             promedio = replicate(1000, mean(sample(bimod_pop, x))))
+})
+
+# juntar en un solo data frame
+prom_tamanos <- do.call(rbind, prom_tamanos)
+
+# ordenar niveles para graficar
+prom_tamanos$tamano <- factor(prom_tamanos$tamano, levels = paste("n =", tamanos))
+
+# graficar
+ggplot(data = prom_tamanos, mapping = aes(x = promedio)) +
+  geom_histogram() +
+  facet_wrap(~ tamano, scales = "free_y")
+
+```
+
+Con muestras muy pequeñas (n = 2) la distribución de los promedios todavía refleja la forma de la población, mientras que con n = 30 ya es prácticamente normal (y más estrecha).
+
  
 
 ::: {.alert .alert-info}
@@ -474,7 +485,7 @@ mean(bimod_pop)
 
  
 
-- Intenta explorar el Teorema del Límite Central como en el caso anterior, pero esta vez utilizando:
+- Intente explorar el Teorema del Límite Central como en el caso anterior, pero esta vez utilizando:
 
   1.  Una distribución exponencial (`rexp()`)
   2.  Una distribución log-normal (`rlnorm()`)
