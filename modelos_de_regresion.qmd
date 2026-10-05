@@ -206,150 +206,9 @@ ggplot(trees, aes(x = Girth, y = Height)) +
 
 Utilizaremos `lm()` para mostrar la flexibilidad de los modelos de regresión. Los componentes de regresión se añadirán gradualmente para que podamos tomarnos el tiempo de entender cada uno de ellos así como los correspondientes cambios en la salida de la regresión.
 
-## Modelo solo con intercepto
 
-Primero vamos a crear una variable numérica de respuesta:
 
-```{r}
-
-# definir semilla
-set.seed(123)
-
-# numero de observaciones
-n <- 50
-
-#  variables aleatorias
-y <- rnorm(n = n, mean = 0, sd = 1)
-
-# poner en un data frame
-y_data <- data.frame(y)
-```
-
- 
-
-Esta única variable puede introducirse en un **modelo de regresión sólo con intercepto**. Para ello, debemos suministrar la fórmula del modelo y los datos a `lm()`:
-
-```{r}
-
-# correr modelo
-y_mod <- lm(formula = y ~ 1, data = y_data)
-
-```
-
- 
-
-Lo que equivale a:
-
-<center><font size = 6>$\hat{Y} = \beta_{0}$</font></center>
-
- 
-
-Podemos obtener el resumen por defecto de los resultados del modelo ejecutando `summary()` en el objeto de salida 'y_mod':
-
-```{r}
-
-summary(y_mod)
-
-```
-
- 
-
-Puede ser bastante informativo graficar los tamaños de efecto (aunque en este caso sólo tenemos uno):
-
-Como haremos este gráfico varias veces, conviene crear una función que lo haga a partir de cualquier modelo:
-
-```{r}
-
-# funcion para graficar tamanos de efecto con intervalos de confianza
-graficar_efectos <- function(modelo) {
-  ci_df <- data.frame(param = names(coef(modelo)), 
-                      est = coef(modelo), 
-                      li = confint(modelo)[, 1], 
-                      ls = confint(modelo)[, 2])
-
-  ggplot(ci_df, aes(x = param, y = est)) + 
-    geom_hline(yintercept = 0, color = "red", lty = 2) +
-    geom_pointrange(aes(ymin = li, ymax = ls)) + 
-    labs(x = "Parámetro", y = "Tamaño de efecto") + 
-    coord_flip()
-}
-
-graficar_efectos(y_mod)
-
-```
-
- 
-
-::: {.alert .alert-success}
- 
-
-<center><font size="5"><b>Interpretación del modelo</b></font></center>
-
- 
-
-Para evaluar la importancia de la asociación nos centramos en la tabla de coeficientes:
-
-```{r, echo= FALSE}
-
-summ_y_mod <- summary(y_mod)
-
-summ_y_mod$coefficients
-```
-
-- En este ejemplo no hay predictores en el modelo, por lo que sólo tenemos una estimación para el intercepto ($\beta_0$)
-
-- El modelo nos dice que el intercepto se estima en `r summ_y_mod$coefficients[1, 1]` y que este valor no es significativamente diferente de 0 (valor p = `r summ_y_mod$coefficients[1, 4]`)
-
-- En este caso el intercepto es simplemente la media de la variable de respuesta
-
-```{r}
-
-mean(y_data$y)
-
-```
-
- 
-
-- Rara vez tenemos predicciones sobre el intercepto, por lo que tendemos a ignorar esta estimación.
-:::
-
- 
-
-::: {.alert .alert-warning}
-<center><font size="5"><b>Caso de estudio</b></font></center>
-
- 
-
-- Ruhs, E. C., Martin, L. B., & Downs, C. J. (2020). [**The impacts of body mass on immune cell concentrations in birds**](https://royalsocietypublishing.org/doi/pdf/10.1098/rspb.2020.0655?download=true). *Proceedings of the Royal Society B*, 287(1934), 20200655.
-
-"*Encontramos que un modelo sólo con intercepto (intercept-only model) explicaba mejor las concentraciones de linfocitos y eosinófilos en las aves, indicando que las concentraciones de estos tipos de células eran independientes de la masa corporal.*"
-
-```{r, out.width = "85%", echo = FALSE, fig.align= "center"}
-
-knitr::include_graphics("./images/leukocytes.png")
-
-```
-
- 
-:::
-
- 
-
-::: {.alert .alert-info}
-<font size="5">Ejercicio 3</font>
-
- 
-
-- Cambie el argumento `mean` en la llamada a la función `rnorm()` en la simulación para el modelo de solo intercepto por un valor distinto de 0 y observe cómo cambian los valores en la tabla de coeficientes
-
-- Cambie el argumento `sd` en la llamada a la función `rnorm()` por un valor más alto y observe cómo cambian los valores en la tabla de coeficientes
-:::
-
- 
-
-------------------------------------------------------------------------
-
-## Añadir un predictor no asociado
+## Modelo con un predictor no asociado
 
 Podemos crear 2 variables numéricas no relacionadas así:
 
@@ -448,7 +307,20 @@ summ_xy_mod$coefficients
 - El modelo nos dice que la estimación de 'x1' es `r summ_xy_mod$coefficients[2, 1]` y que no es significativamente diferente de 0 (p = `r summ_xy_mod$coefficients[2, 4]`)
 :::
 
-------------------------------------------------------------------------
+---
+
+::: {.alert .alert-info}
+
+<font size="5">Ejercicio 3</font>
+
+ 
+
+- Cambie el argumento `mean` en la llamada a la función `rnorm()` en la simulación para el modelo con un predictor no asociado por un valor distinto de 0 y observe cómo cambian los valores en la tabla de coeficientes
+
+- Cambie el argumento `sd` en la llamada a la función `rnorm()` por un valor más alto y observe cómo cambian los valores en la tabla de coeficientes
+
+:::
+
 
  
 
@@ -1357,8 +1229,6 @@ Que es equivalente a esto:
 
 <center><font size = 6>$Y \sim Poisson(\lambda), \quad log(\lambda) = \beta_{0} + \beta_{1} * x_{1} + \beta_{2} * x_{2}$</font></center>
 
-
-
 Es decir, la respuesta sigue una distribución de Poisson cuyo promedio ($\lambda$) se relaciona con los predictores a través de una función de enlace logarítmica. Por eso los estimados están en escala logarítmica.
 
  
@@ -1608,7 +1478,6 @@ data.frame(estimada = ranef(mix_eff_mod)$poblacion[, 1],
 - Note que las desviaciones estimadas son similares a las simuladas aunque tienden a estar un poco "encogidas" hacia 0 (*shrinkage*). Esto es una propiedad de los modelos mixtos: las estimaciones de cada grupo toman prestada información de los demás grupos. Por esta misma razón, la varianza de estos valores (`var(ranef(...))`) no es igual a la varianza estimada por el modelo (`VarCorr()`), por lo que para reportar la variación entre grupos se debe usar esta última.
 
  
-
 
  
 :::
