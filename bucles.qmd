@@ -557,7 +557,6 @@ for (i in archivos_txt) {
   df_resultados <- rbind(df_resultados, txt)
 }
 
-nrow(df_resultados) == sum(n_sp_df$filas)
 ```
 
 ------------------------------------------------------------------------
