@@ -20,7 +20,7 @@ library(sjPlot)
 # ggplot settings
 geom_histogram <- function(...) ggplot2::geom_histogram(..., fill = viridis(10, alpha = 0.5)[8], show.legend = FALSE, bins = 20, color = "black")
 
-geom_smooth <- function(...) ggplot2::geom_smooth(..., color = viridis(10,  alpha = 0.5)[8])
+geom_smooth <- function(...) ggplot2::geom_smooth(..., formula = y ~ x, color = viridis(10,  alpha = 0.5)[8])
 
 geom_boxplot <- function(...) ggplot2::geom_boxplot(..., fill = viridis(10, alpha = 0.5)[7])
 
@@ -264,9 +264,23 @@ summary(xy_mod)
 
  
 
-... y graficar los tamaños de efecto:
+... y graficar los tamaños de efecto. Como haremos este gráfico varias veces, conviene crear una función que lo haga a partir de cualquier modelo:
 
 ```{r}
+
+# funcion para graficar tamanos de efecto con intervalos de confianza
+graficar_efectos <- function(modelo) {
+  ci_df <- data.frame(param = names(coef(modelo)),
+                      est = coef(modelo),
+                      li = confint(modelo)[, 1],
+                      ls = confint(modelo)[, 2])
+
+  ggplot(ci_df, aes(x = param, y = est)) +
+    geom_hline(yintercept = 0, color = "red", lty = 2) +
+    geom_pointrange(aes(ymin = li, ymax = ls)) +
+    labs(x = "Parámetro", y = "Tamaño de efecto") +
+    coord_flip()
+}
 
 graficar_efectos(xy_mod)
 
@@ -276,7 +290,7 @@ graficar_efectos(xy_mod)
 
 Deberíamos "diagnosticar" la idoneidad del modelo inspeccionando más de cerca la distribución de los residuos. La función `plot_model()` del paquete `sjPlot` hace un buen trabajo para crear gráficos de diagnóstico para modelos lineales:
 
-```{r, out.width= "80%", fig.height=4}
+```{r, out.width= "80%", fig.height=4, message=FALSE}
 
 plot_model(xy_mod, type = "diag")
 
@@ -394,7 +408,7 @@ graficar_efectos(xy_mod2)
 
 ... y los gráficos diagnósticos del modelo:
 
-```{r, out.width= "80%", fig.height=4}
+```{r, out.width= "80%", fig.height=4, message=FALSE}
 
 plot_model(xy_mod2, type = "diag")
 
@@ -527,7 +541,7 @@ graficar_efectos(xy_mod_multp)
 
 ... y los gráficos diagnósticos:
 
-```{r, out.width= "80%", fig.height=4}
+```{r, out.width= "80%", fig.height=4, message=FALSE}
 
 plot_model(xy_mod_multp, type = "diag")
 
@@ -797,7 +811,7 @@ graficar_efectos(xy_mod_cat)
 
 ... y los gráficos diagnósticos del modelo:
 
-```{r, out.width= "80%", fig.height=4}
+```{r, out.width= "80%", fig.height=4, message=FALSE}
 
 plot_model(xy_mod_cat, type = "diag")[[2]]
 
@@ -996,7 +1010,7 @@ ggplot(data = xy_datos_intr, aes(x = x2, y = y, color = x1)) +
 # graficar
 ggplot(data = xy_datos_intr, aes(x = x2, y = y, color = x1)) +
     geom_point(size = 3) + scale_color_viridis_d(end = 0.9, begin = 0.2, alpha = 0.6) +
-    ggplot2::geom_smooth(method = "lm", se = FALSE)
+    ggplot2::geom_smooth(method = "lm", formula = y ~ x, se = FALSE)
 
 ```
 
@@ -1014,7 +1028,7 @@ graficar_efectos(xy_mod_intr)
 
 También deberíamos revisar los gráficos de diagnóstico:
 
-```{r, out.width= "80%", fig.height=4}
+```{r, out.width= "80%", fig.height=4, message=FALSE}
 
 plot_model(xy_mod_intr, type = "diag")
 

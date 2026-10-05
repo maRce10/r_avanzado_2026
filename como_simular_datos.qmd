@@ -331,7 +331,7 @@ Y eso es un juego de datos simulados en su forma más básica. Se parece mucho a
 
 ## Prueba de concepto: *el Teorema del Límite Central*
 
-El [Teorema del Límite Central](https://en.wikipedia.org/wiki/Central_limit_theorem) afirma que, si tomamos muestras aleatorias de una población (con varianza finita), los promedios de esas muestras seguirán *aproximadamente* una distribución normal, aunque la población no esté distribuida normalmente. Esta aproximación mejora conforme aumenta el tamaño de cada muestra. Además, la desviación estándar de esa distribución de promedios (el **error estándar**) es igual a la desviación estándar de la población dividida entre la raíz cuadrada del tamaño de muestra ($\sigma / \sqrt{n}$). Por otro lado, el promedio de esa distribución de promedios es igual al promedio de la población (es decir, el promedio muestral es un estimador insesgado). El teorema es un concepto clave para la estadística inferencial, ya que implica que los métodos estadísticos que funcionan para las distribuciones normales pueden ser aplicables a muchos problemas que implican otros tipos de distribuciones. No obstante, el objetivo aquí es sólo mostrar cómo se pueden utilizar las simulaciones para entender el comportamiento de los métodos estadísticos.
+El [Teorema del Límite Central](https://en.wikipedia.org/wiki/Central_limit_theorem) afirma que, si tomamos muestras aleatorias de una población, los promedios de esas muestras seguirán *aproximadamente* una distribución normal, aunque la población no esté distribuida normalmente. Esta aproximación mejora conforme aumenta el tamaño de cada muestra. Además, el promedio de esa distribución de promedios es igual al promedio de la población. (El teorema también describe cuánto varían esos promedios, es decir, el error estándar, pero no lo veremos a fondo en este manual.) El teorema es un concepto clave para la estadística inferencial, ya que implica que los métodos estadísticos que funcionan para las distribuciones normales pueden ser aplicables a muchos problemas que implican otros tipos de distribuciones. No obstante, el objetivo aquí es sólo mostrar cómo se pueden utilizar las simulaciones para entender el comportamiento de los métodos estadísticos.
 
 Para comprobar si esas afirmaciones básicas sobre el Teorema del Límite Central son ciertas, podemos utilizar datos simulados en R. Vamos a simular una población de 1000 observaciones con una distribución uniforme:
 
@@ -400,18 +400,6 @@ mean(unif_pop)
 
 ```
 
-También podemos comprobar que la desviación estándar de los promedios (el error estándar) es cercana a la predicha por el teorema ($\sigma / \sqrt{n}$):
-
-```{r}
-
-# desviacion estandar de los promedios
-sd(samples)
-
-# valor esperado segun el teorema
-sd(unif_pop) / sqrt(30)
-
-```
-
  
 
 Probemos con una distribución más compleja. Por ejemplo, una distribución bimodal:
@@ -476,7 +464,7 @@ ggplot(data = prom_tamanos, mapping = aes(x = promedio)) +
 
 ```
 
-Con muestras muy pequeñas (n = 2) la distribución de los promedios todavía refleja la forma de la población, mientras que con n = 30 ya es prácticamente normal (y más estrecha).
+Con muestras muy pequeñas (n = 2) la distribución de los promedios todavía refleja la forma de la población, mientras que con n = 30 ya es prácticamente normal. En todos los casos los promedios se centran alrededor del promedio de la población.
 
  
 
