@@ -206,8 +206,6 @@ ggplot(trees, aes(x = Girth, y = Height)) +
 
 Utilizaremos `lm()` para mostrar la flexibilidad de los modelos de regresión. Los componentes de regresión se añadirán gradualmente para que podamos tomarnos el tiempo de entender cada uno de ellos así como los correspondientes cambios en la salida de la regresión.
 
-
-
 ## Modelo con un predictor no asociado
 
 Podemos crear 2 variables numéricas no relacionadas así:
@@ -321,10 +319,9 @@ summ_xy_mod$coefficients
 - El modelo nos dice que la estimación de 'x1' es `r summ_xy_mod$coefficients[2, 1]` y que no es significativamente diferente de 0 (p = `r summ_xy_mod$coefficients[2, 4]`)
 :::
 
----
+------------------------------------------------------------------------
 
 ::: {.alert .alert-info}
-
 <font size="5">Ejercicio 3</font>
 
  
@@ -332,9 +329,7 @@ summ_xy_mod$coefficients
 - Cambie el argumento `mean` en la llamada a la función `rnorm()` en la simulación para el modelo con un predictor no asociado por un valor distinto de 0 y observe cómo cambian los valores en la tabla de coeficientes
 
 - Cambie el argumento `sd` en la llamada a la función `rnorm()` por un valor más alto y observe cómo cambian los valores en la tabla de coeficientes
-
 :::
-
 
  
 
@@ -1186,7 +1181,9 @@ ggplot(data = data.frame(resd_mod), mapping = aes(x = resd_mod)) + geom_histogra
 
 ## Modelos lineales generalizados (GLM)
 
-Los GLM nos permiten modelar la asociación a variables respuesta que no siguen una distribución normal. Además, permiten modelar distribuciones que se asemejan más al proceso que generó los datos. El siguiente código crea un juego de datos con una respuesta que representa cuentas (por lo tanto, no normal):
+Los modelos estadísticos deben representar, en la medida de lo posible, el proceso que genera los datos. La distribución normal es apropiada para algunas variables respuesta, pero no para todas. Por ejemplo, cuando estudiamos datos de conteo, podemos utilizar una distribución de Poisson para representar el número de eventos observados. Los modelos lineales generalizados (GLM) nos permiten modelar este tipo de respuestas mediante distribuciones de probabilidad diferentes de la normal.
+
+El siguiente código crea un juego de datos con una respuesta que representa cuentas (por lo tanto, no normal):
 
 ```{r}
 # Simulación de datos
@@ -1229,7 +1226,10 @@ ggplot(xy_datos_pois, aes(x = x1, y = y)) +
 
 La relación no parece muy lineal ni la varianza parece ser constante a través de 'x1'.
 
-Podemos relajar el requisito de la distribución normal con GLMs. `glm()` es una función básica de R que nos ayuda a hacer el truco. Para este ejemplo la distribución más apropiada es *Poisson*. Esto se puede establecer en el argumento `family` así:
+Podemos relajar el requisito de la distribución normal con GLMs. `glm()` es una función básica de R que nos ayuda a hacer el truco. Para este ejemplo la distribución más apropiada es *Poisson* con una función de enlace logarítimica. El enlace logarítmico supone que la respuesta sigue una distribución de Poisson y que el logaritmo de su media esperada es una función lineal de los predictores.
+
+
+Esto se puede establecer en el argumento `family` así:
 
 ```{r}
 
@@ -1246,7 +1246,6 @@ Que es equivalente a esto:
 Es decir, la respuesta sigue una distribución de Poisson cuyo promedio ($\lambda$) se relaciona con los predictores a través de una función de enlace logarítmica. Por eso los estimados están en escala logarítmica.
 
  
-
 Como puede ver el único argumento extra comparado con `lm()` es `family`. El resto es simplemente la "fórmula" y los "datos" con los que ya estamos familiarizados. Así que, de nuevo, podemos aprovechar nuestros conocimientos sobre los modelos lineales para extenderlos a estructuras de datos más complejas.
 
 También necesitamos ejecutar `summary()` para obtener el resultado del modelo:
