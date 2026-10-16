@@ -267,20 +267,3 @@ head(sp_dat, 3)
 9.  Publique el reporte en [Rpubs](https://rpubs.com/) y añada el enlace en el reporte (use un enlace en el texto).
 ```
 :::
-
-------------------------------------------------------------------------
-
-::: {.callout-note collapse="true"}
-## Información de la sesión {.unnumbered .unlisted}
-
-```{r session info}
-#| echo: false
-
-# if devtools is installed use devtools::session_info()
-if (requireNamespace("devtools", quietly = TRUE)) {
-  devtools::session_info()
-} else {
-  sessionInfo()
-}
-```
-:::
