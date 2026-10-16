@@ -3,7 +3,7 @@ title: <font size="7"><b>Tarea 5</b></font>
 format:
   html:
     code-tools: false
-    code-line-numbers: false
+    code-line-numbers: true
     embed-resources: false
 ---
 
@@ -107,7 +107,7 @@ archivos_txt <- list.files(path = directorio, full.names = TRUE, pattern = "TXT$
 
  
 
-También pueden bajar el archivo directamente de [este enlance](https://github.com/maRce10/ucr_r_avanzado/raw/master/additional_files/datos_camara_submarina.zip). Recuerde extraer los archivos y hacer el vector con los nombres de los archivos (correr líneas de la 9 a la 13).
+También pueden bajar el archivo directamente de [este enlance](https://github.com/maRce10/ucr_r_avanzado/raw/master/additional_files/datos_camara_submarina.zip). Recuerde extraer los archivos y hacer el vector con los nombres de los archivos (correr líneas de la 20 a la 25).
 
 Si todo salió bien el vector "archivos_txt" debería tener `r length(archivos_txt)` elementos:
 

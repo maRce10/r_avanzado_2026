@@ -283,40 +283,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># definir directorio a donde guardar los archivos</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>directorio <span class="ot">&lt;-</span> <span class="st">"DIRECCION_DONDE_GUARDAR_LOS ARCHIVOS_DE_EJEMPLO"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># guardar archivos</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="fu">paste0</span>(</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://github.com/maRce10/ucr_r_avanzado/"</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"raw/master/additional_files/datos_camara_submarina.zip"</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">destfile =</span> <span class="fu">file.path</span>(directorio, <span class="st">"datos_camara_submarina.zip"</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># extraerlos del zip</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span>(</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">zipfile =</span> <span class="fu">file.path</span>(directorio, <span class="st">"datos_camara_submarina.zip"</span>),</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">exdir =</span> directorio</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># hacer vector con nombre y direccion de archivos</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>archivos_txt <span class="ot">&lt;-</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list.files</span>(</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> directorio,</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">full.names =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"TXT$"</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># definir directorio a donde guardar los archivos</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>directorio <span class="ot">&lt;-</span> <span class="st">"DIRECCION_DONDE_GUARDAR_LOS ARCHIVOS_DE_EJEMPLO"</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># guardar archivos</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">download.file</span>(</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  <span class="at">url =</span> <span class="fu">paste0</span>(</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="st">"https://github.com/maRce10/ucr_r_avanzado/"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    <span class="st">"raw/master/additional_files/datos_camara_submarina.zip"</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>  ),</span>
+<span id="cb1-10"><a href="#cb1-10"></a>  <span class="at">destfile =</span> <span class="fu">file.path</span>(directorio, <span class="st">"datos_camara_submarina.zip"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co"># extraerlos del zip</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="fu">unzip</span>(</span>
+<span id="cb1-15"><a href="#cb1-15"></a>  <span class="at">zipfile =</span> <span class="fu">file.path</span>(directorio, <span class="st">"datos_camara_submarina.zip"</span>),</span>
+<span id="cb1-16"><a href="#cb1-16"></a>  <span class="at">exdir =</span> directorio</span>
+<span id="cb1-17"><a href="#cb1-17"></a>)</span>
+<span id="cb1-18"><a href="#cb1-18"></a></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="co"># hacer vector con nombre y direccion de archivos</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a>archivos_txt <span class="ot">&lt;-</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a>  <span class="fu">list.files</span>(</span>
+<span id="cb1-22"><a href="#cb1-22"></a>    <span class="at">path =</span> directorio,</span>
+<span id="cb1-23"><a href="#cb1-23"></a>    <span class="at">full.names =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-24"><a href="#cb1-24"></a>    <span class="at">pattern =</span> <span class="st">"TXT$"</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a>  )</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>&nbsp;</p>
-<p>También pueden bajar el archivo directamente de <a href="https://github.com/maRce10/ucr_r_avanzado/raw/master/additional_files/datos_camara_submarina.zip">este enlance</a>. Recuerde extraer los archivos y hacer el vector con los nombres de los archivos (correr líneas de la 9 a la 13).</p>
+<p>También pueden bajar el archivo directamente de <a href="https://github.com/maRce10/ucr_r_avanzado/raw/master/additional_files/datos_camara_submarina.zip">este enlance</a>. Recuerde extraer los archivos y hacer el vector con los nombres de los archivos (correr líneas de la 20 a la 25).</p>
 <p>Si todo salió bien el vector “archivos_txt” debería tener 19 elementos:</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(archivos_txt)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">length</span>(archivos_txt)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 19</code></pre>
