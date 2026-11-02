@@ -1,0 +1,783 @@
+---
+title: <font size="7"><b>Introducción a los modelos lineales mixtos</b></font>
+---
+
+```{r,echo=FALSE,message=FALSE}
+
+options("digits"=5)
+options("digits.secs"=3)
+
+```
+
+```{r, echo = FALSE, message=FALSE}
+
+library(knitr)
+library(ggplot2)
+library(viridis)
+library(lme4)
+library(lmerTest)
+
+# ggplot settings
+theme_set(theme_classic(base_size = 20))
+
+# colores para las tres estrategias de agrupamiento
+col_mods <- viridis(10)[c(2, 5, 8)]
+
+# texto para interpretar valores p en linea
+texto_signif <- function(p, alfa = 0.05) ifelse(p < alfa, "es significativamente diferente de 0", "no es significativamente diferente de 0")
+
+# imprimir valores en linea con 3 cifras significativas
+knitr::knit_hooks$set(inline = function(x) if (is.numeric(x)) format(signif(x, 3)) else x)
+
+```
+
+::: {.alert .alert-info}
+# Objetivo del manual {.unnumbered .unlisted}
+
+-   Entender por qué los datos agrupados (no independientes) requieren modelos especiales
+
+-   Comprender la diferencia entre agrupamiento completo, sin agrupamiento y agrupamiento parcial (*partial pooling*)
+
+-   Ajustar e interpretar modelos lineales mixtos con interceptos y pendientes aleatorias usando `lme4`
+
+-   Reconocer y evitar la pseudoreplicación en datos biológicos
+:::
+
+------------------------------------------------------------------------
+
+Paquetes a utilizar en este manual:
+
+```{r}
+
+# instalar/cargar paquetes
+sketchy::load_packages(
+  c("ggplot2",
+    "viridis",
+    "lme4",
+    "lmerTest",
+    "emmeans")
+  )
+
+```
+
+Este manual continúa donde terminó la sección de modelos mixtos del [manual de modelos de regresión](modelos_de_regresion.qmd). Allí vimos con datos simulados que ignorar la estructura de agrupamiento puede incluso invertir la dirección de un efecto (paradoja de Simpson). Aquí usaremos **datos biológicos reales** para entender con más detalle qué hace un modelo mixto y, sobre todo, cómo "comparte información" entre grupos mediante el **agrupamiento parcial**.
+
+------------------------------------------------------------------------
+
+# ¿Por qué necesitamos modelos mixtos?
+
+Los modelos lineales (`lm()`) asumen que cada observación es **independiente** de las demás. En biología esta suposición se viola constantemente:
+
+-   Medimos varias veces al **mismo individuo** (medidas repetidas, curvas de crecimiento)
+-   Grabamos varios cantos de cada **ave o rana**
+-   Medimos varias hojas de la misma **planta**, varias plantas de la misma **parcela**
+-   Muestreamos varios murcielagos del mismo **regugio**, o varias especies del mismo **género**
+
+Las observaciones dentro de un mismo grupo se parecen más entre sí que observaciones de grupos distintos. Si ignoramos esto, el modelo "cree" que tiene más información independiente de la que realmente tiene, lo que produce errores estándar demasiado pequeños y valores de p demasiado optimistas. A esto se le conoce como **pseudoreplicación** (Hurlbert 1984).
+
+Los modelos mixtos resuelven el problema incluyendo dos tipos de efectos:
+
+-   **Efectos fijos**: los parámetros que nos interesan y que son iguales para toda la población (p. ej. el efecto de la dieta en el crecimiento)
+-   **Efectos aleatorios** (o variables): desviaciones de cada grupo respecto al promedio, que se asume vienen de una distribución normal con una desviación estándar que el modelo estima (p. ej. cuánto varía el crecimiento entre individuos)
+
+------------------------------------------------------------------------
+
+# Datos: crecimiento de pollitos
+
+Usaremos el juego de datos `ChickWeight` que viene con R. Proviene de un experimento real (Crowder & Hand 1990) en el que se registró el **peso** (en gramos) de **50 pollitos** desde el nacimiento hasta el día 21, cada dos días. Cada pollito recibió una de cuatro **dietas**. Traduciremos los nombres de las columnas al español:
+
+```{r}
+
+pollos <- data.frame(
+  peso = ChickWeight$weight,
+  dia = ChickWeight$Time,
+  pollito = factor(as.character(ChickWeight$Chick)),
+  dieta = ChickWeight$Diet
+)
+
+head(pollos, 12)
+
+```
+
+Cada pollito se midió varias veces, por lo que tenemos `r nrow(pollos)` observaciones pero solo `r nlevels(pollos$pollito)` individuos. Además, no todos los pollitos tienen el mismo número de medidas (algunos murieron antes de terminar el experimento):
+
+```{r}
+
+n_obs <- table(pollos$pollito)
+
+sort(n_obs)
+
+```
+
+Este detalle (tamaños de muestra desiguales entre grupos) será clave para entender el agrupamiento parcial. Grafiquemos las curvas de crecimiento de todos los pollitos:
+
+```{r, out.width="100%"}
+
+ggplot(pollos, aes(x = dia, y = peso, group = pollito, color = dieta)) +
+  geom_line(alpha = 0.6) +
+  geom_point(size = 1) +
+  scale_color_viridis_d(end = 0.9) +
+  labs(x = "Día", y = "Peso (g)", color = "Dieta")
+
+```
+
+Dos cosas saltan a la vista: (1) todos los pollitos crecen, pero (2) **la tasa de crecimiento varía mucho entre individuos**. Nuestro objetivo inicial será estimar la tasa de crecimiento (g/día) de cada pollito.
+
+------------------------------------------------------------------------
+
+# Tres maneras de modelar datos agrupados
+
+Hay tres estrategias para lidiar con datos agrupados. Las compararemos con un modelo sencillo de peso en función del día.
+
+## Agrupamiento completo (*complete pooling*)
+
+Ignoramos que las observaciones vienen de diferentes pollitos y ajustamos una sola recta para todos los datos:
+
+<center><font size = 6>$peso_{i} = \beta_{0} + \beta_{1} * dia_{i} + \varepsilon_{i}$</font></center>
+
+```{r}
+
+m_completo <- lm(peso ~ dia, data = pollos)
+
+coef(m_completo)
+
+```
+
+Este modelo asume que todos los pollitos son iguales: misma intercepto y misma tasa de crecimiento. Claramente eso no es cierto. Además trata las `r nrow(pollos)` observaciones como si fueran independientes.
+
+## Sin agrupamiento (*no pooling*)
+
+En el otro extremo, ajustamos una regresión **independiente para cada pollito**. Cada individuo tiene su propio intercepto y su propia pendiente, y lo que aprendemos de un pollito no se usa para los demás:
+
+<center><font size = 6>$peso_{i} = \beta_{0[j]} + \beta_{1[j]} * dia_{i} + \varepsilon_{i}$</font></center>
+
+donde $j$ es el pollito al que pertenece la observación $i$. La función `lmList()` de `lme4` ajusta un `lm()` por grupo:
+
+```{r}
+
+m_sin <- lmList(peso ~ dia | pollito, data = pollos)
+
+coefs_sin <- coef(m_sin)
+
+head(coefs_sin)
+
+```
+
+El problema de este abordaje es que los grupos con pocos datos producen estimados muy ruidosos. Por ejemplo, el pollito 18 solo tiene 2 medidas:
+
+```{r}
+
+pollos[pollos$pollito == "18", ]
+
+coefs_sin["18", ]
+
+```
+
+¡Su tasa de crecimiento estimada es **negativa**! Con solo dos puntos la recta pasa exactamente por ellos y no tenemos forma de distinguir señal de ruido. Sabemos (por los otros 49 pollitos) que los pollitos de esa edad normalmente ganan peso, pero este modelo ignora esa información.
+
+## Agrupamiento parcial (*partial pooling*): el modelo mixto
+
+El modelo mixto es un punto intermedio. Cada pollito tiene su propio intercepto y su propia pendiente, pero estas **se asume que provienen de una distribución común**:
+
+<center><font size = 6>$peso_{i} = (\beta_{0} + b_{0[j]}) + (\beta_{1} + b_{1[j]}) * dia_{i} + \varepsilon_{i}$</font></center>
+
+<center><font size = 5>$b_{0[j]} \sim N(0, \sigma_{0}), \quad b_{1[j]} \sim N(0, \sigma_{1}), \quad \varepsilon_{i} \sim N(0, \sigma)$</font></center>
+
+-   $\beta_{0}$ y $\beta_{1}$: intercepto y pendiente promedio de la población (**efectos fijos**)
+-   $b_{0[j]}$ y $b_{1[j]}$: desviaciones del pollito $j$ respecto al promedio (**efectos aleatorios**)
+-   $\sigma_{0}$ y $\sigma_{1}$: cuánto varían los interceptos y las pendientes entre pollitos (el modelo también estima la correlación entre ambos)
+
+En `lme4` la sintaxis `(dia | pollito)` indica "intercepto y pendiente de `dia` variables entre pollitos":
+
+```{r}
+
+m_parcial <- lmer(peso ~ dia + (dia | pollito), data = pollos)
+
+# coeficientes por pollito (efectos fijos + aleatorios)
+coefs_parcial <- coef(m_parcial)$pollito
+
+coefs_parcial["18", ]
+
+```
+
+Ahora el pollito 18 tiene una tasa de crecimiento positiva y razonable. El modelo combinó la poca información de ese pollito con lo que aprendió de toda la población.
+
+## Comparando las tres estrategias
+
+Juntemos los estimados de los tres modelos en un solo cuadro de datos:
+
+```{r}
+
+# ordenar ambos cuadros igual
+coefs_parcial <- coefs_parcial[rownames(coefs_sin), ]
+
+estimados <- rbind(
+  data.frame(pollito = rownames(coefs_sin),
+             intercepto = unname(coef(m_completo)[1]),
+             pendiente = unname(coef(m_completo)[2]),
+             modelo = "Agrupamiento completo"),
+  data.frame(pollito = rownames(coefs_sin),
+             intercepto = coefs_sin[, 1],
+             pendiente = coefs_sin[, 2],
+             modelo = "Sin agrupamiento"),
+  data.frame(pollito = rownames(coefs_parcial),
+             intercepto = coefs_parcial[, 1],
+             pendiente = coefs_parcial[, 2],
+             modelo = "Agrupamiento parcial")
+)
+
+estimados$modelo <- factor(estimados$modelo, levels = c("Agrupamiento completo", "Sin agrupamiento", "Agrupamiento parcial"))
+
+# añadir numero de observaciones por pollito
+estimados$n <- as.vector(n_obs[estimados$pollito])
+
+head(estimados)
+
+```
+
+Y grafiquemos las rectas de los tres modelos para algunos pollitos, incluyendo los 4 que tienen menos datos (18, 16, 15 y 44):
+
+```{r, out.width="100%", fig.height=8, fig.width=12}
+
+pollitos_sel <- c("18", "16", "15", "44", "7", "21", "24", "35")
+
+pollos_sel <- pollos[pollos$pollito %in% pollitos_sel, ]
+pollos_sel$pollito <- factor(pollos_sel$pollito, levels = pollitos_sel)
+
+estimados_sel <- estimados[estimados$pollito %in% pollitos_sel, ]
+estimados_sel$pollito <- factor(estimados_sel$pollito, levels = pollitos_sel)
+
+ggplot(pollos_sel, aes(x = dia, y = peso)) +
+  geom_point(size = 2) +
+  geom_abline(data = estimados_sel,
+              aes(intercept = intercepto, slope = pendiente, color = modelo, linetype = modelo),
+              linewidth = 1) +
+  scale_color_manual(values = col_mods) +
+  facet_wrap(~ pollito, nrow = 2, labeller = label_both) +
+  xlim(0, 21) +
+  labs(x = "Día", y = "Peso (g)", color = "", linetype = "") +
+  theme(legend.position = "top")
+
+```
+
+-   Para los pollitos con muchos datos (fila de abajo) las rectas **sin agrupamiento** y de **agrupamiento parcial** son casi idénticas: los datos del individuo dominan
+-   Para el pollito 18 (solo 2 medidas) la recta del modelo mixto se aleja mucho de la recta sin agrupamiento y se acerca a la recta promedio de la población. Para los pollitos 16, 15 y 44 (7 a 10 medidas) el cambio es pequeño: con varias medidas poco ruidosas los datos del individuo ya son bastante informativos
+-   La recta de agrupamiento completo es la misma para todos y no describe bien a ningún pollito en particular
+
+------------------------------------------------------------------------
+
+# Agrupamiento parcial y encogimiento (*shrinkage*)
+
+El fenómeno que acabamos de ver se llama **encogimiento** (*shrinkage*): los estimados de cada grupo se "encogen" hacia el promedio general. Veamos las tasas de crecimiento de los 50 pollitos con y sin agrupamiento:
+
+```{r, out.width="100%"}
+
+pendientes <- estimados[estimados$modelo != "Agrupamiento completo", ]
+pendientes$datos <- ifelse(pendientes$n < 12, "Incompletos (< 12 medidas)", "Completos (12 medidas)")
+
+ggplot(pendientes, aes(x = modelo, y = pendiente, group = pollito, color = datos)) +
+  geom_hline(yintercept = fixef(m_parcial)[2], linetype = "dashed") +
+  geom_line(alpha = 0.7) +
+  geom_point(size = 2.5) +
+  scale_color_manual(values = viridis(10)[c(4, 9)]) +
+  labs(x = "", y = "Tasa de crecimiento (g/día)", color = "") +
+  theme(legend.position = "top")
+
+```
+
+La línea punteada es la pendiente promedio de la población ($\beta_{1}$). En general los estimados se mueven hacia ella, pero en estos datos el encogimiento es pequeño para casi todos los pollitos y **enorme para el pollito 18**, el único con apenas 2 medidas. Más adelante veremos por qué (cuadro "¿Cuánto se encoge cada estimado?"). También podemos verlo en las dos dimensiones (intercepto y pendiente) a la vez. Las flechas van del estimado sin agrupamiento al estimado con agrupamiento parcial:
+
+```{r, out.width="100%", fig.height=7, fig.width=10}
+
+flechas <- data.frame(
+  pollito = rownames(coefs_sin),
+  int_sin = coefs_sin[, 1],
+  pend_sin = coefs_sin[, 2],
+  int_par = coefs_parcial[, 1],
+  pend_par = coefs_parcial[, 2],
+  n = as.vector(n_obs[rownames(coefs_sin)])
+)
+
+ggplot(flechas) +
+  geom_segment(aes(x = int_sin, y = pend_sin, xend = int_par, yend = pend_par),
+               arrow = arrow(length = unit(0.15, "cm")), color = "gray50") +
+  geom_point(aes(x = int_sin, y = pend_sin, size = n), color = col_mods[2], alpha = 0.7) +
+  geom_point(aes(x = int_par, y = pend_par), color = col_mods[1], size = 2) +
+  annotate("point", x = fixef(m_parcial)[1], y = fixef(m_parcial)[2],
+           shape = 4, size = 6, stroke = 2) +
+  geom_text(data = flechas[flechas$n < 12, ],
+            aes(x = int_sin, y = pend_sin, label = pollito), nudge_x = 1.5, size = 5) +
+  labs(x = "Intercepto (g)", y = "Pendiente (g/día)",
+       size = "Número de\nmedidas")
+
+```
+
+<font size = 4>Puntos azules: sin agrupamiento (tamaño según número de medidas); puntos morados: agrupamiento parcial; X: promedio poblacional (efectos fijos).</font>
+
+Note que las flechas no apuntan directamente hacia la X sino que se mueven a lo largo de la diagonal. Esto ocurre porque el modelo también estima la **correlación** entre interceptos y pendientes (aquí fuertemente negativa): al encoger la pendiente del pollito 18 el modelo también ajusta su intercepto de acuerdo con esa relación. Además, como el crecimiento no es perfectamente lineal, varios interceptos están por debajo del peso real al nacer (\~40 g); el intercepto es una extrapolación de la recta, no el peso observado al día 0.
+
+::: {.alert .alert-success}
+<center><font size="5"><b>¿Cuánto se encoge cada estimado?</b></font></center>
+
+Para el caso más simple (un modelo solo con intercepto aleatorio), el estimado de agrupamiento parcial del grupo $j$ es aproximadamente un **promedio ponderado** entre el promedio del grupo ($\bar{y}_j$) y el promedio general ($\mu$):
+
+<center><font size = 6>$\hat{\alpha}_j \approx \frac{\frac{n_j}{\sigma^2} \bar{y}_j + \frac{1}{\sigma_{grupo}^2} \mu}{\frac{n_j}{\sigma^2} + \frac{1}{\sigma_{grupo}^2}}$</font></center>
+
+-   $n_j$: número de observaciones del grupo $j$
+-   $\sigma^2$: varianza dentro de grupos (residual)
+-   $\sigma_{grupo}^2$: varianza entre grupos
+
+Por lo tanto, el encogimiento es **mayor** cuando:
+
+-   El grupo tiene **pocas observaciones** ($n_j$ pequeño)
+-   Hay mucho **ruido dentro de grupos** ($\sigma^2$ grande)
+-   Los grupos son **parecidos entre sí** ($\sigma_{grupo}^2$ pequeña)
+
+Esto explica lo que vimos con los pollitos: las diferencias entre individuos son grandes y cada pollito tiene varias medidas con poco ruido, por lo que el modelo "confía" en los datos de cada pollito y casi no los encoge. Solo con 2 medidas (pollito 18) el promedio poblacional pesa más que los datos del individuo.
+
+En los extremos: si $\sigma_{grupo}^2 \rightarrow 0$ obtenemos agrupamiento completo, y si $\sigma_{grupo}^2 \rightarrow \infty$ obtenemos el modelo sin agrupamiento. El modelo mixto **estima de los datos** cuánto agrupar.
+:::
+
+¿Por qué es esto deseable? Porque los estimados extremos que vienen de pocos datos son, en promedio, exageraciones producto del azar. "Tomar prestada" información de los demás grupos produce estimados individuales que en promedio están **más cerca de los valores reales**. Esto es especialmente útil en biología, donde casi siempre tenemos tamaños de muestra desbalanceados (individuos que mueren, sitios con pocas capturas, especies raras).
+
+::: {.alert .alert-info}
+
+<center><font size="5"><b>Ejercicio 1</b></font></center>
+
+Podemos comprobar que el agrupamiento parcial produce mejores estimados usando simulación, ya que solo en datos simulados conocemos los valores reales.
+
+1.  Simule 30 poblaciones de una especie de lagartija cuyo tamaño promedio (longitud hocico-cloaca) proviene de una distribución normal con media 60 mm y desviación estándar 5 mm. El número de individuos medidos por población debe variar entre 2 y 30 (use `sample()`), y la desviación estándar dentro de poblaciones debe ser 8 mm
+
+2.  Estime el promedio de cada población (a) sin agrupamiento (promedio simple de cada población) y (b) con agrupamiento parcial (`coef()` de `lmer(lhc ~ 1 + (1 | poblacion))`)
+
+3.  Calcule el error promedio (diferencia absoluta entre el promedio estimado y el promedio simulado) de cada abordaje. ¿Cuál es menor?
+
+4.  Grafique el error de cada abordaje en función del número de individuos por población
+:::
+
+------------------------------------------------------------------------
+
+# Interpretando el modelo mixto
+
+Veamos el resumen completo del modelo:
+
+```{r}
+
+summary(m_parcial)
+
+```
+
+El resumen tiene dos partes principales:
+
+::: {.alert .alert-success}
+<center><font size="5"><b>Interpretación del modelo</b></font></center>
+
+**Efectos aleatorios** (*Random effects*):
+
+```{r}
+
+VarCorr(m_parcial)
+
+```
+
+-   `pollito (Intercept)`: la desviación estándar del peso inicial entre pollitos es `r as.data.frame(VarCorr(m_parcial))$sdcor[1]` g
+-   `pollito dia`: la desviación estándar de la tasa de crecimiento entre pollitos es `r as.data.frame(VarCorr(m_parcial))$sdcor[2]` g/día. Comparada con la tasa promedio (`r fixef(m_parcial)[2]` g/día) es una variación considerable entre individuos
+-   `Corr`: la correlación entre interceptos y pendientes (`r as.data.frame(VarCorr(m_parcial))$sdcor[3]`). Es negativa: los pollitos que tienen un intercepto más alto tienden a crecer más lento. Ojo: el intercepto corresponde al día 0, por lo que esta correlación depende de dónde está el 0 del predictor (ver ejercicio 2)
+-   Una correlación tan cercana a -1 (su intervalo de confianza llega hasta -1, ver más abajo) suele indicar que el modelo tiene dificultad para estimar ese parámetro por separado. Centrar el predictor generalmente lo resuelve (ejercicio 2)
+-   `Residual`: la variación que queda dentro de cada pollito una vez que ajustamos su propia recta (`r sigma(m_parcial)` g)
+
+**Efectos fijos** (*Fixed effects*):
+
+```{r}
+
+summary(m_parcial)$coefficients
+
+```
+
+-   El intercepto promedio (peso esperado al día 0) es `r fixef(m_parcial)[1]` g
+-   La tasa de crecimiento promedio es `r fixef(m_parcial)[2]` g/día y `r texto_signif(summary(m_parcial)$coefficients[2, 5])` (p = `r summary(m_parcial)$coefficients[2, 5]`). Los valores de p y los grados de libertad (aproximación de Satterthwaite) los añade el paquete `lmerTest`; `lme4` por sí solo no los calcula
+
+**Desviaciones de cada grupo**:
+
+-   `ranef()` devuelve las desviaciones de cada pollito respecto a los efectos fijos ($b_{0[j]}$, $b_{1[j]}$)
+-   `coef()` devuelve los coeficientes de cada pollito ($\beta_0 + b_{0[j]}$, $\beta_1 + b_{1[j]}$)
+
+```{r}
+
+head(ranef(m_parcial)$pollito)
+
+head(coef(m_parcial)$pollito)
+
+```
+:::
+
+## Sintaxis de efectos aleatorios en `lme4`
+
+| Fórmula | Significado |
+|------------------------------------|------------------------------------|
+| `(1 | grupo)` | Intercepto aleatorio |
+| `(x | grupo)` | Intercepto y pendiente de `x` aleatorios, correlacionados |
+| `(x || grupo)` | Intercepto y pendiente aleatorios, sin correlación |
+| `(0 + x | grupo)` | Solo pendiente aleatoria |
+| `(1 | sitio/individuo)` | Individuos anidados en sitios (equivale a `(1 | sitio) + (1 | sitio:individuo)`) |
+| `(1 | individuo) + (1 | año)` | Efectos aleatorios cruzados |
+
+## Coeficiente de correlación intraclase (repetibilidad)
+
+En un modelo con solo intercepto aleatorio, podemos calcular qué proporción de la varianza total se debe a diferencias entre grupos:
+
+<center><font size = 6>$ICC = \frac{\sigma_{grupo}^2}{\sigma_{grupo}^2 + \sigma^2}$</font></center>
+
+En ecología del comportamiento este valor se conoce como **repetibilidad** (Nakagawa & Schielzeth 2010) y se usa, por ejemplo, para saber qué tan consistente es una conducta o un rasgo dentro de individuos. Lo usaremos más adelante en el ejemplo de los cantos de ranas.
+
+------------------------------------------------------------------------
+
+# Respondiendo una pregunta biológica: ¿afecta la dieta el crecimiento?
+
+Hasta ahora solo describimos el crecimiento. La pregunta del experimento original era si **la dieta afecta la tasa de crecimiento**. Esto lo modelamos con una interacción entre `dia` y `dieta` (la pendiente de `dia` cambia según la dieta). Comparemos un modelo que ignora la agrupación con uno mixto:
+
+```{r}
+
+# ignorando que hay medidas repetidas por pollito
+m_lm_dieta <- lm(peso ~ dia * dieta, data = pollos)
+
+# modelo mixto
+m_mixto_dieta <- lmer(peso ~ dia * dieta + (dia | pollito), data = pollos)
+
+```
+
+Comparemos los estimados y sus errores estándar:
+
+```{r}
+
+comparacion <- data.frame(
+  estimado_lm = coef(m_lm_dieta),
+  EE_lm = summary(m_lm_dieta)$coefficients[, 2],
+  estimado_mixto = fixef(m_mixto_dieta),
+  EE_mixto = summary(m_mixto_dieta)$coefficients[, 2]
+)
+
+comparacion$razon_EE <- comparacion$EE_mixto / comparacion$EE_lm
+
+round(comparacion, 3)
+
+```
+
+Podemos comparar estos valores mas facilmente al graficarlos (la razón de errores estándar se muestra arriba de cada par de barras):
+```{r}
+
+comparacion_long <- data.frame(
+  termino = rep(rownames(comparacion), 2),
+  modelo = rep(c("lm()", "lmer()"), each = nrow(comparacion)),
+  estimado = c(comparacion$estimado_lm, comparacion$estimado_mixto),
+  EE = c(comparacion$EE_lm, comparacion$EE_mixto),
+  razon_EE = rep(comparacion$razon_EE, 2)
+)
+
+dodge <- position_dodge(width = 0.5)
+
+comparacion_long$panel <- ifelse(
+  grepl("dia", comparacion_long$termino),
+  "Describen crecimiento",
+  "Describen dieta"
+)
+
+comparacion_labels <- data.frame(
+  termino = rownames(comparacion),
+  panel = ifelse(grepl("dia", rownames(comparacion)),
+                "Describen crecimiento", "Describen dieta"),
+  y = pmax(
+    comparacion$estimado_lm + comparacion$EE_lm,
+    comparacion$estimado_mixto + comparacion$EE_mixto
+  ) + 0.5,
+  razon_EE = sprintf("%.2f", comparacion$razon_EE)
+)
+
+ggplot(comparacion_long, aes(x = termino, y = estimado, color = modelo)) +
+  geom_point(position = dodge, size = 3) +
+  geom_errorbar(
+    aes(ymin = estimado - EE, ymax = estimado + EE),
+    position = dodge,
+    width = 0.2
+  ) +
+ geom_text(
+  data = comparacion_labels,
+  aes(x = termino, y = y, label = razon_EE),
+  inherit.aes = FALSE,
+  color = "black",
+  size = 3
+) +
+  facet_wrap(~panel, scales = "free") +
+  scale_color_manual(
+    name = "Modelo",
+    values = c("lm()" = col_mods[1], "lmer()" = col_mods[2])
+  ) +
+  labs(x = "Término del modelo", y = "Estimado") +
+  theme_classic() +
+  theme(legend.position = "top")
+```
+
+Los estimados son similares, pero los errores estándar cambian bastante:
+
+-   Para los términos que describen la **tasa de crecimiento** (`dia` y las interacciones `dia:dieta`, que son los que responden nuestra pregunta) los errores estándar del modelo mixto son **más del doble** que los del `lm()`. La dieta se asignó a **pollitos**, no a medidas: la unidad experimental es el pollito (50), no la medición (`r nrow(pollos)`). El `lm()` trata cada medición como independiente y es demasiado confiado (pseudoreplicación)
+
+-   Para el intercepto y los efectos principales de la dieta (peso al día 0) los errores estándar del modelo mixto son **menores**. El `lm()` mete en un solo término de error toda la variación, incluyendo las grandes diferencias en crecimiento entre pollitos que se acumulan con el tiempo. El modelo mixto separa esas fuentes de variación y estima con más precisión lo que ocurre al inicio
+
+Es decir, el modelo mixto no es simplemente "más conservador": asigna la incertidumbre al nivel que corresponde.
+
+Grafiquemos las predicciones del modelo para cada dieta (efectos fijos únicamente, con `re.form = NA`):
+
+```{r, out.width="100%"}
+
+nuevos_datos <- expand.grid(dia = 0:21, dieta = levels(pollos$dieta))
+
+nuevos_datos$peso <- predict(m_mixto_dieta, newdata = nuevos_datos, re.form = NA)
+
+ggplot(pollos, aes(x = dia, y = peso, color = dieta)) +
+  geom_line(aes(group = pollito), alpha = 0.25) +
+  geom_line(data = nuevos_datos, linewidth = 2) +
+  scale_color_viridis_d(end = 0.9) +
+  facet_wrap(~ dieta, labeller = label_both) +
+  labs(x = "Día", y = "Peso (g)") +
+  theme(legend.position = "none")
+
+```
+
+Podemos comparar las tasas de crecimiento entre dietas con el paquete `emmeans`:
+
+```{r}
+
+emtrends(m_mixto_dieta, pairwise ~ dieta, var = "dia", lmer.df = "satterthwaite")
+
+```
+
+Todas las dietas tienen tasas de crecimiento promedio mayores que la dieta 1, pero después de corregir por comparaciones múltiples solo la diferencia entre las dietas 1 y 3 es significativa. Con el `lm()` (que ignora la pseudoreplicación) habríamos concluido que varias de estas diferencias son significativas:  
+
+```{r}
+
+emtrends(m_lm_dieta, pairwise ~ dieta, var = "dia")
+
+```
+
+------------------------------------------------------------------------
+
+# Pseudoreplicación: cantos de ranas *Diasporus*
+
+Un caso muy común en bioacústica y comportamiento es grabar **varios cantos por individuo**. Usaremos datos de estructura acústica de cantos de tres especies de ranas del género *Diasporus* (*D. diastema*, *D. hylaeformis* y *D. vocator*). Cada grabación (`sound.files`) corresponde a un individuo, y de cada una se midieron varios cantos (`selec`):
+
+```{r}
+
+cantos <- read.csv("https://raw.githubusercontent.com/maRce10/r_avanzado_2026/refs/heads/master/images/diastema.csv")
+
+cantos$especie <- factor(cantos$species)
+cantos$individuo <- factor(cantos$sound.files)
+
+# numero de cantos e individuos por especie
+data.frame(cantos = as.vector(table(cantos$especie)),
+           individuos = tapply(cantos$individuo, cantos$especie, function(x) length(unique(x))))
+
+```
+
+Tenemos `r nrow(cantos)` cantos pero solo `r nlevels(cantos$individuo)` individuos. Comparemos la frecuencia promedio (`meanfreq`, en kHz) entre especies:
+
+```{r, out.width="100%"}
+
+ggplot(cantos, aes(x = especie, y = meanfreq)) +
+  geom_jitter(aes(color = individuo), width = 0.25, alpha = 0.7, show.legend = FALSE) +
+  scale_color_viridis_d() +
+  labs(x = "Especie", y = "Frecuencia promedio (kHz)")
+
+```
+
+Los colores muestran que los cantos de un mismo individuo forman "grumos": son casi idénticos entre sí. Ajustemos un modelo ignorando al individuo y otro con intercepto aleatorio por individuo:
+
+```{r}
+
+m_lm_cantos <- lm(meanfreq ~ especie, data = cantos)
+
+m_mixto_cantos <- lmer(meanfreq ~ especie + (1 | individuo), data = cantos)
+
+data.frame(
+  EE_lm = summary(m_lm_cantos)$coefficients[, 2],
+  EE_mixto = summary(m_mixto_cantos)$coefficients[, 2]
+)
+
+```
+
+Los errores estándar del modelo mixto son más del doble. Calculemos la repetibilidad (ICC):
+
+```{r}
+
+vc <- as.data.frame(VarCorr(m_mixto_cantos))
+
+icc <- vc$vcov[1] / sum(vc$vcov)
+
+icc
+
+```
+
+El `r round(icc * 100, 1)`% de la variación en frecuencia se debe a diferencias **entre individuos**. Es decir, grabar un canto más del mismo individuo casi no aporta información nueva. En la práctica, el tamaño de muestra efectivo está mucho más cerca del número de individuos (`r nlevels(cantos$individuo)`) que del número de cantos (`r nrow(cantos)`).
+
+Una forma de comprobarlo es promediar los cantos de cada individuo y ajustar un `lm()` a esos promedios. Los errores estándar son muy similares a los del modelo mixto:
+
+```{r}
+
+promedios <- aggregate(meanfreq ~ individuo + especie, data = cantos, FUN = mean)
+
+m_lm_promedios <- lm(meanfreq ~ especie, data = promedios)
+
+summary(m_lm_promedios)$coefficients[, 2]
+
+```
+
+La ventaja del modelo mixto sobre promediar es que usa toda la información (p. ej. pondera adecuadamente a los individuos con más o menos cantos), estima la variación dentro y entre individuos y permite incluir predictores medidos a nivel de canto.
+
+::: {.alert .alert-info}
+
+<center><font size="5"><b>Ejercicio 2</b></font></center>
+
+1.  Calcule la repetibilidad (ICC) de la duración de los cantos (`duration`) de las ranas. ¿Es la duración más o menos repetible que la frecuencia promedio?
+
+2.  En el modelo de los pollitos, la correlación entre interceptos y pendientes depende de dónde está el 0 de `dia`. Cree una variable `dia_c <- pollos$dia - 10` y vuelva a ajustar `m_parcial` con ella. ¿Cambia la correlación? ¿Cambia la pendiente promedio?
+:::
+
+------------------------------------------------------------------------
+
+# Inferencia con modelos mixtos
+
+## REML vs ML
+
+Por defecto `lmer()` ajusta los modelos por **máxima verosimilitud restringida** (REML), que produce estimados menos sesgados de las varianzas. Sin embargo, para comparar modelos con **diferentes efectos fijos** se debe usar máxima verosimilitud (ML). La función `anova()` re-ajusta automáticamente los modelos con ML cuando se usa con modelos de `lmer()`:
+
+```{r}
+
+m_mixto_sin_dieta <- lmer(peso ~ dia + (dia | pollito), data = pollos)
+
+anova(m_mixto_sin_dieta, m_mixto_dieta)
+
+```
+
+El modelo que incluye la dieta se ajusta significativamente mejor a los datos.
+
+## Evaluando los efectos aleatorios
+
+La función `ranova()` de `lmerTest` evalúa cada efecto aleatorio comparando el modelo con uno que no lo incluye (prueba de razón de verosimilitudes):
+
+```{r}
+
+ranova(m_mixto_dieta)
+
+```
+
+Aquí eliminar la pendiente aleatoria (dejando solo el intercepto aleatorio) empeora mucho el modelo, lo que confirma que la tasa de crecimiento varía entre pollitos. Note que estas pruebas son conservadoras porque las varianzas no pueden ser negativas (el valor nulo está en el borde del espacio de parámetros). En general, **los efectos aleatorios que reflejan el diseño del estudio (p. ej. medidas repetidas del mismo individuo) deben incluirse aunque no sean "significativos"**.
+
+## Intervalos de confianza
+
+```{r, warning=FALSE}
+
+confint(m_parcial, method = "profile")
+
+```
+
+`.sig01` y `.sig02` son las desviaciones estándar del intercepto y la pendiente aleatorios, `.sig03` es su correlación y `.sigma` es la desviación estándar residual.
+
+------------------------------------------------------------------------
+
+# Diagnósticos
+
+Los modelos mixtos tienen los mismos supuestos que los modelos lineales (linealidad, homocedasticidad, normalidad de residuos), más uno adicional: **los efectos aleatorios deben tener una distribución aproximadamente normal**.
+
+```{r, out.width="100%", fig.height=5}
+
+diag_df <- data.frame(ajustado = fitted(m_mixto_dieta), residuo = resid(m_mixto_dieta))
+
+ggplot(diag_df, aes(x = ajustado, y = residuo)) +
+  geom_point(alpha = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(x = "Valores ajustados", y = "Residuos")
+
+```
+
+```{r, out.width="100%", fig.height=5}
+
+par(mfrow = c(1, 3))
+
+qqnorm(resid(m_mixto_dieta), main = "Residuos")
+qqline(resid(m_mixto_dieta))
+
+qqnorm(ranef(m_mixto_dieta)$pollito[, 1], main = "Interceptos aleatorios")
+qqline(ranef(m_mixto_dieta)$pollito[, 1])
+
+qqnorm(ranef(m_mixto_dieta)$pollito[, 2], main = "Pendientes aleatorias")
+qqline(ranef(m_mixto_dieta)$pollito[, 2])
+
+```
+
+Los residuos muestran forma de "embudo": la variación aumenta con el peso. Esto es común en datos de crecimiento (el crecimiento es multiplicativo, no aditivo). Una solución usual es modelar el logaritmo del peso (ver ejercicio 3). El paquete `performance` ofrece una revisión gráfica completa con `performance::check_model()`.
+
+------------------------------------------------------------------------
+
+# ¿Efecto fijo o aleatorio?
+
+No hay una regla única, pero estas guías ayudan:
+
+| Usar como **efecto aleatorio** cuando... | Usar como **efecto fijo** cuando... |
+|------------------------------------|------------------------------------|
+| Los niveles son una muestra de una población más grande (individuos, sitios, nidos, años) | Los niveles son todos los que nos interesan (tratamientos, sexo, especie en un estudio de 3 especies) |
+| Queremos generalizar más allá de los niveles muestreados | Queremos comparar esos niveles específicos |
+| Hay al menos 5-6 niveles (con menos, la varianza se estima muy mal) | Hay pocos niveles |
+| Algunos grupos tienen pocos datos (el agrupamiento parcial ayuda) |  |
+
+Un error común es incluir una variable como efecto aleatorio **y** como efecto fijo a la vez, o usar como aleatorio un factor con 2 o 3 niveles. En este último caso el modelo suele estimar una varianza de 0 (`boundary (singular) fit`), lo que es una señal de que el modelo es demasiado complejo para los datos.
+
+------------------------------------------------------------------------
+
+::: {.alert .alert-info}
+
+<center><font size="5"><b>Ejercicio 3</b></font></center>
+
+1.  Ajuste el modelo `m_mixto_dieta` usando `log(peso)` como respuesta. Interprete la pendiente de `dia` (pista: `exp(pendiente) - 1` es la proporción de crecimiento diario). Revise los residuos: ¿mejoró la homocedasticidad?
+
+2.  El juego de datos `sleepstudy` (paquete `lme4`) contiene el tiempo de reacción (`Reaction`, ms) de 18 personas durante 10 días de privación de sueño (`Days`). Ajuste los modelos de agrupamiento completo, sin agrupamiento y parcial, y haga el gráfico de encogimiento (flechas) de intercepto y pendiente. ¿Qué personas muestran más encogimiento? ¿Por qué el encogimiento es menor que en los pollitos?
+
+3.  El juego de datos `CO2` contiene la absorción de CO2 (`uptake`) de 12 plantas del pasto *Echinochloa crus-galli* de dos orígenes (`Type`: Quebec y Mississippi), sometidas a dos tratamientos (`Treatment`: enfriadas o no), medidas a 7 concentraciones de CO2 (`conc`). Ajuste un modelo mixto para evaluar si el efecto del enfriamiento depende del origen de la planta (`uptake ~ log(conc) + Type * Treatment`). ¿Cuál es el efecto aleatorio adecuado? ¿Cuál es la unidad experimental?
+:::
+
+------------------------------------------------------------------------
+
+## Referencias
+
+-   Bates, D., Mächler, M., Bolker, B., & Walker, S. (2015). [Fitting linear mixed-effects models using lme4](https://www.jstatsoft.org/article/view/v067i01). *Journal of Statistical Software*, 67(1), 1-48.
+
+-   Crowder, M. J., & Hand, D. J. (1990). *Analysis of repeated measures*. Chapman and Hall.
+
+-   Gelman, A., & Hill, J. (2007). *Data analysis using regression and multilevel/hierarchical models*. Cambridge University Press.
+
+-   Harrison, X. A., Donaldson, L., Correa-Cano, M. E., Evans, J., Fisher, D. N., Goodwin, C. E., & Inger, R. (2018). [A brief introduction to mixed effects modelling and multi-model inference in ecology](https://peerj.com/articles/4794/). *PeerJ*, 6, e4794.
+
+-   Hurlbert, S. H. (1984). Pseudoreplication and the design of ecological field experiments. *Ecological Monographs*, 54(2), 187-211.
+
+-   Mahr, T. (2017). [Plotting partial pooling in mixed-effects models](https://www.tjmahr.com/plotting-partial-pooling-in-mixed-effects-models/).
+
+-   [Richard McElreath's Statistical Rethinking book](https://github.com/rmcelreath/stat_rethinking_2022)
+
+-   Nakagawa, S., & Schielzeth, H. (2010). Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists. *Biological Reviews*, 85(4), 935-956.
+
+-   Silk, M. J., Harrison, X. A., & Hodgson, D. J. (2020). [Perils and pitfalls of mixed-effects regression models in biology](https://peerj.com/articles/9522/). *PeerJ*, 8, e9522.
+
+------------------------------------------------------------------------
+
+::: {.callout-note collapse="true"}
+## Información de la sesión {.unnumbered .unlisted}
+
+```{r session info}
+#| echo: false
+
+# if devtools is installed use devtools::session_info()
+if (requireNamespace("devtools", quietly = TRUE)) {
+  devtools::session_info()
+} else {
+  sessionInfo()
+}
+```
+:::

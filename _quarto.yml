@@ -33,6 +33,8 @@ website:
           href: como_simular_datos.qmd
         - text: "Modelos de regresión"
           href: modelos_de_regresion.qmd
+        - text: "Modelos mixtos"
+          href: modelos_mixtos_corto.qmd
         - text: "Estadística tradicional como regresión"
           href: estadistica_tradicional_regresion.qmd
         - text: "Gráficos con ggplot2"

@@ -8,7 +8,7 @@ source(
 )
 
 # instalar/ cargar paquetes
-load_packages(
+sketchy::load_packages(
   packages = c(
     "remotes",
     "leaflet",
@@ -27,6 +27,7 @@ load_packages(
     "lmerTest",
     "sjPlot",
     "car",
+    "psych",
     github = "maRce10/sketchy",
     github = "hadley/emo"
   )

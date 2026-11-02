@@ -1567,7 +1567,7 @@ Este manual solo pretende sugerir un abordaje estadístico centrado en los model
 
 -   Harrison, X. A., Donaldson, L., Correa-Cano, M. E., Evans, J., Fisher, D. N., Goodwin, C. E., & Inger, R. (2018). [A brief introduction to mixed effects modelling and multi-model inference in ecology](https://peerj.com/articles/4794/). *PeerJ*, 6, e4794.
 
----
+------------------------------------------------------------------------
 
 ::: {.callout-note collapse="true"}
 ## Información de la sesión {.unnumbered .unlisted}
