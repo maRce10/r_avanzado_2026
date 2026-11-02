@@ -496,6 +496,32 @@ window.Quarto = {
 <section id="tres-maneras-de-modelar-datos-agrupados" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Tres maneras de modelar datos agrupados</h1>
 <p>Hay tres estrategias para lidiar con datos agrupados. Las compararemos con un modelo sencillo de peso en función del día.</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Enfoque</th>
+<th>¿Qué hace?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Agrupamiento completo (complete pooling)</strong></td>
+<td>Ignora la estructura de grupos y analiza todas las observaciones como si pertenecieran a una sola población.</td>
+</tr>
+<tr class="even">
+<td><strong>Sin agrupamiento (no pooling)</strong></td>
+<td>Analiza cada grupo por separado, sin compartir información entre ellos.</td>
+</tr>
+<tr class="odd">
+<td><strong>Agrupamiento parcial (partial pooling)</strong></td>
+<td>Considera las diferencias entre grupos, pero permite que compartan información. Las estimaciones de cada grupo se acercan a la media general (<em>shrinkage</em>), especialmente cuando hay pocos datos por grupo.</td>
+</tr>
+</tbody>
+</table>
 <section id="agrupamiento-completo-complete-pooling" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="agrupamiento-completo-complete-pooling"><span class="header-section-number">3.1</span> Agrupamiento completo (<em>complete pooling</em>)</h2>
 <p>Ignoramos que las observaciones vienen de diferentes pollitos y ajustamos una sola recta para todos los datos:</p>
@@ -907,13 +933,13 @@ window.Quarto = {
 <center>
 <font size="5"><b>Ejercicio 1</b></font>
 </center>
-<p>Podemos comprobar que el agrupamiento parcial produce mejores estimados usando simulación, ya que solo en datos simulados conocemos los valores reales.</p>
+<p>Usando el juego de datos ChickWeight, compare los promedios de peso de los pollitos entre dietas:</p>
 <ol type="1">
-<li><p>Simule 30 poblaciones de una especie de lagartija cuyo tamaño promedio (longitud hocico-cloaca) proviene de una distribución normal con media 60 mm y desviación estándar 5 mm. El número de individuos medidos por población debe variar entre 2 y 30 (use <code>sample()</code>), y la desviación estándar dentro de poblaciones debe ser 8 mm</p></li>
-<li><p>Estime el promedio de cada población (a) sin agrupamiento (promedio simple de cada población) y (b) con agrupamiento parcial (<code>coef()</code> de <code>lmer(lhc ~ 1 + (1 | poblacion))</code>)</p></li>
-<li><p>Calcule el error promedio (diferencia absoluta entre el promedio estimado y el promedio simulado) de cada abordaje. ¿Cuál es menor?</p></li>
-<li><p>Grafique el error de cada abordaje en función del número de individuos por población</p></li>
+<li><p>Calcule el peso promedio para cada dieta usando aggregate().</p></li>
+<li><p>Ajuste un modelo mixto con dieta como efecto fijo e intercepto aleatorio para pollito: lmer(peso ~ dieta + (1 | pollito)).</p></li>
+<li><p>Compare los promedios estimados por ambos abordajes.</p></li>
 </ol>
+<p>¿Por qué los estimados del modelo mixto pueden diferir de los promedios calculados directamente a partir de los datos?</p>
 </div>
 <hr>
 </section>
@@ -1560,7 +1586,7 @@ Información de la sesión
  reformulas     0.4.4      2026-02-02 [1] CRAN (R 4.6.1)
  rlang          1.3.0      2026-07-05 [1] CRAN (R 4.6.1)
  rmarkdown      2.32       2026-09-01 [1] CRAN (R 4.6.1)
- rstudioapi     0.13       2020-11-12 [3] CRAN (R 4.0.3)
+ rstudioapi     0.19.0     2026-06-11 [1] CRAN (R 4.6.1)
  S7             0.2.2      2026-04-22 [1] CRAN (R 4.6.1)
  sandwich       3.0-1      2021-05-18 [3] CRAN (R 4.1.1)
  scales         1.4.0      2025-04-24 [1] CRAN (R 4.6.1)
@@ -2186,488 +2212,495 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb34-132"><a href="#cb34-132" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-133"><a href="#cb34-133" aria-hidden="true" tabindex="-1"></a>Hay tres estrategias para lidiar con datos agrupados. Las compararemos con un modelo sencillo de peso en función del día.</span>
 <span id="cb34-134"><a href="#cb34-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-135"><a href="#cb34-135" aria-hidden="true" tabindex="-1"></a><span class="fu">## Agrupamiento completo (*complete pooling*)</span></span>
-<span id="cb34-136"><a href="#cb34-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-137"><a href="#cb34-137" aria-hidden="true" tabindex="-1"></a>Ignoramos que las observaciones vienen de diferentes pollitos y ajustamos una sola recta para todos los datos:</span>
-<span id="cb34-138"><a href="#cb34-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-139"><a href="#cb34-139" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size = 6&gt;$peso_{i} = \beta_{0} + \beta_{1} * dia_{i} + \varepsilon_{i}$&lt;/font&gt;&lt;/center&gt;</span>
+<span id="cb34-135"><a href="#cb34-135" aria-hidden="true" tabindex="-1"></a>| Enfoque | ¿Qué hace? |</span>
+<span id="cb34-136"><a href="#cb34-136" aria-hidden="true" tabindex="-1"></a>|---|---|</span>
+<span id="cb34-137"><a href="#cb34-137" aria-hidden="true" tabindex="-1"></a>| **Agrupamiento completo (complete pooling)** | Ignora la estructura de grupos y analiza todas las observaciones como si pertenecieran a una sola población. |</span>
+<span id="cb34-138"><a href="#cb34-138" aria-hidden="true" tabindex="-1"></a>| **Sin agrupamiento (no pooling)** | Analiza cada grupo por separado, sin compartir información entre ellos. |</span>
+<span id="cb34-139"><a href="#cb34-139" aria-hidden="true" tabindex="-1"></a>| **Agrupamiento parcial (partial pooling)** | Considera las diferencias entre grupos, pero permite que compartan información. Las estimaciones de cada grupo se acercan a la media general (*shrinkage*), especialmente cuando hay pocos datos por grupo. |</span>
 <span id="cb34-140"><a href="#cb34-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-143"><a href="#cb34-143" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-144"><a href="#cb34-144" aria-hidden="true" tabindex="-1"></a>m_completo <span class="ot">&lt;-</span> <span class="fu">lm</span>(peso <span class="sc">~</span> dia, <span class="at">data =</span> pollos)</span>
-<span id="cb34-145"><a href="#cb34-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-146"><a href="#cb34-146" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(m_completo)</span>
-<span id="cb34-147"><a href="#cb34-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-148"><a href="#cb34-148" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-149"><a href="#cb34-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-150"><a href="#cb34-150" aria-hidden="true" tabindex="-1"></a>Este modelo asume que todos los pollitos son iguales: misma intercepto y misma tasa de crecimiento. Claramente eso no es cierto. Además trata las <span class="in">`r nrow(pollos)`</span> observaciones como si fueran independientes.</span>
+<span id="cb34-141"><a href="#cb34-141" aria-hidden="true" tabindex="-1"></a><span class="fu">## Agrupamiento completo (*complete pooling*)</span></span>
+<span id="cb34-142"><a href="#cb34-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-143"><a href="#cb34-143" aria-hidden="true" tabindex="-1"></a>Ignoramos que las observaciones vienen de diferentes pollitos y ajustamos una sola recta para todos los datos:</span>
+<span id="cb34-144"><a href="#cb34-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-145"><a href="#cb34-145" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size = 6&gt;$peso_{i} = \beta_{0} + \beta_{1} * dia_{i} + \varepsilon_{i}$&lt;/font&gt;&lt;/center&gt;</span>
+<span id="cb34-146"><a href="#cb34-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-149"><a href="#cb34-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-150"><a href="#cb34-150" aria-hidden="true" tabindex="-1"></a>m_completo <span class="ot">&lt;-</span> <span class="fu">lm</span>(peso <span class="sc">~</span> dia, <span class="at">data =</span> pollos)</span>
 <span id="cb34-151"><a href="#cb34-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-152"><a href="#cb34-152" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sin agrupamiento (*no pooling*)</span></span>
+<span id="cb34-152"><a href="#cb34-152" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(m_completo)</span>
 <span id="cb34-153"><a href="#cb34-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-154"><a href="#cb34-154" aria-hidden="true" tabindex="-1"></a>En el otro extremo, ajustamos una regresión **independiente para cada pollito**. Cada individuo tiene su propio intercepto y su propia pendiente, y lo que aprendemos de un pollito no se usa para los demás:</span>
+<span id="cb34-154"><a href="#cb34-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-155"><a href="#cb34-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-156"><a href="#cb34-156" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size = 6&gt;$peso_{i} = \beta_{0<span class="co">[</span><span class="ot">j</span><span class="co">]</span>} + \beta_{1<span class="co">[</span><span class="ot">j</span><span class="co">]</span>} * dia_{i} + \varepsilon_{i}$&lt;/font&gt;&lt;/center&gt;</span>
+<span id="cb34-156"><a href="#cb34-156" aria-hidden="true" tabindex="-1"></a>Este modelo asume que todos los pollitos son iguales: misma intercepto y misma tasa de crecimiento. Claramente eso no es cierto. Además trata las <span class="in">`r nrow(pollos)`</span> observaciones como si fueran independientes.</span>
 <span id="cb34-157"><a href="#cb34-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-158"><a href="#cb34-158" aria-hidden="true" tabindex="-1"></a>donde $j$ es el pollito al que pertenece la observación $i$. La función <span class="in">`lmList()`</span> de <span class="in">`lme4`</span> ajusta un <span class="in">`lm()`</span> por grupo:</span>
+<span id="cb34-158"><a href="#cb34-158" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sin agrupamiento (*no pooling*)</span></span>
 <span id="cb34-159"><a href="#cb34-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-162"><a href="#cb34-162" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-163"><a href="#cb34-163" aria-hidden="true" tabindex="-1"></a>m_sin <span class="ot">&lt;-</span> <span class="fu">lmList</span>(peso <span class="sc">~</span> dia <span class="sc">|</span> pollito, <span class="at">data =</span> pollos)</span>
-<span id="cb34-164"><a href="#cb34-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-165"><a href="#cb34-165" aria-hidden="true" tabindex="-1"></a>coefs_sin <span class="ot">&lt;-</span> <span class="fu">coef</span>(m_sin)</span>
-<span id="cb34-166"><a href="#cb34-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-167"><a href="#cb34-167" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(coefs_sin)</span>
-<span id="cb34-168"><a href="#cb34-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-169"><a href="#cb34-169" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-160"><a href="#cb34-160" aria-hidden="true" tabindex="-1"></a>En el otro extremo, ajustamos una regresión **independiente para cada pollito**. Cada individuo tiene su propio intercepto y su propia pendiente, y lo que aprendemos de un pollito no se usa para los demás:</span>
+<span id="cb34-161"><a href="#cb34-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-162"><a href="#cb34-162" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size = 6&gt;$peso_{i} = \beta_{0<span class="co">[</span><span class="ot">j</span><span class="co">]</span>} + \beta_{1<span class="co">[</span><span class="ot">j</span><span class="co">]</span>} * dia_{i} + \varepsilon_{i}$&lt;/font&gt;&lt;/center&gt;</span>
+<span id="cb34-163"><a href="#cb34-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-164"><a href="#cb34-164" aria-hidden="true" tabindex="-1"></a>donde $j$ es el pollito al que pertenece la observación $i$. La función <span class="in">`lmList()`</span> de <span class="in">`lme4`</span> ajusta un <span class="in">`lm()`</span> por grupo:</span>
+<span id="cb34-165"><a href="#cb34-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-168"><a href="#cb34-168" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-169"><a href="#cb34-169" aria-hidden="true" tabindex="-1"></a>m_sin <span class="ot">&lt;-</span> <span class="fu">lmList</span>(peso <span class="sc">~</span> dia <span class="sc">|</span> pollito, <span class="at">data =</span> pollos)</span>
 <span id="cb34-170"><a href="#cb34-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-171"><a href="#cb34-171" aria-hidden="true" tabindex="-1"></a>El problema de este abordaje es que los grupos con pocos datos producen estimados muy ruidosos. Por ejemplo, el pollito 18 solo tiene 2 medidas:</span>
+<span id="cb34-171"><a href="#cb34-171" aria-hidden="true" tabindex="-1"></a>coefs_sin <span class="ot">&lt;-</span> <span class="fu">coef</span>(m_sin)</span>
 <span id="cb34-172"><a href="#cb34-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-175"><a href="#cb34-175" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-176"><a href="#cb34-176" aria-hidden="true" tabindex="-1"></a>pollos[pollos<span class="sc">$</span>pollito <span class="sc">==</span> <span class="st">"18"</span>, ]</span>
-<span id="cb34-177"><a href="#cb34-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-178"><a href="#cb34-178" aria-hidden="true" tabindex="-1"></a>coefs_sin[<span class="st">"18"</span>, ]</span>
-<span id="cb34-179"><a href="#cb34-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-180"><a href="#cb34-180" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-181"><a href="#cb34-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-182"><a href="#cb34-182" aria-hidden="true" tabindex="-1"></a>¡Su tasa de crecimiento estimada es **negativa**! Con solo dos puntos la recta pasa exactamente por ellos y no tenemos forma de distinguir señal de ruido. Sabemos (por los otros 49 pollitos) que los pollitos de esa edad normalmente ganan peso, pero este modelo ignora esa información.</span>
+<span id="cb34-173"><a href="#cb34-173" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(coefs_sin)</span>
+<span id="cb34-174"><a href="#cb34-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-175"><a href="#cb34-175" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-176"><a href="#cb34-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-177"><a href="#cb34-177" aria-hidden="true" tabindex="-1"></a>El problema de este abordaje es que los grupos con pocos datos producen estimados muy ruidosos. Por ejemplo, el pollito 18 solo tiene 2 medidas:</span>
+<span id="cb34-178"><a href="#cb34-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-181"><a href="#cb34-181" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-182"><a href="#cb34-182" aria-hidden="true" tabindex="-1"></a>pollos[pollos<span class="sc">$</span>pollito <span class="sc">==</span> <span class="st">"18"</span>, ]</span>
 <span id="cb34-183"><a href="#cb34-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-184"><a href="#cb34-184" aria-hidden="true" tabindex="-1"></a><span class="fu">## Agrupamiento parcial (*partial pooling*): el modelo mixto</span></span>
+<span id="cb34-184"><a href="#cb34-184" aria-hidden="true" tabindex="-1"></a>coefs_sin[<span class="st">"18"</span>, ]</span>
 <span id="cb34-185"><a href="#cb34-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-186"><a href="#cb34-186" aria-hidden="true" tabindex="-1"></a>El modelo mixto es un punto intermedio. Cada pollito tiene su propio intercepto y su propia pendiente, pero estas **se asume que provienen de una distribución común**:</span>
+<span id="cb34-186"><a href="#cb34-186" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-187"><a href="#cb34-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-188"><a href="#cb34-188" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size = 6&gt;$peso_{i} = (\beta_{0} + b_{0<span class="co">[</span><span class="ot">j</span><span class="co">]</span>}) + (\beta_{1} + b_{1<span class="co">[</span><span class="ot">j</span><span class="co">]</span>}) * dia_{i} + \varepsilon_{i}$&lt;/font&gt;&lt;/center&gt;</span>
+<span id="cb34-188"><a href="#cb34-188" aria-hidden="true" tabindex="-1"></a>¡Su tasa de crecimiento estimada es **negativa**! Con solo dos puntos la recta pasa exactamente por ellos y no tenemos forma de distinguir señal de ruido. Sabemos (por los otros 49 pollitos) que los pollitos de esa edad normalmente ganan peso, pero este modelo ignora esa información.</span>
 <span id="cb34-189"><a href="#cb34-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-190"><a href="#cb34-190" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size = 5&gt;$b_{0<span class="co">[</span><span class="ot">j</span><span class="co">]</span>} \sim N(0, \sigma_{0}), \quad b_{1<span class="co">[</span><span class="ot">j</span><span class="co">]</span>} \sim N(0, \sigma_{1}), \quad \varepsilon_{i} \sim N(0, \sigma)$&lt;/font&gt;&lt;/center&gt;</span>
+<span id="cb34-190"><a href="#cb34-190" aria-hidden="true" tabindex="-1"></a><span class="fu">## Agrupamiento parcial (*partial pooling*): el modelo mixto</span></span>
 <span id="cb34-191"><a href="#cb34-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-192"><a href="#cb34-192" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\beta_{0}$ y $\beta_{1}$: intercepto y pendiente promedio de la población (**efectos fijos**)</span>
-<span id="cb34-193"><a href="#cb34-193" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$b_{0[j]}$ y $b_{1<span class="co">[</span><span class="ot">j</span><span class="co">]</span>}$: desviaciones del pollito $j$ respecto al promedio (**efectos aleatorios**)</span>
-<span id="cb34-194"><a href="#cb34-194" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\sigma_{0}$ y $\sigma_{1}$: cuánto varían los interceptos y las pendientes entre pollitos (el modelo también estima la correlación entre ambos)</span>
+<span id="cb34-192"><a href="#cb34-192" aria-hidden="true" tabindex="-1"></a>El modelo mixto es un punto intermedio. Cada pollito tiene su propio intercepto y su propia pendiente, pero estas **se asume que provienen de una distribución común**:</span>
+<span id="cb34-193"><a href="#cb34-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-194"><a href="#cb34-194" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size = 6&gt;$peso_{i} = (\beta_{0} + b_{0<span class="co">[</span><span class="ot">j</span><span class="co">]</span>}) + (\beta_{1} + b_{1<span class="co">[</span><span class="ot">j</span><span class="co">]</span>}) * dia_{i} + \varepsilon_{i}$&lt;/font&gt;&lt;/center&gt;</span>
 <span id="cb34-195"><a href="#cb34-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-196"><a href="#cb34-196" aria-hidden="true" tabindex="-1"></a>En <span class="in">`lme4`</span> la sintaxis <span class="in">`(dia | pollito)`</span> indica "intercepto y pendiente de <span class="in">`dia`</span> variables entre pollitos":</span>
+<span id="cb34-196"><a href="#cb34-196" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size = 5&gt;$b_{0<span class="co">[</span><span class="ot">j</span><span class="co">]</span>} \sim N(0, \sigma_{0}), \quad b_{1<span class="co">[</span><span class="ot">j</span><span class="co">]</span>} \sim N(0, \sigma_{1}), \quad \varepsilon_{i} \sim N(0, \sigma)$&lt;/font&gt;&lt;/center&gt;</span>
 <span id="cb34-197"><a href="#cb34-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-200"><a href="#cb34-200" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-201"><a href="#cb34-201" aria-hidden="true" tabindex="-1"></a>m_parcial <span class="ot">&lt;-</span> <span class="fu">lmer</span>(peso <span class="sc">~</span> dia <span class="sc">+</span> (dia <span class="sc">|</span> pollito), <span class="at">data =</span> pollos)</span>
-<span id="cb34-202"><a href="#cb34-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-203"><a href="#cb34-203" aria-hidden="true" tabindex="-1"></a><span class="co"># coeficientes por pollito (efectos fijos + aleatorios)</span></span>
-<span id="cb34-204"><a href="#cb34-204" aria-hidden="true" tabindex="-1"></a>coefs_parcial <span class="ot">&lt;-</span> <span class="fu">coef</span>(m_parcial)<span class="sc">$</span>pollito</span>
-<span id="cb34-205"><a href="#cb34-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-206"><a href="#cb34-206" aria-hidden="true" tabindex="-1"></a>coefs_parcial[<span class="st">"18"</span>, ]</span>
-<span id="cb34-207"><a href="#cb34-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-208"><a href="#cb34-208" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-209"><a href="#cb34-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-210"><a href="#cb34-210" aria-hidden="true" tabindex="-1"></a>Ahora el pollito 18 tiene una tasa de crecimiento positiva y razonable. El modelo combinó la poca información de ese pollito con lo que aprendió de toda la población.</span>
+<span id="cb34-198"><a href="#cb34-198" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\beta_{0}$ y $\beta_{1}$: intercepto y pendiente promedio de la población (**efectos fijos**)</span>
+<span id="cb34-199"><a href="#cb34-199" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$b_{0[j]}$ y $b_{1<span class="co">[</span><span class="ot">j</span><span class="co">]</span>}$: desviaciones del pollito $j$ respecto al promedio (**efectos aleatorios**)</span>
+<span id="cb34-200"><a href="#cb34-200" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\sigma_{0}$ y $\sigma_{1}$: cuánto varían los interceptos y las pendientes entre pollitos (el modelo también estima la correlación entre ambos)</span>
+<span id="cb34-201"><a href="#cb34-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-202"><a href="#cb34-202" aria-hidden="true" tabindex="-1"></a>En <span class="in">`lme4`</span> la sintaxis <span class="in">`(dia | pollito)`</span> indica "intercepto y pendiente de <span class="in">`dia`</span> variables entre pollitos":</span>
+<span id="cb34-203"><a href="#cb34-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-206"><a href="#cb34-206" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-207"><a href="#cb34-207" aria-hidden="true" tabindex="-1"></a>m_parcial <span class="ot">&lt;-</span> <span class="fu">lmer</span>(peso <span class="sc">~</span> dia <span class="sc">+</span> (dia <span class="sc">|</span> pollito), <span class="at">data =</span> pollos)</span>
+<span id="cb34-208"><a href="#cb34-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-209"><a href="#cb34-209" aria-hidden="true" tabindex="-1"></a><span class="co"># coeficientes por pollito (efectos fijos + aleatorios)</span></span>
+<span id="cb34-210"><a href="#cb34-210" aria-hidden="true" tabindex="-1"></a>coefs_parcial <span class="ot">&lt;-</span> <span class="fu">coef</span>(m_parcial)<span class="sc">$</span>pollito</span>
 <span id="cb34-211"><a href="#cb34-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-212"><a href="#cb34-212" aria-hidden="true" tabindex="-1"></a><span class="fu">## Comparando las tres estrategias</span></span>
+<span id="cb34-212"><a href="#cb34-212" aria-hidden="true" tabindex="-1"></a>coefs_parcial[<span class="st">"18"</span>, ]</span>
 <span id="cb34-213"><a href="#cb34-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-214"><a href="#cb34-214" aria-hidden="true" tabindex="-1"></a>Juntemos los estimados de los tres modelos en un solo cuadro de datos:</span>
+<span id="cb34-214"><a href="#cb34-214" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-215"><a href="#cb34-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-218"><a href="#cb34-218" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-219"><a href="#cb34-219" aria-hidden="true" tabindex="-1"></a><span class="co"># ordenar ambos cuadros igual</span></span>
-<span id="cb34-220"><a href="#cb34-220" aria-hidden="true" tabindex="-1"></a>coefs_parcial <span class="ot">&lt;-</span> coefs_parcial[<span class="fu">rownames</span>(coefs_sin), ]</span>
+<span id="cb34-216"><a href="#cb34-216" aria-hidden="true" tabindex="-1"></a>Ahora el pollito 18 tiene una tasa de crecimiento positiva y razonable. El modelo combinó la poca información de ese pollito con lo que aprendió de toda la población.</span>
+<span id="cb34-217"><a href="#cb34-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-218"><a href="#cb34-218" aria-hidden="true" tabindex="-1"></a><span class="fu">## Comparando las tres estrategias</span></span>
+<span id="cb34-219"><a href="#cb34-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-220"><a href="#cb34-220" aria-hidden="true" tabindex="-1"></a>Juntemos los estimados de los tres modelos en un solo cuadro de datos:</span>
 <span id="cb34-221"><a href="#cb34-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-222"><a href="#cb34-222" aria-hidden="true" tabindex="-1"></a>estimados <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb34-223"><a href="#cb34-223" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">pollito =</span> <span class="fu">rownames</span>(coefs_sin),</span>
-<span id="cb34-224"><a href="#cb34-224" aria-hidden="true" tabindex="-1"></a>             <span class="at">intercepto =</span> <span class="fu">unname</span>(<span class="fu">coef</span>(m_completo)[<span class="dv">1</span>]),</span>
-<span id="cb34-225"><a href="#cb34-225" aria-hidden="true" tabindex="-1"></a>             <span class="at">pendiente =</span> <span class="fu">unname</span>(<span class="fu">coef</span>(m_completo)[<span class="dv">2</span>]),</span>
-<span id="cb34-226"><a href="#cb34-226" aria-hidden="true" tabindex="-1"></a>             <span class="at">modelo =</span> <span class="st">"Agrupamiento completo"</span>),</span>
-<span id="cb34-227"><a href="#cb34-227" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">pollito =</span> <span class="fu">rownames</span>(coefs_sin),</span>
-<span id="cb34-228"><a href="#cb34-228" aria-hidden="true" tabindex="-1"></a>             <span class="at">intercepto =</span> coefs_sin[, <span class="dv">1</span>],</span>
-<span id="cb34-229"><a href="#cb34-229" aria-hidden="true" tabindex="-1"></a>             <span class="at">pendiente =</span> coefs_sin[, <span class="dv">2</span>],</span>
-<span id="cb34-230"><a href="#cb34-230" aria-hidden="true" tabindex="-1"></a>             <span class="at">modelo =</span> <span class="st">"Sin agrupamiento"</span>),</span>
-<span id="cb34-231"><a href="#cb34-231" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">pollito =</span> <span class="fu">rownames</span>(coefs_parcial),</span>
-<span id="cb34-232"><a href="#cb34-232" aria-hidden="true" tabindex="-1"></a>             <span class="at">intercepto =</span> coefs_parcial[, <span class="dv">1</span>],</span>
-<span id="cb34-233"><a href="#cb34-233" aria-hidden="true" tabindex="-1"></a>             <span class="at">pendiente =</span> coefs_parcial[, <span class="dv">2</span>],</span>
-<span id="cb34-234"><a href="#cb34-234" aria-hidden="true" tabindex="-1"></a>             <span class="at">modelo =</span> <span class="st">"Agrupamiento parcial"</span>)</span>
-<span id="cb34-235"><a href="#cb34-235" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb34-236"><a href="#cb34-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-237"><a href="#cb34-237" aria-hidden="true" tabindex="-1"></a>estimados<span class="sc">$</span>modelo <span class="ot">&lt;-</span> <span class="fu">factor</span>(estimados<span class="sc">$</span>modelo, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Agrupamiento completo"</span>, <span class="st">"Sin agrupamiento"</span>, <span class="st">"Agrupamiento parcial"</span>))</span>
-<span id="cb34-238"><a href="#cb34-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-239"><a href="#cb34-239" aria-hidden="true" tabindex="-1"></a><span class="co"># añadir numero de observaciones por pollito</span></span>
-<span id="cb34-240"><a href="#cb34-240" aria-hidden="true" tabindex="-1"></a>estimados<span class="sc">$</span>n <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(n_obs[estimados<span class="sc">$</span>pollito])</span>
-<span id="cb34-241"><a href="#cb34-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-242"><a href="#cb34-242" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(estimados)</span>
-<span id="cb34-243"><a href="#cb34-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-244"><a href="#cb34-244" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-245"><a href="#cb34-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-246"><a href="#cb34-246" aria-hidden="true" tabindex="-1"></a>Y grafiquemos las rectas de los tres modelos para algunos pollitos, incluyendo los 4 que tienen menos datos (18, 16, 15 y 44):</span>
+<span id="cb34-224"><a href="#cb34-224" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-225"><a href="#cb34-225" aria-hidden="true" tabindex="-1"></a><span class="co"># ordenar ambos cuadros igual</span></span>
+<span id="cb34-226"><a href="#cb34-226" aria-hidden="true" tabindex="-1"></a>coefs_parcial <span class="ot">&lt;-</span> coefs_parcial[<span class="fu">rownames</span>(coefs_sin), ]</span>
+<span id="cb34-227"><a href="#cb34-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-228"><a href="#cb34-228" aria-hidden="true" tabindex="-1"></a>estimados <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb34-229"><a href="#cb34-229" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">pollito =</span> <span class="fu">rownames</span>(coefs_sin),</span>
+<span id="cb34-230"><a href="#cb34-230" aria-hidden="true" tabindex="-1"></a>             <span class="at">intercepto =</span> <span class="fu">unname</span>(<span class="fu">coef</span>(m_completo)[<span class="dv">1</span>]),</span>
+<span id="cb34-231"><a href="#cb34-231" aria-hidden="true" tabindex="-1"></a>             <span class="at">pendiente =</span> <span class="fu">unname</span>(<span class="fu">coef</span>(m_completo)[<span class="dv">2</span>]),</span>
+<span id="cb34-232"><a href="#cb34-232" aria-hidden="true" tabindex="-1"></a>             <span class="at">modelo =</span> <span class="st">"Agrupamiento completo"</span>),</span>
+<span id="cb34-233"><a href="#cb34-233" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">pollito =</span> <span class="fu">rownames</span>(coefs_sin),</span>
+<span id="cb34-234"><a href="#cb34-234" aria-hidden="true" tabindex="-1"></a>             <span class="at">intercepto =</span> coefs_sin[, <span class="dv">1</span>],</span>
+<span id="cb34-235"><a href="#cb34-235" aria-hidden="true" tabindex="-1"></a>             <span class="at">pendiente =</span> coefs_sin[, <span class="dv">2</span>],</span>
+<span id="cb34-236"><a href="#cb34-236" aria-hidden="true" tabindex="-1"></a>             <span class="at">modelo =</span> <span class="st">"Sin agrupamiento"</span>),</span>
+<span id="cb34-237"><a href="#cb34-237" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">pollito =</span> <span class="fu">rownames</span>(coefs_parcial),</span>
+<span id="cb34-238"><a href="#cb34-238" aria-hidden="true" tabindex="-1"></a>             <span class="at">intercepto =</span> coefs_parcial[, <span class="dv">1</span>],</span>
+<span id="cb34-239"><a href="#cb34-239" aria-hidden="true" tabindex="-1"></a>             <span class="at">pendiente =</span> coefs_parcial[, <span class="dv">2</span>],</span>
+<span id="cb34-240"><a href="#cb34-240" aria-hidden="true" tabindex="-1"></a>             <span class="at">modelo =</span> <span class="st">"Agrupamiento parcial"</span>)</span>
+<span id="cb34-241"><a href="#cb34-241" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-242"><a href="#cb34-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-243"><a href="#cb34-243" aria-hidden="true" tabindex="-1"></a>estimados<span class="sc">$</span>modelo <span class="ot">&lt;-</span> <span class="fu">factor</span>(estimados<span class="sc">$</span>modelo, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Agrupamiento completo"</span>, <span class="st">"Sin agrupamiento"</span>, <span class="st">"Agrupamiento parcial"</span>))</span>
+<span id="cb34-244"><a href="#cb34-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-245"><a href="#cb34-245" aria-hidden="true" tabindex="-1"></a><span class="co"># añadir numero de observaciones por pollito</span></span>
+<span id="cb34-246"><a href="#cb34-246" aria-hidden="true" tabindex="-1"></a>estimados<span class="sc">$</span>n <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(n_obs[estimados<span class="sc">$</span>pollito])</span>
 <span id="cb34-247"><a href="#cb34-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-248"><a href="#cb34-248" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, out.width="100%", fig.height=8, fig.width=12}</span></span>
+<span id="cb34-248"><a href="#cb34-248" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(estimados)</span>
 <span id="cb34-249"><a href="#cb34-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-250"><a href="#cb34-250" aria-hidden="true" tabindex="-1"></a><span class="in">pollitos_sel &lt;- c("18", "16", "15", "44", "7", "21", "24", "35")</span></span>
+<span id="cb34-250"><a href="#cb34-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-251"><a href="#cb34-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-252"><a href="#cb34-252" aria-hidden="true" tabindex="-1"></a><span class="in">pollos_sel &lt;- pollos[pollos$pollito %in% pollitos_sel, ]</span></span>
-<span id="cb34-253"><a href="#cb34-253" aria-hidden="true" tabindex="-1"></a><span class="in">pollos_sel$pollito &lt;- factor(pollos_sel$pollito, levels = pollitos_sel)</span></span>
-<span id="cb34-254"><a href="#cb34-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-255"><a href="#cb34-255" aria-hidden="true" tabindex="-1"></a><span class="in">estimados_sel &lt;- estimados[estimados$pollito %in% pollitos_sel, ]</span></span>
-<span id="cb34-256"><a href="#cb34-256" aria-hidden="true" tabindex="-1"></a><span class="in">estimados_sel$pollito &lt;- factor(estimados_sel$pollito, levels = pollitos_sel)</span></span>
+<span id="cb34-252"><a href="#cb34-252" aria-hidden="true" tabindex="-1"></a>Y grafiquemos las rectas de los tres modelos para algunos pollitos, incluyendo los 4 que tienen menos datos (18, 16, 15 y 44):</span>
+<span id="cb34-253"><a href="#cb34-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-254"><a href="#cb34-254" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, out.width="100%", fig.height=8, fig.width=12}</span></span>
+<span id="cb34-255"><a href="#cb34-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-256"><a href="#cb34-256" aria-hidden="true" tabindex="-1"></a><span class="in">pollitos_sel &lt;- c("18", "16", "15", "44", "7", "21", "24", "35")</span></span>
 <span id="cb34-257"><a href="#cb34-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-258"><a href="#cb34-258" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(pollos_sel, aes(x = dia, y = peso)) +</span></span>
-<span id="cb34-259"><a href="#cb34-259" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(size = 2) +</span></span>
-<span id="cb34-260"><a href="#cb34-260" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_abline(data = estimados_sel,</span></span>
-<span id="cb34-261"><a href="#cb34-261" aria-hidden="true" tabindex="-1"></a><span class="in">              aes(intercept = intercepto, slope = pendiente, color = modelo, linetype = modelo),</span></span>
-<span id="cb34-262"><a href="#cb34-262" aria-hidden="true" tabindex="-1"></a><span class="in">              linewidth = 1) +</span></span>
-<span id="cb34-263"><a href="#cb34-263" aria-hidden="true" tabindex="-1"></a><span class="in">  scale_color_manual(values = col_mods) +</span></span>
-<span id="cb34-264"><a href="#cb34-264" aria-hidden="true" tabindex="-1"></a><span class="in">  facet_wrap(~ pollito, nrow = 2, labeller = label_both) +</span></span>
-<span id="cb34-265"><a href="#cb34-265" aria-hidden="true" tabindex="-1"></a><span class="in">  xlim(0, 21) +</span></span>
-<span id="cb34-266"><a href="#cb34-266" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(x = "Día", y = "Peso (g)", color = "", linetype = "") +</span></span>
-<span id="cb34-267"><a href="#cb34-267" aria-hidden="true" tabindex="-1"></a><span class="in">  theme(legend.position = "top")</span></span>
-<span id="cb34-268"><a href="#cb34-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-269"><a href="#cb34-269" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-270"><a href="#cb34-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-271"><a href="#cb34-271" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Para los pollitos con muchos datos (fila de abajo) las rectas **sin agrupamiento** y de **agrupamiento parcial** son casi idénticas: los datos del individuo dominan</span>
-<span id="cb34-272"><a href="#cb34-272" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Para el pollito 18 (solo 2 medidas) la recta del modelo mixto se aleja mucho de la recta sin agrupamiento y se acerca a la recta promedio de la población. Para los pollitos 16, 15 y 44 (7 a 10 medidas) el cambio es pequeño: con varias medidas poco ruidosas los datos del individuo ya son bastante informativos</span>
-<span id="cb34-273"><a href="#cb34-273" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>La recta de agrupamiento completo es la misma para todos y no describe bien a ningún pollito en particular</span>
+<span id="cb34-258"><a href="#cb34-258" aria-hidden="true" tabindex="-1"></a><span class="in">pollos_sel &lt;- pollos[pollos$pollito %in% pollitos_sel, ]</span></span>
+<span id="cb34-259"><a href="#cb34-259" aria-hidden="true" tabindex="-1"></a><span class="in">pollos_sel$pollito &lt;- factor(pollos_sel$pollito, levels = pollitos_sel)</span></span>
+<span id="cb34-260"><a href="#cb34-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-261"><a href="#cb34-261" aria-hidden="true" tabindex="-1"></a><span class="in">estimados_sel &lt;- estimados[estimados$pollito %in% pollitos_sel, ]</span></span>
+<span id="cb34-262"><a href="#cb34-262" aria-hidden="true" tabindex="-1"></a><span class="in">estimados_sel$pollito &lt;- factor(estimados_sel$pollito, levels = pollitos_sel)</span></span>
+<span id="cb34-263"><a href="#cb34-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-264"><a href="#cb34-264" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(pollos_sel, aes(x = dia, y = peso)) +</span></span>
+<span id="cb34-265"><a href="#cb34-265" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(size = 2) +</span></span>
+<span id="cb34-266"><a href="#cb34-266" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_abline(data = estimados_sel,</span></span>
+<span id="cb34-267"><a href="#cb34-267" aria-hidden="true" tabindex="-1"></a><span class="in">              aes(intercept = intercepto, slope = pendiente, color = modelo, linetype = modelo),</span></span>
+<span id="cb34-268"><a href="#cb34-268" aria-hidden="true" tabindex="-1"></a><span class="in">              linewidth = 1) +</span></span>
+<span id="cb34-269"><a href="#cb34-269" aria-hidden="true" tabindex="-1"></a><span class="in">  scale_color_manual(values = col_mods) +</span></span>
+<span id="cb34-270"><a href="#cb34-270" aria-hidden="true" tabindex="-1"></a><span class="in">  facet_wrap(~ pollito, nrow = 2, labeller = label_both) +</span></span>
+<span id="cb34-271"><a href="#cb34-271" aria-hidden="true" tabindex="-1"></a><span class="in">  xlim(0, 21) +</span></span>
+<span id="cb34-272"><a href="#cb34-272" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(x = "Día", y = "Peso (g)", color = "", linetype = "") +</span></span>
+<span id="cb34-273"><a href="#cb34-273" aria-hidden="true" tabindex="-1"></a><span class="in">  theme(legend.position = "top")</span></span>
 <span id="cb34-274"><a href="#cb34-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-275"><a href="#cb34-275" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb34-275"><a href="#cb34-275" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-276"><a href="#cb34-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-277"><a href="#cb34-277" aria-hidden="true" tabindex="-1"></a><span class="fu"># Agrupamiento parcial y encogimiento (*shrinkage*)</span></span>
-<span id="cb34-278"><a href="#cb34-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-279"><a href="#cb34-279" aria-hidden="true" tabindex="-1"></a>El fenómeno que acabamos de ver se llama **encogimiento** (*shrinkage*): los estimados de cada grupo se "encogen" hacia el promedio general. Veamos las tasas de crecimiento de los 50 pollitos con y sin agrupamiento:</span>
+<span id="cb34-277"><a href="#cb34-277" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Para los pollitos con muchos datos (fila de abajo) las rectas **sin agrupamiento** y de **agrupamiento parcial** son casi idénticas: los datos del individuo dominan</span>
+<span id="cb34-278"><a href="#cb34-278" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Para el pollito 18 (solo 2 medidas) la recta del modelo mixto se aleja mucho de la recta sin agrupamiento y se acerca a la recta promedio de la población. Para los pollitos 16, 15 y 44 (7 a 10 medidas) el cambio es pequeño: con varias medidas poco ruidosas los datos del individuo ya son bastante informativos</span>
+<span id="cb34-279"><a href="#cb34-279" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>La recta de agrupamiento completo es la misma para todos y no describe bien a ningún pollito en particular</span>
 <span id="cb34-280"><a href="#cb34-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-281"><a href="#cb34-281" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, out.width="100%"}</span></span>
+<span id="cb34-281"><a href="#cb34-281" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
 <span id="cb34-282"><a href="#cb34-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-283"><a href="#cb34-283" aria-hidden="true" tabindex="-1"></a><span class="in">pendientes &lt;- estimados[estimados$modelo != "Agrupamiento completo", ]</span></span>
-<span id="cb34-284"><a href="#cb34-284" aria-hidden="true" tabindex="-1"></a><span class="in">pendientes$datos &lt;- ifelse(pendientes$n &lt; 12, "Incompletos (&lt; 12 medidas)", "Completos (12 medidas)")</span></span>
-<span id="cb34-285"><a href="#cb34-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-286"><a href="#cb34-286" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(pendientes, aes(x = modelo, y = pendiente, group = pollito, color = datos)) +</span></span>
-<span id="cb34-287"><a href="#cb34-287" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_hline(yintercept = fixef(m_parcial)[2], linetype = "dashed") +</span></span>
-<span id="cb34-288"><a href="#cb34-288" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_line(alpha = 0.7) +</span></span>
-<span id="cb34-289"><a href="#cb34-289" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(size = 2.5) +</span></span>
-<span id="cb34-290"><a href="#cb34-290" aria-hidden="true" tabindex="-1"></a><span class="in">  scale_color_manual(values = viridis(10)[c(4, 9)]) +</span></span>
-<span id="cb34-291"><a href="#cb34-291" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(x = "", y = "Tasa de crecimiento (g/día)", color = "") +</span></span>
-<span id="cb34-292"><a href="#cb34-292" aria-hidden="true" tabindex="-1"></a><span class="in">  theme(legend.position = "top")</span></span>
-<span id="cb34-293"><a href="#cb34-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-294"><a href="#cb34-294" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-295"><a href="#cb34-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-296"><a href="#cb34-296" aria-hidden="true" tabindex="-1"></a>La línea punteada es la pendiente promedio de la población ($\beta_{1}$). En general los estimados se mueven hacia ella, pero en estos datos el encogimiento es pequeño para casi todos los pollitos y **enorme para el pollito 18**, el único con apenas 2 medidas. Más adelante veremos por qué (cuadro "¿Cuánto se encoge cada estimado?"). También podemos verlo en las dos dimensiones (intercepto y pendiente) a la vez. Las flechas van del estimado sin agrupamiento al estimado con agrupamiento parcial:</span>
-<span id="cb34-297"><a href="#cb34-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-298"><a href="#cb34-298" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, out.width="100%", fig.height=7, fig.width=10}</span></span>
+<span id="cb34-283"><a href="#cb34-283" aria-hidden="true" tabindex="-1"></a><span class="fu"># Agrupamiento parcial y encogimiento (*shrinkage*)</span></span>
+<span id="cb34-284"><a href="#cb34-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-285"><a href="#cb34-285" aria-hidden="true" tabindex="-1"></a>El fenómeno que acabamos de ver se llama **encogimiento** (*shrinkage*): los estimados de cada grupo se "encogen" hacia el promedio general. Veamos las tasas de crecimiento de los 50 pollitos con y sin agrupamiento:</span>
+<span id="cb34-286"><a href="#cb34-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-287"><a href="#cb34-287" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, out.width="100%"}</span></span>
+<span id="cb34-288"><a href="#cb34-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-289"><a href="#cb34-289" aria-hidden="true" tabindex="-1"></a><span class="in">pendientes &lt;- estimados[estimados$modelo != "Agrupamiento completo", ]</span></span>
+<span id="cb34-290"><a href="#cb34-290" aria-hidden="true" tabindex="-1"></a><span class="in">pendientes$datos &lt;- ifelse(pendientes$n &lt; 12, "Incompletos (&lt; 12 medidas)", "Completos (12 medidas)")</span></span>
+<span id="cb34-291"><a href="#cb34-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-292"><a href="#cb34-292" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(pendientes, aes(x = modelo, y = pendiente, group = pollito, color = datos)) +</span></span>
+<span id="cb34-293"><a href="#cb34-293" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_hline(yintercept = fixef(m_parcial)[2], linetype = "dashed") +</span></span>
+<span id="cb34-294"><a href="#cb34-294" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_line(alpha = 0.7) +</span></span>
+<span id="cb34-295"><a href="#cb34-295" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(size = 2.5) +</span></span>
+<span id="cb34-296"><a href="#cb34-296" aria-hidden="true" tabindex="-1"></a><span class="in">  scale_color_manual(values = viridis(10)[c(4, 9)]) +</span></span>
+<span id="cb34-297"><a href="#cb34-297" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(x = "", y = "Tasa de crecimiento (g/día)", color = "") +</span></span>
+<span id="cb34-298"><a href="#cb34-298" aria-hidden="true" tabindex="-1"></a><span class="in">  theme(legend.position = "top")</span></span>
 <span id="cb34-299"><a href="#cb34-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-300"><a href="#cb34-300" aria-hidden="true" tabindex="-1"></a><span class="in">flechas &lt;- data.frame(</span></span>
-<span id="cb34-301"><a href="#cb34-301" aria-hidden="true" tabindex="-1"></a><span class="in">  pollito = rownames(coefs_sin),</span></span>
-<span id="cb34-302"><a href="#cb34-302" aria-hidden="true" tabindex="-1"></a><span class="in">  int_sin = coefs_sin[, 1],</span></span>
-<span id="cb34-303"><a href="#cb34-303" aria-hidden="true" tabindex="-1"></a><span class="in">  pend_sin = coefs_sin[, 2],</span></span>
-<span id="cb34-304"><a href="#cb34-304" aria-hidden="true" tabindex="-1"></a><span class="in">  int_par = coefs_parcial[, 1],</span></span>
-<span id="cb34-305"><a href="#cb34-305" aria-hidden="true" tabindex="-1"></a><span class="in">  pend_par = coefs_parcial[, 2],</span></span>
-<span id="cb34-306"><a href="#cb34-306" aria-hidden="true" tabindex="-1"></a><span class="in">  n = as.vector(n_obs[rownames(coefs_sin)])</span></span>
-<span id="cb34-307"><a href="#cb34-307" aria-hidden="true" tabindex="-1"></a><span class="in">)</span></span>
-<span id="cb34-308"><a href="#cb34-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-309"><a href="#cb34-309" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(flechas) +</span></span>
-<span id="cb34-310"><a href="#cb34-310" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_segment(aes(x = int_sin, y = pend_sin, xend = int_par, yend = pend_par),</span></span>
-<span id="cb34-311"><a href="#cb34-311" aria-hidden="true" tabindex="-1"></a><span class="in">               arrow = arrow(length = unit(0.15, "cm")), color = "gray50") +</span></span>
-<span id="cb34-312"><a href="#cb34-312" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(aes(x = int_sin, y = pend_sin, size = n), color = col_mods[2], alpha = 0.7) +</span></span>
-<span id="cb34-313"><a href="#cb34-313" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(aes(x = int_par, y = pend_par), color = col_mods[1], size = 2) +</span></span>
-<span id="cb34-314"><a href="#cb34-314" aria-hidden="true" tabindex="-1"></a><span class="in">  annotate("point", x = fixef(m_parcial)[1], y = fixef(m_parcial)[2],</span></span>
-<span id="cb34-315"><a href="#cb34-315" aria-hidden="true" tabindex="-1"></a><span class="in">           shape = 4, size = 6, stroke = 2) +</span></span>
-<span id="cb34-316"><a href="#cb34-316" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_text(data = flechas[flechas$n &lt; 12, ],</span></span>
-<span id="cb34-317"><a href="#cb34-317" aria-hidden="true" tabindex="-1"></a><span class="in">            aes(x = int_sin, y = pend_sin, label = pollito), nudge_x = 1.5, size = 5) +</span></span>
-<span id="cb34-318"><a href="#cb34-318" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(x = "Intercepto (g)", y = "Pendiente (g/día)",</span></span>
-<span id="cb34-319"><a href="#cb34-319" aria-hidden="true" tabindex="-1"></a><span class="in">       size = "Número de\nmedidas")</span></span>
-<span id="cb34-320"><a href="#cb34-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-321"><a href="#cb34-321" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-322"><a href="#cb34-322" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-323"><a href="#cb34-323" aria-hidden="true" tabindex="-1"></a>&lt;font size = 4&gt;Puntos azules: sin agrupamiento (tamaño según número de medidas); puntos morados: agrupamiento parcial; X: promedio poblacional (efectos fijos).&lt;/font&gt;</span>
-<span id="cb34-324"><a href="#cb34-324" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-325"><a href="#cb34-325" aria-hidden="true" tabindex="-1"></a>Note que las flechas no apuntan directamente hacia la X sino que se mueven a lo largo de la diagonal. Esto ocurre porque el modelo también estima la **correlación** entre interceptos y pendientes (aquí fuertemente negativa): al encoger la pendiente del pollito 18 el modelo también ajusta su intercepto de acuerdo con esa relación. Además, como el crecimiento no es perfectamente lineal, varios interceptos están por debajo del peso real al nacer (\~40 g); el intercepto es una extrapolación de la recta, no el peso observado al día 0.</span>
+<span id="cb34-300"><a href="#cb34-300" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-301"><a href="#cb34-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-302"><a href="#cb34-302" aria-hidden="true" tabindex="-1"></a>La línea punteada es la pendiente promedio de la población ($\beta_{1}$). En general los estimados se mueven hacia ella, pero en estos datos el encogimiento es pequeño para casi todos los pollitos y **enorme para el pollito 18**, el único con apenas 2 medidas. Más adelante veremos por qué (cuadro "¿Cuánto se encoge cada estimado?"). También podemos verlo en las dos dimensiones (intercepto y pendiente) a la vez. Las flechas van del estimado sin agrupamiento al estimado con agrupamiento parcial:</span>
+<span id="cb34-303"><a href="#cb34-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-304"><a href="#cb34-304" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, out.width="100%", fig.height=7, fig.width=10}</span></span>
+<span id="cb34-305"><a href="#cb34-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-306"><a href="#cb34-306" aria-hidden="true" tabindex="-1"></a><span class="in">flechas &lt;- data.frame(</span></span>
+<span id="cb34-307"><a href="#cb34-307" aria-hidden="true" tabindex="-1"></a><span class="in">  pollito = rownames(coefs_sin),</span></span>
+<span id="cb34-308"><a href="#cb34-308" aria-hidden="true" tabindex="-1"></a><span class="in">  int_sin = coefs_sin[, 1],</span></span>
+<span id="cb34-309"><a href="#cb34-309" aria-hidden="true" tabindex="-1"></a><span class="in">  pend_sin = coefs_sin[, 2],</span></span>
+<span id="cb34-310"><a href="#cb34-310" aria-hidden="true" tabindex="-1"></a><span class="in">  int_par = coefs_parcial[, 1],</span></span>
+<span id="cb34-311"><a href="#cb34-311" aria-hidden="true" tabindex="-1"></a><span class="in">  pend_par = coefs_parcial[, 2],</span></span>
+<span id="cb34-312"><a href="#cb34-312" aria-hidden="true" tabindex="-1"></a><span class="in">  n = as.vector(n_obs[rownames(coefs_sin)])</span></span>
+<span id="cb34-313"><a href="#cb34-313" aria-hidden="true" tabindex="-1"></a><span class="in">)</span></span>
+<span id="cb34-314"><a href="#cb34-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-315"><a href="#cb34-315" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(flechas) +</span></span>
+<span id="cb34-316"><a href="#cb34-316" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_segment(aes(x = int_sin, y = pend_sin, xend = int_par, yend = pend_par),</span></span>
+<span id="cb34-317"><a href="#cb34-317" aria-hidden="true" tabindex="-1"></a><span class="in">               arrow = arrow(length = unit(0.15, "cm")), color = "gray50") +</span></span>
+<span id="cb34-318"><a href="#cb34-318" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(aes(x = int_sin, y = pend_sin, size = n), color = col_mods[2], alpha = 0.7) +</span></span>
+<span id="cb34-319"><a href="#cb34-319" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_point(aes(x = int_par, y = pend_par), color = col_mods[1], size = 2) +</span></span>
+<span id="cb34-320"><a href="#cb34-320" aria-hidden="true" tabindex="-1"></a><span class="in">  annotate("point", x = fixef(m_parcial)[1], y = fixef(m_parcial)[2],</span></span>
+<span id="cb34-321"><a href="#cb34-321" aria-hidden="true" tabindex="-1"></a><span class="in">           shape = 4, size = 6, stroke = 2) +</span></span>
+<span id="cb34-322"><a href="#cb34-322" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_text(data = flechas[flechas$n &lt; 12, ],</span></span>
+<span id="cb34-323"><a href="#cb34-323" aria-hidden="true" tabindex="-1"></a><span class="in">            aes(x = int_sin, y = pend_sin, label = pollito), nudge_x = 1.5, size = 5) +</span></span>
+<span id="cb34-324"><a href="#cb34-324" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(x = "Intercepto (g)", y = "Pendiente (g/día)",</span></span>
+<span id="cb34-325"><a href="#cb34-325" aria-hidden="true" tabindex="-1"></a><span class="in">       size = "Número de\nmedidas")</span></span>
 <span id="cb34-326"><a href="#cb34-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-327"><a href="#cb34-327" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-success}</span>
-<span id="cb34-328"><a href="#cb34-328" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size="5"&gt;&lt;b&gt;¿Cuánto se encoge cada estimado?&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</span>
-<span id="cb34-329"><a href="#cb34-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-330"><a href="#cb34-330" aria-hidden="true" tabindex="-1"></a>Para el caso más simple (un modelo solo con intercepto aleatorio), el estimado de agrupamiento parcial del grupo $j$ es aproximadamente un **promedio ponderado** entre el promedio del grupo ($\bar{y}_j$) y el promedio general ($\mu$):</span>
-<span id="cb34-331"><a href="#cb34-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-332"><a href="#cb34-332" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size = 6&gt;$\hat{\alpha}_j \approx \frac{\frac{n_j}{\sigma^2} \bar{y}_j + \frac{1}{\sigma_{grupo}^2} \mu}{\frac{n_j}{\sigma^2} + \frac{1}{\sigma_{grupo}^2}}$&lt;/font&gt;&lt;/center&gt;</span>
-<span id="cb34-333"><a href="#cb34-333" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-334"><a href="#cb34-334" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$n_j$: número de observaciones del grupo $j$</span>
-<span id="cb34-335"><a href="#cb34-335" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\sigma^2$: varianza dentro de grupos (residual)</span>
-<span id="cb34-336"><a href="#cb34-336" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\sigma_{grupo}^2$: varianza entre grupos</span>
+<span id="cb34-327"><a href="#cb34-327" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-328"><a href="#cb34-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-329"><a href="#cb34-329" aria-hidden="true" tabindex="-1"></a>&lt;font size = 4&gt;Puntos azules: sin agrupamiento (tamaño según número de medidas); puntos morados: agrupamiento parcial; X: promedio poblacional (efectos fijos).&lt;/font&gt;</span>
+<span id="cb34-330"><a href="#cb34-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-331"><a href="#cb34-331" aria-hidden="true" tabindex="-1"></a>Note que las flechas no apuntan directamente hacia la X sino que se mueven a lo largo de la diagonal. Esto ocurre porque el modelo también estima la **correlación** entre interceptos y pendientes (aquí fuertemente negativa): al encoger la pendiente del pollito 18 el modelo también ajusta su intercepto de acuerdo con esa relación. Además, como el crecimiento no es perfectamente lineal, varios interceptos están por debajo del peso real al nacer (\~40 g); el intercepto es una extrapolación de la recta, no el peso observado al día 0.</span>
+<span id="cb34-332"><a href="#cb34-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-333"><a href="#cb34-333" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-success}</span>
+<span id="cb34-334"><a href="#cb34-334" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size="5"&gt;&lt;b&gt;¿Cuánto se encoge cada estimado?&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</span>
+<span id="cb34-335"><a href="#cb34-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-336"><a href="#cb34-336" aria-hidden="true" tabindex="-1"></a>Para el caso más simple (un modelo solo con intercepto aleatorio), el estimado de agrupamiento parcial del grupo $j$ es aproximadamente un **promedio ponderado** entre el promedio del grupo ($\bar{y}_j$) y el promedio general ($\mu$):</span>
 <span id="cb34-337"><a href="#cb34-337" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-338"><a href="#cb34-338" aria-hidden="true" tabindex="-1"></a>Por lo tanto, el encogimiento es **mayor** cuando:</span>
+<span id="cb34-338"><a href="#cb34-338" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size = 6&gt;$\hat{\alpha}_j \approx \frac{\frac{n_j}{\sigma^2} \bar{y}_j + \frac{1}{\sigma_{grupo}^2} \mu}{\frac{n_j}{\sigma^2} + \frac{1}{\sigma_{grupo}^2}}$&lt;/font&gt;&lt;/center&gt;</span>
 <span id="cb34-339"><a href="#cb34-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-340"><a href="#cb34-340" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>El grupo tiene **pocas observaciones** ($n_j$ pequeño)</span>
-<span id="cb34-341"><a href="#cb34-341" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Hay mucho **ruido dentro de grupos** ($\sigma^2$ grande)</span>
-<span id="cb34-342"><a href="#cb34-342" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Los grupos son **parecidos entre sí** ($\sigma_{grupo}^2$ pequeña)</span>
+<span id="cb34-340"><a href="#cb34-340" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$n_j$: número de observaciones del grupo $j$</span>
+<span id="cb34-341"><a href="#cb34-341" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\sigma^2$: varianza dentro de grupos (residual)</span>
+<span id="cb34-342"><a href="#cb34-342" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\sigma_{grupo}^2$: varianza entre grupos</span>
 <span id="cb34-343"><a href="#cb34-343" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-344"><a href="#cb34-344" aria-hidden="true" tabindex="-1"></a>Esto explica lo que vimos con los pollitos: las diferencias entre individuos son grandes y cada pollito tiene varias medidas con poco ruido, por lo que el modelo "confía" en los datos de cada pollito y casi no los encoge. Solo con 2 medidas (pollito 18) el promedio poblacional pesa más que los datos del individuo.</span>
+<span id="cb34-344"><a href="#cb34-344" aria-hidden="true" tabindex="-1"></a>Por lo tanto, el encogimiento es **mayor** cuando:</span>
 <span id="cb34-345"><a href="#cb34-345" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-346"><a href="#cb34-346" aria-hidden="true" tabindex="-1"></a>En los extremos: si $\sigma_{grupo}^2 \rightarrow 0$ obtenemos agrupamiento completo, y si $\sigma_{grupo}^2 \rightarrow \infty$ obtenemos el modelo sin agrupamiento. El modelo mixto **estima de los datos** cuánto agrupar.</span>
-<span id="cb34-347"><a href="#cb34-347" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-348"><a href="#cb34-348" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-349"><a href="#cb34-349" aria-hidden="true" tabindex="-1"></a>¿Por qué es esto deseable? Porque los estimados extremos que vienen de pocos datos son, en promedio, exageraciones producto del azar. "Tomar prestada" información de los demás grupos produce estimados individuales que en promedio están **más cerca de los valores reales**. Esto es especialmente útil en biología, donde casi siempre tenemos tamaños de muestra desbalanceados (individuos que mueren, sitios con pocas capturas, especies raras).</span>
-<span id="cb34-350"><a href="#cb34-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-351"><a href="#cb34-351" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
-<span id="cb34-352"><a href="#cb34-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-353"><a href="#cb34-353" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size="5"&gt;&lt;b&gt;Ejercicio 1&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</span>
+<span id="cb34-346"><a href="#cb34-346" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>El grupo tiene **pocas observaciones** ($n_j$ pequeño)</span>
+<span id="cb34-347"><a href="#cb34-347" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Hay mucho **ruido dentro de grupos** ($\sigma^2$ grande)</span>
+<span id="cb34-348"><a href="#cb34-348" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Los grupos son **parecidos entre sí** ($\sigma_{grupo}^2$ pequeña)</span>
+<span id="cb34-349"><a href="#cb34-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-350"><a href="#cb34-350" aria-hidden="true" tabindex="-1"></a>Esto explica lo que vimos con los pollitos: las diferencias entre individuos son grandes y cada pollito tiene varias medidas con poco ruido, por lo que el modelo "confía" en los datos de cada pollito y casi no los encoge. Solo con 2 medidas (pollito 18) el promedio poblacional pesa más que los datos del individuo.</span>
+<span id="cb34-351"><a href="#cb34-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-352"><a href="#cb34-352" aria-hidden="true" tabindex="-1"></a>En los extremos: si $\sigma_{grupo}^2 \rightarrow 0$ obtenemos agrupamiento completo, y si $\sigma_{grupo}^2 \rightarrow \infty$ obtenemos el modelo sin agrupamiento. El modelo mixto **estima de los datos** cuánto agrupar.</span>
+<span id="cb34-353"><a href="#cb34-353" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb34-354"><a href="#cb34-354" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-355"><a href="#cb34-355" aria-hidden="true" tabindex="-1"></a>Podemos comprobar que el agrupamiento parcial produce mejores estimados usando simulación, ya que solo en datos simulados conocemos los valores reales.</span>
+<span id="cb34-355"><a href="#cb34-355" aria-hidden="true" tabindex="-1"></a>¿Por qué es esto deseable? Porque los estimados extremos que vienen de pocos datos son, en promedio, exageraciones producto del azar. "Tomar prestada" información de los demás grupos produce estimados individuales que en promedio están **más cerca de los valores reales**. Esto es especialmente útil en biología, donde casi siempre tenemos tamaños de muestra desbalanceados (individuos que mueren, sitios con pocas capturas, especies raras).</span>
 <span id="cb34-356"><a href="#cb34-356" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-357"><a href="#cb34-357" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Simule 30 poblaciones de una especie de lagartija cuyo tamaño promedio (longitud hocico-cloaca) proviene de una distribución normal con media 60 mm y desviación estándar 5 mm. El número de individuos medidos por población debe variar entre 2 y 30 (use <span class="in">`sample()`</span>), y la desviación estándar dentro de poblaciones debe ser 8 mm</span>
+<span id="cb34-357"><a href="#cb34-357" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
 <span id="cb34-358"><a href="#cb34-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-359"><a href="#cb34-359" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Estime el promedio de cada población (a) sin agrupamiento (promedio simple de cada población) y (b) con agrupamiento parcial (<span class="in">`coef()`</span> de <span class="in">`lmer(lhc ~ 1 + (1 | poblacion))`</span>)</span>
+<span id="cb34-359"><a href="#cb34-359" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size="5"&gt;&lt;b&gt;Ejercicio 1&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</span>
 <span id="cb34-360"><a href="#cb34-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-361"><a href="#cb34-361" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Calcule el error promedio (diferencia absoluta entre el promedio estimado y el promedio simulado) de cada abordaje. ¿Cuál es menor?</span>
+<span id="cb34-361"><a href="#cb34-361" aria-hidden="true" tabindex="-1"></a>Usando el juego de datos ChickWeight, compare los promedios de peso de los pollitos entre dietas:</span>
 <span id="cb34-362"><a href="#cb34-362" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-363"><a href="#cb34-363" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Grafique el error de cada abordaje en función del número de individuos por población</span>
-<span id="cb34-364"><a href="#cb34-364" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-365"><a href="#cb34-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-366"><a href="#cb34-366" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb34-367"><a href="#cb34-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-368"><a href="#cb34-368" aria-hidden="true" tabindex="-1"></a><span class="fu"># Interpretando el modelo mixto</span></span>
-<span id="cb34-369"><a href="#cb34-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-370"><a href="#cb34-370" aria-hidden="true" tabindex="-1"></a>Veamos el resumen completo del modelo:</span>
-<span id="cb34-371"><a href="#cb34-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-374"><a href="#cb34-374" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-375"><a href="#cb34-375" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_parcial)</span>
+<span id="cb34-363"><a href="#cb34-363" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Calcule el peso promedio para cada dieta usando aggregate().</span>
+<span id="cb34-364"><a href="#cb34-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-365"><a href="#cb34-365" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Ajuste un modelo mixto con dieta como efecto fijo e intercepto aleatorio para pollito: lmer(peso ~ dieta + (1 | pollito)).</span>
+<span id="cb34-366"><a href="#cb34-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-367"><a href="#cb34-367" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Compare los promedios estimados por ambos abordajes.</span>
+<span id="cb34-368"><a href="#cb34-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-369"><a href="#cb34-369" aria-hidden="true" tabindex="-1"></a>¿Por qué los estimados del modelo mixto pueden diferir de los promedios calculados directamente a partir de los datos?</span>
+<span id="cb34-370"><a href="#cb34-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-371"><a href="#cb34-371" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-372"><a href="#cb34-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-373"><a href="#cb34-373" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb34-374"><a href="#cb34-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-375"><a href="#cb34-375" aria-hidden="true" tabindex="-1"></a><span class="fu"># Interpretando el modelo mixto</span></span>
 <span id="cb34-376"><a href="#cb34-376" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-377"><a href="#cb34-377" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-377"><a href="#cb34-377" aria-hidden="true" tabindex="-1"></a>Veamos el resumen completo del modelo:</span>
 <span id="cb34-378"><a href="#cb34-378" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-379"><a href="#cb34-379" aria-hidden="true" tabindex="-1"></a>El resumen tiene dos partes principales:</span>
-<span id="cb34-380"><a href="#cb34-380" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-381"><a href="#cb34-381" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-success}</span>
-<span id="cb34-382"><a href="#cb34-382" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size="5"&gt;&lt;b&gt;Interpretación del modelo&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</span>
+<span id="cb34-381"><a href="#cb34-381" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-382"><a href="#cb34-382" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_parcial)</span>
 <span id="cb34-383"><a href="#cb34-383" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-384"><a href="#cb34-384" aria-hidden="true" tabindex="-1"></a>**Efectos aleatorios** (*Random effects*):</span>
+<span id="cb34-384"><a href="#cb34-384" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-385"><a href="#cb34-385" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-388"><a href="#cb34-388" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-389"><a href="#cb34-389" aria-hidden="true" tabindex="-1"></a><span class="fu">VarCorr</span>(m_parcial)</span>
+<span id="cb34-386"><a href="#cb34-386" aria-hidden="true" tabindex="-1"></a>El resumen tiene dos partes principales:</span>
+<span id="cb34-387"><a href="#cb34-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-388"><a href="#cb34-388" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-success}</span>
+<span id="cb34-389"><a href="#cb34-389" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size="5"&gt;&lt;b&gt;Interpretación del modelo&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</span>
 <span id="cb34-390"><a href="#cb34-390" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-391"><a href="#cb34-391" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-391"><a href="#cb34-391" aria-hidden="true" tabindex="-1"></a>**Efectos aleatorios** (*Random effects*):</span>
 <span id="cb34-392"><a href="#cb34-392" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-393"><a href="#cb34-393" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`pollito (Intercept)`</span>: la desviación estándar del peso inicial entre pollitos es <span class="in">`r as.data.frame(VarCorr(m_parcial))$sdcor[1]`</span> g</span>
-<span id="cb34-394"><a href="#cb34-394" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`pollito dia`</span>: la desviación estándar de la tasa de crecimiento entre pollitos es <span class="in">`r as.data.frame(VarCorr(m_parcial))$sdcor[2]`</span> g/día. Comparada con la tasa promedio (<span class="in">`r fixef(m_parcial)[2]`</span> g/día) es una variación considerable entre individuos</span>
-<span id="cb34-395"><a href="#cb34-395" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`Corr`</span>: la correlación entre interceptos y pendientes (<span class="in">`r as.data.frame(VarCorr(m_parcial))$sdcor[3]`</span>). Es negativa: los pollitos que tienen un intercepto más alto tienden a crecer más lento. Ojo: el intercepto corresponde al día 0, por lo que esta correlación depende de dónde está el 0 del predictor (ver ejercicio 2)</span>
-<span id="cb34-396"><a href="#cb34-396" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Una correlación tan cercana a -1 (su intervalo de confianza llega hasta -1, ver más abajo) suele indicar que el modelo tiene dificultad para estimar ese parámetro por separado. Centrar el predictor generalmente lo resuelve (ejercicio 2)</span>
-<span id="cb34-397"><a href="#cb34-397" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`Residual`</span>: la variación que queda dentro de cada pollito una vez que ajustamos su propia recta (<span class="in">`r sigma(m_parcial)`</span> g)</span>
-<span id="cb34-398"><a href="#cb34-398" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-399"><a href="#cb34-399" aria-hidden="true" tabindex="-1"></a>**Efectos fijos** (*Fixed effects*):</span>
-<span id="cb34-400"><a href="#cb34-400" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-403"><a href="#cb34-403" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-404"><a href="#cb34-404" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_parcial)<span class="sc">$</span>coefficients</span>
+<span id="cb34-395"><a href="#cb34-395" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-396"><a href="#cb34-396" aria-hidden="true" tabindex="-1"></a><span class="fu">VarCorr</span>(m_parcial)</span>
+<span id="cb34-397"><a href="#cb34-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-398"><a href="#cb34-398" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-399"><a href="#cb34-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-400"><a href="#cb34-400" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`pollito (Intercept)`</span>: la desviación estándar del peso inicial entre pollitos es <span class="in">`r as.data.frame(VarCorr(m_parcial))$sdcor[1]`</span> g</span>
+<span id="cb34-401"><a href="#cb34-401" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`pollito dia`</span>: la desviación estándar de la tasa de crecimiento entre pollitos es <span class="in">`r as.data.frame(VarCorr(m_parcial))$sdcor[2]`</span> g/día. Comparada con la tasa promedio (<span class="in">`r fixef(m_parcial)[2]`</span> g/día) es una variación considerable entre individuos</span>
+<span id="cb34-402"><a href="#cb34-402" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`Corr`</span>: la correlación entre interceptos y pendientes (<span class="in">`r as.data.frame(VarCorr(m_parcial))$sdcor[3]`</span>). Es negativa: los pollitos que tienen un intercepto más alto tienden a crecer más lento. Ojo: el intercepto corresponde al día 0, por lo que esta correlación depende de dónde está el 0 del predictor (ver ejercicio 2)</span>
+<span id="cb34-403"><a href="#cb34-403" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Una correlación tan cercana a -1 (su intervalo de confianza llega hasta -1, ver más abajo) suele indicar que el modelo tiene dificultad para estimar ese parámetro por separado. Centrar el predictor generalmente lo resuelve (ejercicio 2)</span>
+<span id="cb34-404"><a href="#cb34-404" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`Residual`</span>: la variación que queda dentro de cada pollito una vez que ajustamos su propia recta (<span class="in">`r sigma(m_parcial)`</span> g)</span>
 <span id="cb34-405"><a href="#cb34-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-406"><a href="#cb34-406" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-406"><a href="#cb34-406" aria-hidden="true" tabindex="-1"></a>**Efectos fijos** (*Fixed effects*):</span>
 <span id="cb34-407"><a href="#cb34-407" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-408"><a href="#cb34-408" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>El intercepto promedio (peso esperado al día 0) es <span class="in">`r fixef(m_parcial)[1]`</span> g</span>
-<span id="cb34-409"><a href="#cb34-409" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>La tasa de crecimiento promedio es <span class="in">`r fixef(m_parcial)[2]`</span> g/día y <span class="in">`r texto_signif(summary(m_parcial)$coefficients[2, 5])`</span> (p = <span class="in">`r summary(m_parcial)$coefficients[2, 5]`</span>). Los valores de p y los grados de libertad (aproximación de Satterthwaite) los añade el paquete <span class="in">`lmerTest`</span>; <span class="in">`lme4`</span> por sí solo no los calcula</span>
-<span id="cb34-410"><a href="#cb34-410" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-411"><a href="#cb34-411" aria-hidden="true" tabindex="-1"></a>**Desviaciones de cada grupo**:</span>
+<span id="cb34-410"><a href="#cb34-410" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-411"><a href="#cb34-411" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_parcial)<span class="sc">$</span>coefficients</span>
 <span id="cb34-412"><a href="#cb34-412" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-413"><a href="#cb34-413" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`ranef()`</span> devuelve las desviaciones de cada pollito respecto a los efectos fijos ($b_{0[j]}$, $b_{1<span class="co">[</span><span class="ot">j</span><span class="co">]</span>}$)</span>
-<span id="cb34-414"><a href="#cb34-414" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`coef()`</span> devuelve los coeficientes de cada pollito ($\beta_0 + b_{0[j]}$, $\beta_1 + b_{1<span class="co">[</span><span class="ot">j</span><span class="co">]</span>}$)</span>
-<span id="cb34-415"><a href="#cb34-415" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-418"><a href="#cb34-418" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-419"><a href="#cb34-419" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">ranef</span>(m_parcial)<span class="sc">$</span>pollito)</span>
-<span id="cb34-420"><a href="#cb34-420" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-421"><a href="#cb34-421" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">coef</span>(m_parcial)<span class="sc">$</span>pollito)</span>
+<span id="cb34-413"><a href="#cb34-413" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-414"><a href="#cb34-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-415"><a href="#cb34-415" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>El intercepto promedio (peso esperado al día 0) es <span class="in">`r fixef(m_parcial)[1]`</span> g</span>
+<span id="cb34-416"><a href="#cb34-416" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>La tasa de crecimiento promedio es <span class="in">`r fixef(m_parcial)[2]`</span> g/día y <span class="in">`r texto_signif(summary(m_parcial)$coefficients[2, 5])`</span> (p = <span class="in">`r summary(m_parcial)$coefficients[2, 5]`</span>). Los valores de p y los grados de libertad (aproximación de Satterthwaite) los añade el paquete <span class="in">`lmerTest`</span>; <span class="in">`lme4`</span> por sí solo no los calcula</span>
+<span id="cb34-417"><a href="#cb34-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-418"><a href="#cb34-418" aria-hidden="true" tabindex="-1"></a>**Desviaciones de cada grupo**:</span>
+<span id="cb34-419"><a href="#cb34-419" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-420"><a href="#cb34-420" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`ranef()`</span> devuelve las desviaciones de cada pollito respecto a los efectos fijos ($b_{0[j]}$, $b_{1<span class="co">[</span><span class="ot">j</span><span class="co">]</span>}$)</span>
+<span id="cb34-421"><a href="#cb34-421" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`coef()`</span> devuelve los coeficientes de cada pollito ($\beta_0 + b_{0[j]}$, $\beta_1 + b_{1<span class="co">[</span><span class="ot">j</span><span class="co">]</span>}$)</span>
 <span id="cb34-422"><a href="#cb34-422" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-423"><a href="#cb34-423" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-424"><a href="#cb34-424" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-425"><a href="#cb34-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-426"><a href="#cb34-426" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sintaxis de efectos aleatorios en `lme4`</span></span>
+<span id="cb34-425"><a href="#cb34-425" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-426"><a href="#cb34-426" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">ranef</span>(m_parcial)<span class="sc">$</span>pollito)</span>
 <span id="cb34-427"><a href="#cb34-427" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-428"><a href="#cb34-428" aria-hidden="true" tabindex="-1"></a>| Fórmula | Significado |</span>
-<span id="cb34-429"><a href="#cb34-429" aria-hidden="true" tabindex="-1"></a>|------------------------------------|------------------------------------|</span>
-<span id="cb34-430"><a href="#cb34-430" aria-hidden="true" tabindex="-1"></a>| <span class="in">`(1 | grupo)`</span> | Intercepto aleatorio |</span>
-<span id="cb34-431"><a href="#cb34-431" aria-hidden="true" tabindex="-1"></a>| <span class="in">`(x | grupo)`</span> | Intercepto y pendiente de <span class="in">`x`</span> aleatorios, correlacionados |</span>
-<span id="cb34-432"><a href="#cb34-432" aria-hidden="true" tabindex="-1"></a>| <span class="in">`(x || grupo)`</span> | Intercepto y pendiente aleatorios, sin correlación |</span>
-<span id="cb34-433"><a href="#cb34-433" aria-hidden="true" tabindex="-1"></a>| <span class="in">`(0 + x | grupo)`</span> | Solo pendiente aleatoria |</span>
-<span id="cb34-434"><a href="#cb34-434" aria-hidden="true" tabindex="-1"></a>| <span class="in">`(1 | sitio/individuo)`</span> | Individuos anidados en sitios (equivale a <span class="in">`(1 | sitio) + (1 | sitio:individuo)`</span>) |</span>
-<span id="cb34-435"><a href="#cb34-435" aria-hidden="true" tabindex="-1"></a>| <span class="in">`(1 | individuo) + (1 | año)`</span> | Efectos aleatorios cruzados |</span>
-<span id="cb34-436"><a href="#cb34-436" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-437"><a href="#cb34-437" aria-hidden="true" tabindex="-1"></a><span class="fu">## Coeficiente de correlación intraclase (repetibilidad)</span></span>
-<span id="cb34-438"><a href="#cb34-438" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-439"><a href="#cb34-439" aria-hidden="true" tabindex="-1"></a>En un modelo con solo intercepto aleatorio, podemos calcular qué proporción de la varianza total se debe a diferencias entre grupos:</span>
-<span id="cb34-440"><a href="#cb34-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-441"><a href="#cb34-441" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size = 6&gt;$ICC = \frac{\sigma_{grupo}^2}{\sigma_{grupo}^2 + \sigma^2}$&lt;/font&gt;&lt;/center&gt;</span>
-<span id="cb34-442"><a href="#cb34-442" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-443"><a href="#cb34-443" aria-hidden="true" tabindex="-1"></a>En ecología del comportamiento este valor se conoce como **repetibilidad** (Nakagawa &amp; Schielzeth 2010) y se usa, por ejemplo, para saber qué tan consistente es una conducta o un rasgo dentro de individuos. Lo usaremos más adelante en el ejemplo de los cantos de ranas.</span>
-<span id="cb34-444"><a href="#cb34-444" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-445"><a href="#cb34-445" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb34-446"><a href="#cb34-446" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-447"><a href="#cb34-447" aria-hidden="true" tabindex="-1"></a><span class="fu"># Respondiendo una pregunta biológica: ¿afecta la dieta el crecimiento?</span></span>
-<span id="cb34-448"><a href="#cb34-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-449"><a href="#cb34-449" aria-hidden="true" tabindex="-1"></a>Hasta ahora solo describimos el crecimiento. La pregunta del experimento original era si **la dieta afecta la tasa de crecimiento**. Esto lo modelamos con una interacción entre <span class="in">`dia`</span> y <span class="in">`dieta`</span> (la pendiente de <span class="in">`dia`</span> cambia según la dieta). Comparemos un modelo que ignora la agrupación con uno mixto:</span>
-<span id="cb34-450"><a href="#cb34-450" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-453"><a href="#cb34-453" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-454"><a href="#cb34-454" aria-hidden="true" tabindex="-1"></a><span class="co"># ignorando que hay medidas repetidas por pollito</span></span>
-<span id="cb34-455"><a href="#cb34-455" aria-hidden="true" tabindex="-1"></a>m_lm_dieta <span class="ot">&lt;-</span> <span class="fu">lm</span>(peso <span class="sc">~</span> dia <span class="sc">*</span> dieta, <span class="at">data =</span> pollos)</span>
-<span id="cb34-456"><a href="#cb34-456" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-457"><a href="#cb34-457" aria-hidden="true" tabindex="-1"></a><span class="co"># modelo mixto</span></span>
-<span id="cb34-458"><a href="#cb34-458" aria-hidden="true" tabindex="-1"></a>m_mixto_dieta <span class="ot">&lt;-</span> <span class="fu">lmer</span>(peso <span class="sc">~</span> dia <span class="sc">*</span> dieta <span class="sc">+</span> (dia <span class="sc">|</span> pollito), <span class="at">data =</span> pollos)</span>
-<span id="cb34-459"><a href="#cb34-459" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-460"><a href="#cb34-460" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-461"><a href="#cb34-461" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-462"><a href="#cb34-462" aria-hidden="true" tabindex="-1"></a>Comparemos los estimados y sus errores estándar:</span>
+<span id="cb34-428"><a href="#cb34-428" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">coef</span>(m_parcial)<span class="sc">$</span>pollito)</span>
+<span id="cb34-429"><a href="#cb34-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-430"><a href="#cb34-430" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-431"><a href="#cb34-431" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-432"><a href="#cb34-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-433"><a href="#cb34-433" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sintaxis de efectos aleatorios en `lme4`</span></span>
+<span id="cb34-434"><a href="#cb34-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-435"><a href="#cb34-435" aria-hidden="true" tabindex="-1"></a>| Fórmula | Significado |</span>
+<span id="cb34-436"><a href="#cb34-436" aria-hidden="true" tabindex="-1"></a>|------------------------------------|------------------------------------|</span>
+<span id="cb34-437"><a href="#cb34-437" aria-hidden="true" tabindex="-1"></a>| <span class="in">`(1 | grupo)`</span> | Intercepto aleatorio |</span>
+<span id="cb34-438"><a href="#cb34-438" aria-hidden="true" tabindex="-1"></a>| <span class="in">`(x | grupo)`</span> | Intercepto y pendiente de <span class="in">`x`</span> aleatorios, correlacionados |</span>
+<span id="cb34-439"><a href="#cb34-439" aria-hidden="true" tabindex="-1"></a>| <span class="in">`(x || grupo)`</span> | Intercepto y pendiente aleatorios, sin correlación |</span>
+<span id="cb34-440"><a href="#cb34-440" aria-hidden="true" tabindex="-1"></a>| <span class="in">`(0 + x | grupo)`</span> | Solo pendiente aleatoria |</span>
+<span id="cb34-441"><a href="#cb34-441" aria-hidden="true" tabindex="-1"></a>| <span class="in">`(1 | sitio/individuo)`</span> | Individuos anidados en sitios (equivale a <span class="in">`(1 | sitio) + (1 | sitio:individuo)`</span>) |</span>
+<span id="cb34-442"><a href="#cb34-442" aria-hidden="true" tabindex="-1"></a>| <span class="in">`(1 | individuo) + (1 | año)`</span> | Efectos aleatorios cruzados |</span>
+<span id="cb34-443"><a href="#cb34-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-444"><a href="#cb34-444" aria-hidden="true" tabindex="-1"></a><span class="fu">## Coeficiente de correlación intraclase (repetibilidad)</span></span>
+<span id="cb34-445"><a href="#cb34-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-446"><a href="#cb34-446" aria-hidden="true" tabindex="-1"></a>En un modelo con solo intercepto aleatorio, podemos calcular qué proporción de la varianza total se debe a diferencias entre grupos:</span>
+<span id="cb34-447"><a href="#cb34-447" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-448"><a href="#cb34-448" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size = 6&gt;$ICC = \frac{\sigma_{grupo}^2}{\sigma_{grupo}^2 + \sigma^2}$&lt;/font&gt;&lt;/center&gt;</span>
+<span id="cb34-449"><a href="#cb34-449" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-450"><a href="#cb34-450" aria-hidden="true" tabindex="-1"></a>En ecología del comportamiento este valor se conoce como **repetibilidad** (Nakagawa &amp; Schielzeth 2010) y se usa, por ejemplo, para saber qué tan consistente es una conducta o un rasgo dentro de individuos. Lo usaremos más adelante en el ejemplo de los cantos de ranas.</span>
+<span id="cb34-451"><a href="#cb34-451" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-452"><a href="#cb34-452" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb34-453"><a href="#cb34-453" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-454"><a href="#cb34-454" aria-hidden="true" tabindex="-1"></a><span class="fu"># Respondiendo una pregunta biológica: ¿afecta la dieta el crecimiento?</span></span>
+<span id="cb34-455"><a href="#cb34-455" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-456"><a href="#cb34-456" aria-hidden="true" tabindex="-1"></a>Hasta ahora solo describimos el crecimiento. La pregunta del experimento original era si **la dieta afecta la tasa de crecimiento**. Esto lo modelamos con una interacción entre <span class="in">`dia`</span> y <span class="in">`dieta`</span> (la pendiente de <span class="in">`dia`</span> cambia según la dieta). Comparemos un modelo que ignora la agrupación con uno mixto:</span>
+<span id="cb34-457"><a href="#cb34-457" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-460"><a href="#cb34-460" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-461"><a href="#cb34-461" aria-hidden="true" tabindex="-1"></a><span class="co"># ignorando que hay medidas repetidas por pollito</span></span>
+<span id="cb34-462"><a href="#cb34-462" aria-hidden="true" tabindex="-1"></a>m_lm_dieta <span class="ot">&lt;-</span> <span class="fu">lm</span>(peso <span class="sc">~</span> dia <span class="sc">*</span> dieta, <span class="at">data =</span> pollos)</span>
 <span id="cb34-463"><a href="#cb34-463" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-466"><a href="#cb34-466" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-467"><a href="#cb34-467" aria-hidden="true" tabindex="-1"></a>comparacion <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb34-468"><a href="#cb34-468" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimado_lm =</span> <span class="fu">coef</span>(m_lm_dieta),</span>
-<span id="cb34-469"><a href="#cb34-469" aria-hidden="true" tabindex="-1"></a>  <span class="at">EE_lm =</span> <span class="fu">summary</span>(m_lm_dieta)<span class="sc">$</span>coefficients[, <span class="dv">2</span>],</span>
-<span id="cb34-470"><a href="#cb34-470" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimado_mixto =</span> <span class="fu">fixef</span>(m_mixto_dieta),</span>
-<span id="cb34-471"><a href="#cb34-471" aria-hidden="true" tabindex="-1"></a>  <span class="at">EE_mixto =</span> <span class="fu">summary</span>(m_mixto_dieta)<span class="sc">$</span>coefficients[, <span class="dv">2</span>]</span>
-<span id="cb34-472"><a href="#cb34-472" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb34-473"><a href="#cb34-473" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-474"><a href="#cb34-474" aria-hidden="true" tabindex="-1"></a>comparacion<span class="sc">$</span>razon_EE <span class="ot">&lt;-</span> comparacion<span class="sc">$</span>EE_mixto <span class="sc">/</span> comparacion<span class="sc">$</span>EE_lm</span>
-<span id="cb34-475"><a href="#cb34-475" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-476"><a href="#cb34-476" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(comparacion, <span class="dv">3</span>)</span>
-<span id="cb34-477"><a href="#cb34-477" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-478"><a href="#cb34-478" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-479"><a href="#cb34-479" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-480"><a href="#cb34-480" aria-hidden="true" tabindex="-1"></a>Podemos comparar estos valores mas facilmente al graficarlos (la razón de errores estándar se muestra arriba de cada par de barras):</span>
-<span id="cb34-483"><a href="#cb34-483" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-484"><a href="#cb34-484" aria-hidden="true" tabindex="-1"></a>comparacion_long <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb34-485"><a href="#cb34-485" aria-hidden="true" tabindex="-1"></a>  <span class="at">termino =</span> <span class="fu">rep</span>(<span class="fu">rownames</span>(comparacion), <span class="dv">2</span>),</span>
-<span id="cb34-486"><a href="#cb34-486" aria-hidden="true" tabindex="-1"></a>  <span class="at">modelo =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"lm()"</span>, <span class="st">"lmer()"</span>), <span class="at">each =</span> <span class="fu">nrow</span>(comparacion)),</span>
-<span id="cb34-487"><a href="#cb34-487" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimado =</span> <span class="fu">c</span>(comparacion<span class="sc">$</span>estimado_lm, comparacion<span class="sc">$</span>estimado_mixto),</span>
-<span id="cb34-488"><a href="#cb34-488" aria-hidden="true" tabindex="-1"></a>  <span class="at">EE =</span> <span class="fu">c</span>(comparacion<span class="sc">$</span>EE_lm, comparacion<span class="sc">$</span>EE_mixto),</span>
-<span id="cb34-489"><a href="#cb34-489" aria-hidden="true" tabindex="-1"></a>  <span class="at">razon_EE =</span> <span class="fu">rep</span>(comparacion<span class="sc">$</span>razon_EE, <span class="dv">2</span>)</span>
-<span id="cb34-490"><a href="#cb34-490" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb34-491"><a href="#cb34-491" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-492"><a href="#cb34-492" aria-hidden="true" tabindex="-1"></a>dodge <span class="ot">&lt;-</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>)</span>
-<span id="cb34-493"><a href="#cb34-493" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-494"><a href="#cb34-494" aria-hidden="true" tabindex="-1"></a>comparacion_long<span class="sc">$</span>panel <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
-<span id="cb34-495"><a href="#cb34-495" aria-hidden="true" tabindex="-1"></a>  <span class="fu">grepl</span>(<span class="st">"dia"</span>, comparacion_long<span class="sc">$</span>termino),</span>
-<span id="cb34-496"><a href="#cb34-496" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Describen crecimiento"</span>,</span>
-<span id="cb34-497"><a href="#cb34-497" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Describen dieta"</span></span>
-<span id="cb34-498"><a href="#cb34-498" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb34-499"><a href="#cb34-499" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-500"><a href="#cb34-500" aria-hidden="true" tabindex="-1"></a>comparacion_labels <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb34-501"><a href="#cb34-501" aria-hidden="true" tabindex="-1"></a>  <span class="at">termino =</span> <span class="fu">rownames</span>(comparacion),</span>
-<span id="cb34-502"><a href="#cb34-502" aria-hidden="true" tabindex="-1"></a>  <span class="at">panel =</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">"dia"</span>, <span class="fu">rownames</span>(comparacion)),</span>
-<span id="cb34-503"><a href="#cb34-503" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Describen crecimiento"</span>, <span class="st">"Describen dieta"</span>),</span>
-<span id="cb34-504"><a href="#cb34-504" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">pmax</span>(</span>
-<span id="cb34-505"><a href="#cb34-505" aria-hidden="true" tabindex="-1"></a>    comparacion<span class="sc">$</span>estimado_lm <span class="sc">+</span> comparacion<span class="sc">$</span>EE_lm,</span>
-<span id="cb34-506"><a href="#cb34-506" aria-hidden="true" tabindex="-1"></a>    comparacion<span class="sc">$</span>estimado_mixto <span class="sc">+</span> comparacion<span class="sc">$</span>EE_mixto</span>
-<span id="cb34-507"><a href="#cb34-507" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> <span class="fl">0.5</span>,</span>
-<span id="cb34-508"><a href="#cb34-508" aria-hidden="true" tabindex="-1"></a>  <span class="at">razon_EE =</span> <span class="fu">sprintf</span>(<span class="st">"%.2f"</span>, comparacion<span class="sc">$</span>razon_EE)</span>
-<span id="cb34-509"><a href="#cb34-509" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb34-510"><a href="#cb34-510" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-511"><a href="#cb34-511" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(comparacion_long, <span class="fu">aes</span>(<span class="at">x =</span> termino, <span class="at">y =</span> estimado, <span class="at">color =</span> modelo)) <span class="sc">+</span></span>
-<span id="cb34-512"><a href="#cb34-512" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> dodge, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb34-513"><a href="#cb34-513" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(</span>
-<span id="cb34-514"><a href="#cb34-514" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">ymin =</span> estimado <span class="sc">-</span> EE, <span class="at">ymax =</span> estimado <span class="sc">+</span> EE),</span>
-<span id="cb34-515"><a href="#cb34-515" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> dodge,</span>
-<span id="cb34-516"><a href="#cb34-516" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.2</span></span>
-<span id="cb34-517"><a href="#cb34-517" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb34-518"><a href="#cb34-518" aria-hidden="true" tabindex="-1"></a> <span class="fu">geom_text</span>(</span>
-<span id="cb34-519"><a href="#cb34-519" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> comparacion_labels,</span>
-<span id="cb34-520"><a href="#cb34-520" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> termino, <span class="at">y =</span> y, <span class="at">label =</span> razon_EE),</span>
-<span id="cb34-521"><a href="#cb34-521" aria-hidden="true" tabindex="-1"></a>  <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb34-522"><a href="#cb34-522" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb34-523"><a href="#cb34-523" aria-hidden="true" tabindex="-1"></a>  <span class="at">size =</span> <span class="dv">3</span></span>
-<span id="cb34-524"><a href="#cb34-524" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
-<span id="cb34-525"><a href="#cb34-525" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>panel, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
-<span id="cb34-526"><a href="#cb34-526" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(</span>
-<span id="cb34-527"><a href="#cb34-527" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Modelo"</span>,</span>
-<span id="cb34-528"><a href="#cb34-528" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"lm()"</span> <span class="ot">=</span> col_mods[<span class="dv">1</span>], <span class="st">"lmer()"</span> <span class="ot">=</span> col_mods[<span class="dv">2</span>])</span>
-<span id="cb34-529"><a href="#cb34-529" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb34-530"><a href="#cb34-530" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Término del modelo"</span>, <span class="at">y =</span> <span class="st">"Estimado"</span>) <span class="sc">+</span></span>
-<span id="cb34-531"><a href="#cb34-531" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb34-532"><a href="#cb34-532" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>)</span>
-<span id="cb34-533"><a href="#cb34-533" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-534"><a href="#cb34-534" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-535"><a href="#cb34-535" aria-hidden="true" tabindex="-1"></a>Los estimados son similares, pero los errores estándar cambian bastante:</span>
-<span id="cb34-536"><a href="#cb34-536" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-537"><a href="#cb34-537" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Para los términos que describen la **tasa de crecimiento** (`dia` y las interacciones `dia:dieta`, que son los que responden nuestra pregunta) los errores estándar del modelo mixto son **más del doble** que los del `lm()`. La dieta se asignó a **pollitos**, no a medidas: la unidad experimental es el pollito (50), no la medición (<span class="in">`r nrow(pollos)`</span>). El <span class="in">`lm()`</span> trata cada medición como independiente y es demasiado confiado (pseudoreplicación)</span>
-<span id="cb34-538"><a href="#cb34-538" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-539"><a href="#cb34-539" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Para el intercepto y los efectos principales de la dieta (peso al día 0) los errores estándar del modelo mixto son **menores**. El <span class="in">`lm()`</span> mete en un solo término de error toda la variación, incluyendo las grandes diferencias en crecimiento entre pollitos que se acumulan con el tiempo. El modelo mixto separa esas fuentes de variación y estima con más precisión lo que ocurre al inicio</span>
-<span id="cb34-540"><a href="#cb34-540" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-541"><a href="#cb34-541" aria-hidden="true" tabindex="-1"></a>Es decir, el modelo mixto no es simplemente "más conservador": asigna la incertidumbre al nivel que corresponde.</span>
-<span id="cb34-542"><a href="#cb34-542" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-543"><a href="#cb34-543" aria-hidden="true" tabindex="-1"></a>Grafiquemos las predicciones del modelo para cada dieta (efectos fijos únicamente, con <span class="in">`re.form = NA`</span>):</span>
-<span id="cb34-544"><a href="#cb34-544" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-545"><a href="#cb34-545" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, out.width="100%"}</span></span>
-<span id="cb34-546"><a href="#cb34-546" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-547"><a href="#cb34-547" aria-hidden="true" tabindex="-1"></a><span class="in">nuevos_datos &lt;- expand.grid(dia = 0:21, dieta = levels(pollos$dieta))</span></span>
-<span id="cb34-548"><a href="#cb34-548" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-549"><a href="#cb34-549" aria-hidden="true" tabindex="-1"></a><span class="in">nuevos_datos$peso &lt;- predict(m_mixto_dieta, newdata = nuevos_datos, re.form = NA)</span></span>
-<span id="cb34-550"><a href="#cb34-550" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-551"><a href="#cb34-551" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(pollos, aes(x = dia, y = peso, color = dieta)) +</span></span>
-<span id="cb34-552"><a href="#cb34-552" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_line(aes(group = pollito), alpha = 0.25) +</span></span>
-<span id="cb34-553"><a href="#cb34-553" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_line(data = nuevos_datos, linewidth = 2) +</span></span>
-<span id="cb34-554"><a href="#cb34-554" aria-hidden="true" tabindex="-1"></a><span class="in">  scale_color_viridis_d(end = 0.9) +</span></span>
-<span id="cb34-555"><a href="#cb34-555" aria-hidden="true" tabindex="-1"></a><span class="in">  facet_wrap(~ dieta, labeller = label_both) +</span></span>
-<span id="cb34-556"><a href="#cb34-556" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(x = "Día", y = "Peso (g)") +</span></span>
-<span id="cb34-557"><a href="#cb34-557" aria-hidden="true" tabindex="-1"></a><span class="in">  theme(legend.position = "none")</span></span>
-<span id="cb34-558"><a href="#cb34-558" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-559"><a href="#cb34-559" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-560"><a href="#cb34-560" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-561"><a href="#cb34-561" aria-hidden="true" tabindex="-1"></a>Podemos comparar las tasas de crecimiento entre dietas con el paquete <span class="in">`emmeans`</span>:</span>
-<span id="cb34-562"><a href="#cb34-562" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-565"><a href="#cb34-565" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-566"><a href="#cb34-566" aria-hidden="true" tabindex="-1"></a><span class="fu">emtrends</span>(m_mixto_dieta, pairwise <span class="sc">~</span> dieta, <span class="at">var =</span> <span class="st">"dia"</span>, <span class="at">lmer.df =</span> <span class="st">"satterthwaite"</span>)</span>
+<span id="cb34-464"><a href="#cb34-464" aria-hidden="true" tabindex="-1"></a><span class="co"># modelo mixto</span></span>
+<span id="cb34-465"><a href="#cb34-465" aria-hidden="true" tabindex="-1"></a>m_mixto_dieta <span class="ot">&lt;-</span> <span class="fu">lmer</span>(peso <span class="sc">~</span> dia <span class="sc">*</span> dieta <span class="sc">+</span> (dia <span class="sc">|</span> pollito), <span class="at">data =</span> pollos)</span>
+<span id="cb34-466"><a href="#cb34-466" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-467"><a href="#cb34-467" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-468"><a href="#cb34-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-469"><a href="#cb34-469" aria-hidden="true" tabindex="-1"></a>Comparemos los estimados y sus errores estándar:</span>
+<span id="cb34-470"><a href="#cb34-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-473"><a href="#cb34-473" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-474"><a href="#cb34-474" aria-hidden="true" tabindex="-1"></a>comparacion <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb34-475"><a href="#cb34-475" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimado_lm =</span> <span class="fu">coef</span>(m_lm_dieta),</span>
+<span id="cb34-476"><a href="#cb34-476" aria-hidden="true" tabindex="-1"></a>  <span class="at">EE_lm =</span> <span class="fu">summary</span>(m_lm_dieta)<span class="sc">$</span>coefficients[, <span class="dv">2</span>],</span>
+<span id="cb34-477"><a href="#cb34-477" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimado_mixto =</span> <span class="fu">fixef</span>(m_mixto_dieta),</span>
+<span id="cb34-478"><a href="#cb34-478" aria-hidden="true" tabindex="-1"></a>  <span class="at">EE_mixto =</span> <span class="fu">summary</span>(m_mixto_dieta)<span class="sc">$</span>coefficients[, <span class="dv">2</span>]</span>
+<span id="cb34-479"><a href="#cb34-479" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-480"><a href="#cb34-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-481"><a href="#cb34-481" aria-hidden="true" tabindex="-1"></a>comparacion<span class="sc">$</span>razon_EE <span class="ot">&lt;-</span> comparacion<span class="sc">$</span>EE_mixto <span class="sc">/</span> comparacion<span class="sc">$</span>EE_lm</span>
+<span id="cb34-482"><a href="#cb34-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-483"><a href="#cb34-483" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(comparacion, <span class="dv">3</span>)</span>
+<span id="cb34-484"><a href="#cb34-484" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-485"><a href="#cb34-485" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-486"><a href="#cb34-486" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-487"><a href="#cb34-487" aria-hidden="true" tabindex="-1"></a>Podemos comparar estos valores mas facilmente al graficarlos (la razón de errores estándar se muestra arriba de cada par de barras):</span>
+<span id="cb34-490"><a href="#cb34-490" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-491"><a href="#cb34-491" aria-hidden="true" tabindex="-1"></a>comparacion_long <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb34-492"><a href="#cb34-492" aria-hidden="true" tabindex="-1"></a>  <span class="at">termino =</span> <span class="fu">rep</span>(<span class="fu">rownames</span>(comparacion), <span class="dv">2</span>),</span>
+<span id="cb34-493"><a href="#cb34-493" aria-hidden="true" tabindex="-1"></a>  <span class="at">modelo =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"lm()"</span>, <span class="st">"lmer()"</span>), <span class="at">each =</span> <span class="fu">nrow</span>(comparacion)),</span>
+<span id="cb34-494"><a href="#cb34-494" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimado =</span> <span class="fu">c</span>(comparacion<span class="sc">$</span>estimado_lm, comparacion<span class="sc">$</span>estimado_mixto),</span>
+<span id="cb34-495"><a href="#cb34-495" aria-hidden="true" tabindex="-1"></a>  <span class="at">EE =</span> <span class="fu">c</span>(comparacion<span class="sc">$</span>EE_lm, comparacion<span class="sc">$</span>EE_mixto),</span>
+<span id="cb34-496"><a href="#cb34-496" aria-hidden="true" tabindex="-1"></a>  <span class="at">razon_EE =</span> <span class="fu">rep</span>(comparacion<span class="sc">$</span>razon_EE, <span class="dv">2</span>)</span>
+<span id="cb34-497"><a href="#cb34-497" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-498"><a href="#cb34-498" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-499"><a href="#cb34-499" aria-hidden="true" tabindex="-1"></a>dodge <span class="ot">&lt;-</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>)</span>
+<span id="cb34-500"><a href="#cb34-500" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-501"><a href="#cb34-501" aria-hidden="true" tabindex="-1"></a>comparacion_long<span class="sc">$</span>panel <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb34-502"><a href="#cb34-502" aria-hidden="true" tabindex="-1"></a>  <span class="fu">grepl</span>(<span class="st">"dia"</span>, comparacion_long<span class="sc">$</span>termino),</span>
+<span id="cb34-503"><a href="#cb34-503" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Describen crecimiento"</span>,</span>
+<span id="cb34-504"><a href="#cb34-504" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Describen dieta"</span></span>
+<span id="cb34-505"><a href="#cb34-505" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-506"><a href="#cb34-506" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-507"><a href="#cb34-507" aria-hidden="true" tabindex="-1"></a>comparacion_labels <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb34-508"><a href="#cb34-508" aria-hidden="true" tabindex="-1"></a>  <span class="at">termino =</span> <span class="fu">rownames</span>(comparacion),</span>
+<span id="cb34-509"><a href="#cb34-509" aria-hidden="true" tabindex="-1"></a>  <span class="at">panel =</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">"dia"</span>, <span class="fu">rownames</span>(comparacion)),</span>
+<span id="cb34-510"><a href="#cb34-510" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Describen crecimiento"</span>, <span class="st">"Describen dieta"</span>),</span>
+<span id="cb34-511"><a href="#cb34-511" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">pmax</span>(</span>
+<span id="cb34-512"><a href="#cb34-512" aria-hidden="true" tabindex="-1"></a>    comparacion<span class="sc">$</span>estimado_lm <span class="sc">+</span> comparacion<span class="sc">$</span>EE_lm,</span>
+<span id="cb34-513"><a href="#cb34-513" aria-hidden="true" tabindex="-1"></a>    comparacion<span class="sc">$</span>estimado_mixto <span class="sc">+</span> comparacion<span class="sc">$</span>EE_mixto</span>
+<span id="cb34-514"><a href="#cb34-514" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> <span class="fl">0.5</span>,</span>
+<span id="cb34-515"><a href="#cb34-515" aria-hidden="true" tabindex="-1"></a>  <span class="at">razon_EE =</span> <span class="fu">sprintf</span>(<span class="st">"%.2f"</span>, comparacion<span class="sc">$</span>razon_EE)</span>
+<span id="cb34-516"><a href="#cb34-516" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-517"><a href="#cb34-517" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-518"><a href="#cb34-518" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(comparacion_long, <span class="fu">aes</span>(<span class="at">x =</span> termino, <span class="at">y =</span> estimado, <span class="at">color =</span> modelo)) <span class="sc">+</span></span>
+<span id="cb34-519"><a href="#cb34-519" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> dodge, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb34-520"><a href="#cb34-520" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(</span>
+<span id="cb34-521"><a href="#cb34-521" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">ymin =</span> estimado <span class="sc">-</span> EE, <span class="at">ymax =</span> estimado <span class="sc">+</span> EE),</span>
+<span id="cb34-522"><a href="#cb34-522" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> dodge,</span>
+<span id="cb34-523"><a href="#cb34-523" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.2</span></span>
+<span id="cb34-524"><a href="#cb34-524" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb34-525"><a href="#cb34-525" aria-hidden="true" tabindex="-1"></a> <span class="fu">geom_text</span>(</span>
+<span id="cb34-526"><a href="#cb34-526" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> comparacion_labels,</span>
+<span id="cb34-527"><a href="#cb34-527" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> termino, <span class="at">y =</span> y, <span class="at">label =</span> razon_EE),</span>
+<span id="cb34-528"><a href="#cb34-528" aria-hidden="true" tabindex="-1"></a>  <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb34-529"><a href="#cb34-529" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb34-530"><a href="#cb34-530" aria-hidden="true" tabindex="-1"></a>  <span class="at">size =</span> <span class="dv">3</span></span>
+<span id="cb34-531"><a href="#cb34-531" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb34-532"><a href="#cb34-532" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>panel, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb34-533"><a href="#cb34-533" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(</span>
+<span id="cb34-534"><a href="#cb34-534" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Modelo"</span>,</span>
+<span id="cb34-535"><a href="#cb34-535" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"lm()"</span> <span class="ot">=</span> col_mods[<span class="dv">1</span>], <span class="st">"lmer()"</span> <span class="ot">=</span> col_mods[<span class="dv">2</span>])</span>
+<span id="cb34-536"><a href="#cb34-536" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb34-537"><a href="#cb34-537" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Término del modelo"</span>, <span class="at">y =</span> <span class="st">"Estimado"</span>) <span class="sc">+</span></span>
+<span id="cb34-538"><a href="#cb34-538" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb34-539"><a href="#cb34-539" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>)</span>
+<span id="cb34-540"><a href="#cb34-540" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-541"><a href="#cb34-541" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-542"><a href="#cb34-542" aria-hidden="true" tabindex="-1"></a>Los estimados son similares, pero los errores estándar cambian bastante:</span>
+<span id="cb34-543"><a href="#cb34-543" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-544"><a href="#cb34-544" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Para los términos que describen la **tasa de crecimiento** (`dia` y las interacciones `dia:dieta`, que son los que responden nuestra pregunta) los errores estándar del modelo mixto son **más del doble** que los del `lm()`. La dieta se asignó a **pollitos**, no a medidas: la unidad experimental es el pollito (50), no la medición (<span class="in">`r nrow(pollos)`</span>). El <span class="in">`lm()`</span> trata cada medición como independiente y es demasiado confiado (pseudoreplicación)</span>
+<span id="cb34-545"><a href="#cb34-545" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-546"><a href="#cb34-546" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Para el intercepto y los efectos principales de la dieta (peso al día 0) los errores estándar del modelo mixto son **menores**. El <span class="in">`lm()`</span> mete en un solo término de error toda la variación, incluyendo las grandes diferencias en crecimiento entre pollitos que se acumulan con el tiempo. El modelo mixto separa esas fuentes de variación y estima con más precisión lo que ocurre al inicio</span>
+<span id="cb34-547"><a href="#cb34-547" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-548"><a href="#cb34-548" aria-hidden="true" tabindex="-1"></a>Es decir, el modelo mixto no es simplemente "más conservador": asigna la incertidumbre al nivel que corresponde.</span>
+<span id="cb34-549"><a href="#cb34-549" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-550"><a href="#cb34-550" aria-hidden="true" tabindex="-1"></a>Grafiquemos las predicciones del modelo para cada dieta (efectos fijos únicamente, con <span class="in">`re.form = NA`</span>):</span>
+<span id="cb34-551"><a href="#cb34-551" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-552"><a href="#cb34-552" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, out.width="100%"}</span></span>
+<span id="cb34-553"><a href="#cb34-553" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-554"><a href="#cb34-554" aria-hidden="true" tabindex="-1"></a><span class="in">nuevos_datos &lt;- expand.grid(dia = 0:21, dieta = levels(pollos$dieta))</span></span>
+<span id="cb34-555"><a href="#cb34-555" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-556"><a href="#cb34-556" aria-hidden="true" tabindex="-1"></a><span class="in">nuevos_datos$peso &lt;- predict(m_mixto_dieta, newdata = nuevos_datos, re.form = NA)</span></span>
+<span id="cb34-557"><a href="#cb34-557" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-558"><a href="#cb34-558" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(pollos, aes(x = dia, y = peso, color = dieta)) +</span></span>
+<span id="cb34-559"><a href="#cb34-559" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_line(aes(group = pollito), alpha = 0.25) +</span></span>
+<span id="cb34-560"><a href="#cb34-560" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_line(data = nuevos_datos, linewidth = 2) +</span></span>
+<span id="cb34-561"><a href="#cb34-561" aria-hidden="true" tabindex="-1"></a><span class="in">  scale_color_viridis_d(end = 0.9) +</span></span>
+<span id="cb34-562"><a href="#cb34-562" aria-hidden="true" tabindex="-1"></a><span class="in">  facet_wrap(~ dieta, labeller = label_both) +</span></span>
+<span id="cb34-563"><a href="#cb34-563" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(x = "Día", y = "Peso (g)") +</span></span>
+<span id="cb34-564"><a href="#cb34-564" aria-hidden="true" tabindex="-1"></a><span class="in">  theme(legend.position = "none")</span></span>
+<span id="cb34-565"><a href="#cb34-565" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-566"><a href="#cb34-566" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-567"><a href="#cb34-567" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-568"><a href="#cb34-568" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-568"><a href="#cb34-568" aria-hidden="true" tabindex="-1"></a>Podemos comparar las tasas de crecimiento entre dietas con el paquete <span class="in">`emmeans`</span>:</span>
 <span id="cb34-569"><a href="#cb34-569" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-570"><a href="#cb34-570" aria-hidden="true" tabindex="-1"></a>Todas las dietas tienen tasas de crecimiento promedio mayores que la dieta 1, pero después de corregir por comparaciones múltiples solo la diferencia entre las dietas 1 y 3 es significativa. Con el <span class="in">`lm()`</span> (que ignora la pseudoreplicación) habríamos concluido que varias de estas diferencias son significativas:  </span>
-<span id="cb34-571"><a href="#cb34-571" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-574"><a href="#cb34-574" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-575"><a href="#cb34-575" aria-hidden="true" tabindex="-1"></a><span class="fu">emtrends</span>(m_lm_dieta, pairwise <span class="sc">~</span> dieta, <span class="at">var =</span> <span class="st">"dia"</span>)</span>
+<span id="cb34-572"><a href="#cb34-572" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-573"><a href="#cb34-573" aria-hidden="true" tabindex="-1"></a><span class="fu">emtrends</span>(m_mixto_dieta, pairwise <span class="sc">~</span> dieta, <span class="at">var =</span> <span class="st">"dia"</span>, <span class="at">lmer.df =</span> <span class="st">"satterthwaite"</span>)</span>
+<span id="cb34-574"><a href="#cb34-574" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-575"><a href="#cb34-575" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-576"><a href="#cb34-576" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-577"><a href="#cb34-577" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-577"><a href="#cb34-577" aria-hidden="true" tabindex="-1"></a>Todas las dietas tienen tasas de crecimiento promedio mayores que la dieta 1, pero después de corregir por comparaciones múltiples solo la diferencia entre las dietas 1 y 3 es significativa. Con el <span class="in">`lm()`</span> (que ignora la pseudoreplicación) habríamos concluido que varias de estas diferencias son significativas:  </span>
 <span id="cb34-578"><a href="#cb34-578" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-579"><a href="#cb34-579" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-580"><a href="#cb34-580" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb34-581"><a href="#cb34-581" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-582"><a href="#cb34-582" aria-hidden="true" tabindex="-1"></a><span class="fu"># ¿Efecto fijo o aleatorio?</span></span>
+<span id="cb34-581"><a href="#cb34-581" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-582"><a href="#cb34-582" aria-hidden="true" tabindex="-1"></a><span class="fu">emtrends</span>(m_lm_dieta, pairwise <span class="sc">~</span> dieta, <span class="at">var =</span> <span class="st">"dia"</span>)</span>
 <span id="cb34-583"><a href="#cb34-583" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-584"><a href="#cb34-584" aria-hidden="true" tabindex="-1"></a>No hay una regla única, pero estas guías ayudan:</span>
+<span id="cb34-584"><a href="#cb34-584" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-585"><a href="#cb34-585" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-586"><a href="#cb34-586" aria-hidden="true" tabindex="-1"></a>| Usar como **efecto aleatorio** cuando... | Usar como **efecto fijo** cuando... |</span>
-<span id="cb34-587"><a href="#cb34-587" aria-hidden="true" tabindex="-1"></a>|------------------------------------|------------------------------------|</span>
-<span id="cb34-588"><a href="#cb34-588" aria-hidden="true" tabindex="-1"></a>| Los niveles son una muestra de una población más grande (individuos, sitios, nidos, años) | Los niveles son todos los que nos interesan (tratamientos, sexo, especie en un estudio de 3 especies) |</span>
-<span id="cb34-589"><a href="#cb34-589" aria-hidden="true" tabindex="-1"></a>| Queremos generalizar más allá de los niveles muestreados | Queremos comparar esos niveles específicos |</span>
-<span id="cb34-590"><a href="#cb34-590" aria-hidden="true" tabindex="-1"></a>| Hay al menos 5-6 niveles (con menos, la varianza se estima muy mal) | Hay pocos niveles |</span>
-<span id="cb34-591"><a href="#cb34-591" aria-hidden="true" tabindex="-1"></a>| Algunos grupos tienen pocos datos (el agrupamiento parcial ayuda) |  |</span>
+<span id="cb34-586"><a href="#cb34-586" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-587"><a href="#cb34-587" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb34-588"><a href="#cb34-588" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-589"><a href="#cb34-589" aria-hidden="true" tabindex="-1"></a><span class="fu"># ¿Efecto fijo o aleatorio?</span></span>
+<span id="cb34-590"><a href="#cb34-590" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-591"><a href="#cb34-591" aria-hidden="true" tabindex="-1"></a>No hay una regla única, pero estas guías ayudan:</span>
 <span id="cb34-592"><a href="#cb34-592" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-593"><a href="#cb34-593" aria-hidden="true" tabindex="-1"></a>Un error común es incluir una variable como efecto aleatorio **y** como efecto fijo a la vez, o usar como aleatorio un factor con 2 o 3 niveles. En este último caso el modelo suele estimar una varianza de 0 (<span class="in">`boundary (singular) fit`</span>), lo que es una señal de que el modelo es demasiado complejo para los datos.</span>
-<span id="cb34-594"><a href="#cb34-594" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-595"><a href="#cb34-595" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb34-596"><a href="#cb34-596" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-597"><a href="#cb34-597" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
-<span id="cb34-598"><a href="#cb34-598" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-599"><a href="#cb34-599" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size="5"&gt;&lt;b&gt;Ejercicio 2&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</span>
-<span id="cb34-600"><a href="#cb34-600" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-601"><a href="#cb34-601" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>El juego de datos <span class="in">`sleepstudy`</span> (paquete <span class="in">`lme4`</span>) contiene el tiempo de reacción (<span class="in">`Reaction`</span>, ms) de 18 personas durante 10 días de privación de sueño (<span class="in">`Days`</span>). ¿Cuál es la unidad experimental?. Ajuste los modelos de agrupamiento completo (<span class="in">`lm`</span>) y parcial (mixto). Compare los estimados de ambos modelos.</span>
-<span id="cb34-602"><a href="#cb34-602" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-603"><a href="#cb34-603" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>El juego de datos <span class="in">`CO2`</span> contiene la absorción de CO2 (<span class="in">`uptake`</span>) de 12 plantas del pasto *Echinochloa crus-galli* de dos orígenes (<span class="in">`Type`</span>: Quebec y Mississippi), sometidas a dos tratamientos (<span class="in">`Treatment`</span>: enfriadas o no), medidas a 7 concentraciones de CO2 (<span class="in">`conc`</span>). Ajuste un modelo mixto para evaluar si el efecto del enfriamiento depende del origen de la planta (<span class="in">`uptake ~ log(conc) + Type * Treatment`</span>). ¿Cuál es el efecto aleatorio adecuado? ¿Cuál es la unidad experimental?</span>
-<span id="cb34-604"><a href="#cb34-604" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-605"><a href="#cb34-605" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-606"><a href="#cb34-606" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-607"><a href="#cb34-607" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb34-608"><a href="#cb34-608" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-609"><a href="#cb34-609" aria-hidden="true" tabindex="-1"></a><span class="fu">## Referencias</span></span>
-<span id="cb34-610"><a href="#cb34-610" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-611"><a href="#cb34-611" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Bates, D., Mächler, M., Bolker, B., &amp; Walker, S. (2015). <span class="co">[</span><span class="ot">Fitting linear mixed-effects models using lme4</span><span class="co">](https://www.jstatsoft.org/article/view/v067i01)</span>. *Journal of Statistical Software*, 67(1), 1-48.</span>
-<span id="cb34-612"><a href="#cb34-612" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-613"><a href="#cb34-613" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Crowder, M. J., &amp; Hand, D. J. (1990). *Analysis of repeated measures*. Chapman and Hall.</span>
-<span id="cb34-614"><a href="#cb34-614" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-615"><a href="#cb34-615" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Gelman, A., &amp; Hill, J. (2007). *Data analysis using regression and multilevel/hierarchical models*. Cambridge University Press.</span>
-<span id="cb34-616"><a href="#cb34-616" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-617"><a href="#cb34-617" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Harrison, X. A., Donaldson, L., Correa-Cano, M. E., Evans, J., Fisher, D. N., Goodwin, C. E., &amp; Inger, R. (2018). <span class="co">[</span><span class="ot">A brief introduction to mixed effects modelling and multi-model inference in ecology</span><span class="co">](https://peerj.com/articles/4794/)</span>. *PeerJ*, 6, e4794.</span>
-<span id="cb34-618"><a href="#cb34-618" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-619"><a href="#cb34-619" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Hurlbert, S. H. (1984). Pseudoreplication and the design of ecological field experiments. *Ecological Monographs*, 54(2), 187-211.</span>
-<span id="cb34-620"><a href="#cb34-620" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-621"><a href="#cb34-621" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Mahr, T. (2017). <span class="co">[</span><span class="ot">Plotting partial pooling in mixed-effects models</span><span class="co">](https://www.tjmahr.com/plotting-partial-pooling-in-mixed-effects-models/)</span>.</span>
-<span id="cb34-622"><a href="#cb34-622" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-623"><a href="#cb34-623" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Richard McElreath's Statistical Rethinking book</span><span class="co">](https://github.com/rmcelreath/stat_rethinking_2022)</span></span>
-<span id="cb34-624"><a href="#cb34-624" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-625"><a href="#cb34-625" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Nakagawa, S., &amp; Schielzeth, H. (2010). Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists. *Biological Reviews*, 85(4), 935-956.</span>
-<span id="cb34-626"><a href="#cb34-626" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-627"><a href="#cb34-627" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Silk, M. J., Harrison, X. A., &amp; Hodgson, D. J. (2020). <span class="co">[</span><span class="ot">Perils and pitfalls of mixed-effects regression models in biology</span><span class="co">](https://peerj.com/articles/9522/)</span>. *PeerJ*, 8, e9522.</span>
-<span id="cb34-628"><a href="#cb34-628" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-629"><a href="#cb34-629" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb34-630"><a href="#cb34-630" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-631"><a href="#cb34-631" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true"}</span>
-<span id="cb34-632"><a href="#cb34-632" aria-hidden="true" tabindex="-1"></a><span class="fu">## Información de la sesión {.unnumbered .unlisted}</span></span>
+<span id="cb34-593"><a href="#cb34-593" aria-hidden="true" tabindex="-1"></a>| Usar como **efecto aleatorio** cuando... | Usar como **efecto fijo** cuando... |</span>
+<span id="cb34-594"><a href="#cb34-594" aria-hidden="true" tabindex="-1"></a>|------------------------------------|------------------------------------|</span>
+<span id="cb34-595"><a href="#cb34-595" aria-hidden="true" tabindex="-1"></a>| Los niveles son una muestra de una población más grande (individuos, sitios, nidos, años) | Los niveles son todos los que nos interesan (tratamientos, sexo, especie en un estudio de 3 especies) |</span>
+<span id="cb34-596"><a href="#cb34-596" aria-hidden="true" tabindex="-1"></a>| Queremos generalizar más allá de los niveles muestreados | Queremos comparar esos niveles específicos |</span>
+<span id="cb34-597"><a href="#cb34-597" aria-hidden="true" tabindex="-1"></a>| Hay al menos 5-6 niveles (con menos, la varianza se estima muy mal) | Hay pocos niveles |</span>
+<span id="cb34-598"><a href="#cb34-598" aria-hidden="true" tabindex="-1"></a>| Algunos grupos tienen pocos datos (el agrupamiento parcial ayuda) |  |</span>
+<span id="cb34-599"><a href="#cb34-599" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-600"><a href="#cb34-600" aria-hidden="true" tabindex="-1"></a>Un error común es incluir una variable como efecto aleatorio **y** como efecto fijo a la vez, o usar como aleatorio un factor con 2 o 3 niveles. En este último caso el modelo suele estimar una varianza de 0 (<span class="in">`boundary (singular) fit`</span>), lo que es una señal de que el modelo es demasiado complejo para los datos.</span>
+<span id="cb34-601"><a href="#cb34-601" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-602"><a href="#cb34-602" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb34-603"><a href="#cb34-603" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-604"><a href="#cb34-604" aria-hidden="true" tabindex="-1"></a>::: {.alert .alert-info}</span>
+<span id="cb34-605"><a href="#cb34-605" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-606"><a href="#cb34-606" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;&lt;font size="5"&gt;&lt;b&gt;Ejercicio 2&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</span>
+<span id="cb34-607"><a href="#cb34-607" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-608"><a href="#cb34-608" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>El juego de datos <span class="in">`sleepstudy`</span> (paquete <span class="in">`lme4`</span>) contiene el tiempo de reacción (<span class="in">`Reaction`</span>, ms) de 18 personas durante 10 días de privación de sueño (<span class="in">`Days`</span>). ¿Cuál es la unidad experimental?. Ajuste los modelos de agrupamiento completo (<span class="in">`lm`</span>) y parcial (mixto). Compare los estimados de ambos modelos.</span>
+<span id="cb34-609"><a href="#cb34-609" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-610"><a href="#cb34-610" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>El juego de datos <span class="in">`CO2`</span> contiene la absorción de CO2 (<span class="in">`uptake`</span>) de 12 plantas del pasto *Echinochloa crus-galli* de dos orígenes (<span class="in">`Type`</span>: Quebec y Mississippi), sometidas a dos tratamientos (<span class="in">`Treatment`</span>: enfriadas o no), medidas a 7 concentraciones de CO2 (<span class="in">`conc`</span>). Ajuste un modelo mixto para evaluar si el efecto del enfriamiento depende del origen de la planta (<span class="in">`uptake ~ log(conc) + Type * Treatment`</span>). ¿Cuál es el efecto aleatorio adecuado? ¿Cuál es la unidad experimental?</span>
+<span id="cb34-611"><a href="#cb34-611" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-612"><a href="#cb34-612" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-613"><a href="#cb34-613" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-614"><a href="#cb34-614" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb34-615"><a href="#cb34-615" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-616"><a href="#cb34-616" aria-hidden="true" tabindex="-1"></a><span class="fu">## Referencias</span></span>
+<span id="cb34-617"><a href="#cb34-617" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-618"><a href="#cb34-618" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Bates, D., Mächler, M., Bolker, B., &amp; Walker, S. (2015). <span class="co">[</span><span class="ot">Fitting linear mixed-effects models using lme4</span><span class="co">](https://www.jstatsoft.org/article/view/v067i01)</span>. *Journal of Statistical Software*, 67(1), 1-48.</span>
+<span id="cb34-619"><a href="#cb34-619" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-620"><a href="#cb34-620" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Crowder, M. J., &amp; Hand, D. J. (1990). *Analysis of repeated measures*. Chapman and Hall.</span>
+<span id="cb34-621"><a href="#cb34-621" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-622"><a href="#cb34-622" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Gelman, A., &amp; Hill, J. (2007). *Data analysis using regression and multilevel/hierarchical models*. Cambridge University Press.</span>
+<span id="cb34-623"><a href="#cb34-623" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-624"><a href="#cb34-624" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Harrison, X. A., Donaldson, L., Correa-Cano, M. E., Evans, J., Fisher, D. N., Goodwin, C. E., &amp; Inger, R. (2018). <span class="co">[</span><span class="ot">A brief introduction to mixed effects modelling and multi-model inference in ecology</span><span class="co">](https://peerj.com/articles/4794/)</span>. *PeerJ*, 6, e4794.</span>
+<span id="cb34-625"><a href="#cb34-625" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-626"><a href="#cb34-626" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Hurlbert, S. H. (1984). Pseudoreplication and the design of ecological field experiments. *Ecological Monographs*, 54(2), 187-211.</span>
+<span id="cb34-627"><a href="#cb34-627" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-628"><a href="#cb34-628" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Mahr, T. (2017). <span class="co">[</span><span class="ot">Plotting partial pooling in mixed-effects models</span><span class="co">](https://www.tjmahr.com/plotting-partial-pooling-in-mixed-effects-models/)</span>.</span>
+<span id="cb34-629"><a href="#cb34-629" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-630"><a href="#cb34-630" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Richard McElreath's Statistical Rethinking book</span><span class="co">](https://github.com/rmcelreath/stat_rethinking_2022)</span></span>
+<span id="cb34-631"><a href="#cb34-631" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-632"><a href="#cb34-632" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Nakagawa, S., &amp; Schielzeth, H. (2010). Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists. *Biological Reviews*, 85(4), 935-956.</span>
 <span id="cb34-633"><a href="#cb34-633" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-634"><a href="#cb34-634" aria-hidden="true" tabindex="-1"></a><span class="in">```{r session info}</span></span>
-<span id="cb34-635"><a href="#cb34-635" aria-hidden="true" tabindex="-1"></a><span class="in">#| echo: false</span></span>
-<span id="cb34-636"><a href="#cb34-636" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-637"><a href="#cb34-637" aria-hidden="true" tabindex="-1"></a><span class="in"># if devtools is installed use devtools::session_info()</span></span>
-<span id="cb34-638"><a href="#cb34-638" aria-hidden="true" tabindex="-1"></a><span class="in">if (requireNamespace("devtools", quietly = TRUE)) {</span></span>
-<span id="cb34-639"><a href="#cb34-639" aria-hidden="true" tabindex="-1"></a><span class="in">  devtools::session_info()</span></span>
-<span id="cb34-640"><a href="#cb34-640" aria-hidden="true" tabindex="-1"></a><span class="in">} else {</span></span>
-<span id="cb34-641"><a href="#cb34-641" aria-hidden="true" tabindex="-1"></a><span class="in">  sessionInfo()</span></span>
-<span id="cb34-642"><a href="#cb34-642" aria-hidden="true" tabindex="-1"></a><span class="in">}</span></span>
-<span id="cb34-643"><a href="#cb34-643" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-644"><a href="#cb34-644" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-634"><a href="#cb34-634" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Silk, M. J., Harrison, X. A., &amp; Hodgson, D. J. (2020). <span class="co">[</span><span class="ot">Perils and pitfalls of mixed-effects regression models in biology</span><span class="co">](https://peerj.com/articles/9522/)</span>. *PeerJ*, 8, e9522.</span>
+<span id="cb34-635"><a href="#cb34-635" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-636"><a href="#cb34-636" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb34-637"><a href="#cb34-637" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-638"><a href="#cb34-638" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true"}</span>
+<span id="cb34-639"><a href="#cb34-639" aria-hidden="true" tabindex="-1"></a><span class="fu">## Información de la sesión {.unnumbered .unlisted}</span></span>
+<span id="cb34-640"><a href="#cb34-640" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-641"><a href="#cb34-641" aria-hidden="true" tabindex="-1"></a><span class="in">```{r session info}</span></span>
+<span id="cb34-642"><a href="#cb34-642" aria-hidden="true" tabindex="-1"></a><span class="in">#| echo: false</span></span>
+<span id="cb34-643"><a href="#cb34-643" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-644"><a href="#cb34-644" aria-hidden="true" tabindex="-1"></a><span class="in"># if devtools is installed use devtools::session_info()</span></span>
+<span id="cb34-645"><a href="#cb34-645" aria-hidden="true" tabindex="-1"></a><span class="in">if (requireNamespace("devtools", quietly = TRUE)) {</span></span>
+<span id="cb34-646"><a href="#cb34-646" aria-hidden="true" tabindex="-1"></a><span class="in">  devtools::session_info()</span></span>
+<span id="cb34-647"><a href="#cb34-647" aria-hidden="true" tabindex="-1"></a><span class="in">} else {</span></span>
+<span id="cb34-648"><a href="#cb34-648" aria-hidden="true" tabindex="-1"></a><span class="in">  sessionInfo()</span></span>
+<span id="cb34-649"><a href="#cb34-649" aria-hidden="true" tabindex="-1"></a><span class="in">}</span></span>
+<span id="cb34-650"><a href="#cb34-650" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-651"><a href="#cb34-651" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

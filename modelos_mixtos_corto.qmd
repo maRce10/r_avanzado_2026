@@ -129,6 +129,12 @@ Dos cosas saltan a la vista: (1) todos los pollitos crecen, pero (2) **la tasa d
 
 Hay tres estrategias para lidiar con datos agrupados. Las compararemos con un modelo sencillo de peso en función del día.
 
+| Enfoque | ¿Qué hace? |
+|---|---|
+| **Agrupamiento completo (complete pooling)** | Ignora la estructura de grupos y analiza todas las observaciones como si pertenecieran a una sola población. |
+| **Sin agrupamiento (no pooling)** | Analiza cada grupo por separado, sin compartir información entre ellos. |
+| **Agrupamiento parcial (partial pooling)** | Considera las diferencias entre grupos, pero permite que compartan información. Las estimaciones de cada grupo se acercan a la media general (*shrinkage*), especialmente cuando hay pocos datos por grupo. |
+
 ## Agrupamiento completo (*complete pooling*)
 
 Ignoramos que las observaciones vienen de diferentes pollitos y ajustamos una sola recta para todos los datos:
@@ -344,15 +350,16 @@ En los extremos: si $\sigma_{grupo}^2 \rightarrow 0$ obtenemos agrupamiento comp
 
 <center><font size="5"><b>Ejercicio 1</b></font></center>
 
-Podemos comprobar que el agrupamiento parcial produce mejores estimados usando simulación, ya que solo en datos simulados conocemos los valores reales.
+Usando el juego de datos ChickWeight, compare los promedios de peso de los pollitos entre dietas:
 
-1.  Simule 30 poblaciones de una especie de lagartija cuyo tamaño promedio (longitud hocico-cloaca) proviene de una distribución normal con media 60 mm y desviación estándar 5 mm. El número de individuos medidos por población debe variar entre 2 y 30 (use `sample()`), y la desviación estándar dentro de poblaciones debe ser 8 mm
+1. Calcule el peso promedio para cada dieta usando aggregate().
 
-2.  Estime el promedio de cada población (a) sin agrupamiento (promedio simple de cada población) y (b) con agrupamiento parcial (`coef()` de `lmer(lhc ~ 1 + (1 | poblacion))`)
+2. Ajuste un modelo mixto con dieta como efecto fijo e intercepto aleatorio para pollito: lmer(peso ~ dieta + (1 | pollito)).
 
-3.  Calcule el error promedio (diferencia absoluta entre el promedio estimado y el promedio simulado) de cada abordaje. ¿Cuál es menor?
+3. Compare los promedios estimados por ambos abordajes.
 
-4.  Grafique el error de cada abordaje en función del número de individuos por población
+¿Por qué los estimados del modelo mixto pueden diferir de los promedios calculados directamente a partir de los datos?
+
 :::
 
 ------------------------------------------------------------------------
